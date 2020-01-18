@@ -5,8 +5,8 @@ rebuild:
 	docker image build --no-cache -t openworklabs/lotus:latest -f lotus.dockerfile .
 
 run:
-	docker container run --publish 1235:1235 --detach --name lotus openworklabs/lotus:latest
+	docker container run -p 1235:1235 -p 1234:1234 --detach --name lotus openworklabs/lotus:latest
 
 bash:
-	docker container run --publish 1235:1235 -it --entrypoint=/bin/bash --name lotus --rm openworklabs/lotus:latest
+	docker container run -p 1235:1235 -p 1234:1234 -it --entrypoint=/bin/bash --name lotus --rm openworklabs/lotus:latest
 

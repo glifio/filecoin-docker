@@ -1,8 +1,8 @@
 # Default config:
 [API]
-#  ListenAddress = "/ip4/127.0.0.1/tcp/1234/http"
-#  Timeout = "30s"
-#
+  ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
+  Timeout = "30s"
+
 [Libp2p]
 #  ListenAddresses = ["/ip4/0.0.0.0/tcp/1235", "/ip6/::/tcp/1235"]
 #  ConnMgrLow = 150

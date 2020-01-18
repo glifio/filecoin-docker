@@ -15,6 +15,7 @@ FROM ubuntu:18.04
 RUN apt-get update -y && \
     apt-get install sudo mesa-opencl-icd ocl-icd-opencl-dev -y
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
+COPY config/config.toml /root/.lotus/config.toml
 COPY scripts/entrypoint /bin/entrypoint
 EXPOSE 1235/tcp
 ENTRYPOINT ["/bin/entrypoint"]

@@ -9,7 +9,9 @@ echo "version: $VERSION"
 # Tag the current revision in git
 git tag -a "$VERSION" -m "version $VERSION"
 git push
-git push --tagsdocker tag $ORG/$IMAGE:latest $ORG/$IMAGE:$VERSION
+git push --tags
+
+docker tag $ORG/$IMAGE:latest $ORG/$IMAGE:$VERSION
 
 # push it
 docker push $ORG/$IMAGE:latest

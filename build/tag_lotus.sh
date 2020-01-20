@@ -11,8 +11,8 @@ git tag -a "$VERSION" -m "version $VERSION"
 git push
 git push --tags
 
-docker tag $ORG/$IMAGE:latest $ORG/$IMAGE:$VERSION
+docker tag $ORG/$IMAGE\:latest $ORG/$IMAGE:$VERSION
 
 # push it
-docker push $ORG/$IMAGE:latest
+docker push $ORG/$IMAGE\:latest
 docker push $ORG/$IMAGE:$VERSION

@@ -19,4 +19,5 @@ COPY LOTUS_VERSION /VERSION
 COPY config/config.toml /root/.lotus/config.toml
 COPY scripts/entrypoint /bin/entrypoint
 EXPOSE 1235/tcp
+EXPOSE 1234/tcp
 ENTRYPOINT ["/bin/entrypoint"]

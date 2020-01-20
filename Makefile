@@ -1,8 +1,17 @@
-build:
-	docker image build -t openworklabs/lotus:latest -f lotus.dockerfile .
+build: build_lotus
 
-rebuild:
-	docker image build --no-cache -t openworklabs/lotus:latest -f lotus.dockerfile .
+rebuild: rebuild_lotus
+
+tag: tag_lotus
+
+build_lotus:
+	./build/build_lotus.sh
+
+rebuild_lotus:
+	./build/build_lotus.sh rebuild
+
+tag_lotus:
+	./build/tag_lotus.sh
 
 run:
 	docker container run -p 1235:1235 -p 1234:1234 --detach --name lotus openworklabs/lotus:latest
@@ -21,4 +30,3 @@ log:
 
 rm:
 	docker rm lotus
-

@@ -9,7 +9,7 @@ RUN git clone https://github.com/filecoin-project/lotus.git && \
     newestTag=$(git describe --abbrev=0) && \
     git checkout $newestTag && \
     make clean && \
-    make lotus && \
+    make all && \
     make install
 
 # runtime container stage

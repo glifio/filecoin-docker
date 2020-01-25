@@ -5,7 +5,9 @@ RUN apt-get update -y && \
 RUN git clone https://github.com/filecoin-project/lotus.git && \
     cd lotus && \
     git pull && \
-    git checkout master && \
+    git fetch --tags && \
+    newestTag=$(git describe --abbrev=0) && \
+    git checkout $newestTag && \
     make clean && \
     make all && \
     make install

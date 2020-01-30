@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# start proxy
+sudo service nginx start
+
 # turn on bash's job control
 set -m
 

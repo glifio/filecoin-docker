@@ -19,7 +19,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
 COPY LOTUS_VERSION /VERSION
-COPY config/config.toml /root/.lotus/config.toml
+
+COPY config/config.toml /root/config.toml
 COPY scripts/entrypoint /bin/entrypoint
 
 COPY nginx/conf.d/lotus_node.conf /etc/nginx/sites-enabled/lotus_node.conf

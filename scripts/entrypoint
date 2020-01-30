@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ln -fs /root/config.toml /root/.lotus/config.toml
+
 # start proxy
 sudo service nginx start
 

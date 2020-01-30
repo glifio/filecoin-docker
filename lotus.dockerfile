@@ -15,7 +15,7 @@ RUN git clone https://github.com/filecoin-project/lotus.git && \
 # runtime container stage
 FROM ubuntu:18.04
 RUN apt-get update && \
-    apt-get install sudo ca-certificates mesa-opencl-icd ocl-icd-opencl-dev nginx -y && \
+    apt-get install sudo ca-certificates mesa-opencl-icd ocl-icd-opencl-dev -y && \
     rm -rf /var/lib/apt/lists/*
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
 COPY LOTUS_VERSION /VERSION
@@ -23,11 +23,10 @@ COPY LOTUS_VERSION /VERSION
 COPY config/config.toml /root/config.toml
 COPY scripts/entrypoint /bin/entrypoint
 
-COPY nginx/conf.d/lotus_node.conf /etc/nginx/sites-enabled/lotus_node.conf
-COPY nginx/nginx.lotus_node.conf /etc/nginx/nginx.conf
-
+# API port
 EXPOSE 1234/tcp
+
+# P2P port
 EXPOSE 1235/tcp
-EXPOSE 8080/tcp
 
 ENTRYPOINT ["/bin/entrypoint"]

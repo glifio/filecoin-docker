@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ln -fs /root/config.toml /root/.lotus/config.toml
+ln -fs /etc/secret-vol/token /root/.lotus/token
 
 # start proxy
 sudo service nginx start

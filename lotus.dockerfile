@@ -9,9 +9,7 @@ RUN git clone https://github.com/filecoin-project/lotus.git && \
     newestTag=$(git describe --abbrev=0) && \
     git checkout $newestTag && \
     make clean && \
-    make lotus chainwatch && \
     install -C ./lotus /usr/local/bin/lotus && \
-    install -C ./chainwatch /usr/local/bin/chainwatch
 
 # runtime container stage
 FROM ubuntu:18.04
@@ -19,7 +17,6 @@ FROM ubuntu:18.04
 #    apt-get install sudo ca-certificates mesa-opencl-icd ocl-icd-opencl-dev -y && \
 #    rm -rf /var/lib/apt/lists/*
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
-COPY --from=build-env /usr/local/bin/chainwatch /usr/local/bin/chainwatch
 COPY --from=build-env /etc/ssl/certs /etc/ssl/certs
 COPY LOTUS_VERSION /VERSION
 

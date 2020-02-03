@@ -1,7 +1,12 @@
 #!/bin/bash
 
-ln -fs /root/config.toml /root/.lotus/config.toml
-#ln -fs /etc/secret-vol/token /root/.lotus/token
+# make sure directory exists
+mkdir -p /root/.lotus/keystore
+
+# setup configuration
+cp /root/config.toml /root/.lotus/config.toml
+cp /etc/lotus-secret-vol/token /root/.lotus/token
+cp /etc/lotus-secret-vol/privatekey /root/.lotus/keystore/MF2XI2BNNJ3XILLQOJUXMYLUMU
 
 # turn on bash's job control
 set -m

@@ -6,8 +6,8 @@ RUN git clone https://github.com/filecoin-project/lotus.git && \
     cd lotus && \
     git pull && \
     git fetch --tags && \
-    newestTag=$(git describe --abbrev=0) && \
-    git checkout $newestTag && \
+    latestTag=$(git describe --tags `git rev-list --tags --max-count=1`) && \
+    git checkout $latestTag && \
     make clean && \
     make lotus chainwatch && \
     install -C ./lotus /usr/local/bin/lotus && \
@@ -39,3 +39,4 @@ EXPOSE 1234/tcp
 EXPOSE 1235/tcp
 
 ENTRYPOINT ["/bin/entrypoint"]
+#ENTRYPOINT ["tail", "-f", "/dev/null"]

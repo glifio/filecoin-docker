@@ -1,21 +1,36 @@
 #!/bin/bash
 
+repeat() { while :; sleep 2; do $@ && return; done }
+
 # setup configuration
 cp /root/config.toml /root/.lotus/config.toml
 
 # turn on bash's job control
 set -m
 
+while getopts sb option
+do
+    case "${option}" in
+        s) SYNC=true;;
+        b) BOOTSTRAP=false;;
+    esac
+done
+
 # Start the primary process and put it in the background
-lotus daemon &
+echo "Starting lotus daemon" >&2
+if [ "$BOOSTRAP" == false ] ; then
+    lotus daemon --bootstrap=false &
+else
+    lotus daemon &
+fi
 
-# the my_helper_process might need to know how to wait on the
-# primary process to start before it does its work and returns
-sleep 5
-
-# Start the helper process
-lotus sync wait >/dev/null
+if [ "$SYNC" == true ] ; then
+    echo "Starting lotus sync" >&2
+    # Start the sync process
+    repeat lotus sync wait
+fi
 
 # bring the primary process back into the foreground
 # and leave it there
+echo "primary process back into the foreground" >&2
 fg %1

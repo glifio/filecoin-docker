@@ -39,4 +39,3 @@ EXPOSE 1234/tcp
 EXPOSE 1235/tcp
 
 ENTRYPOINT ["/bin/entrypoint"]
-#ENTRYPOINT ["tail", "-f", "/dev/null"]

@@ -1,36 +1,37 @@
-#!/bin/bash
+#!/bin/sh
 
 repeat() { while :; sleep 2; do $@ && return; done }
 
 # setup configuration
 cp /root/config.toml /root/.lotus/config.toml
 
-# turn on bash's job control
-set -m
-
-while getopts sb option
+while getopts sdc option
 do
     case "${option}" in
         s) SYNC=true;;
-        b) BOOTSTRAP=false;;
+        d) DAEMON=true;;
+        c) CHAINWATCH=true;;
     esac
 done
-
-# Start the primary process and put it in the background
-echo "Starting lotus daemon" >&2
-if [ "$BOOSTRAP" == false ] ; then
-    lotus daemon --bootstrap=false &
-else
-    lotus daemon &
+    
+if [ "$DAEMON" == true ] ; then
+    echo "Starting daemon"
+    # Start the daemon process
+    lotus daemon
 fi
 
 if [ "$SYNC" == true ] ; then
-    echo "Starting lotus sync" >&2
-    # Start the sync process
+    echo "Starting sync wait"
+    # Start the daemon process and put it in the background
+    lotus daemon &
+    # Run the sync process until it dies
     repeat lotus sync wait
 fi
 
-# bring the primary process back into the foreground
-# and leave it there
-echo "primary process back into the foreground" >&2
-fg %1
+if [ "$CHAINWATCH" == true ] ; then
+    echo "Starting chainwatch"
+    # Start the daemon process and put it in the background
+    lotus daemon &
+    # Start the chainwatch process
+    repeat chainwatch run
+fi

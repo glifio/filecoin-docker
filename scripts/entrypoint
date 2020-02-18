@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 repeat() { while :; sleep 2; do $@ && return; done }
 

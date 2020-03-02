@@ -32,6 +32,8 @@ if [ "$CHAINWATCH" == true ] ; then
     echo "Starting chainwatch"
     # Start the daemon process and put it in the background
     lotus daemon &
+    # wait until we are sure daemon is up (chainwatch will fail if daemon is not running and return 0 even when failing so repeat is not working)
+    sleep 120
     # Start the chainwatch process
     repeat chainwatch run
 fi

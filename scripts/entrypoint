@@ -5,22 +5,29 @@ repeat() { while :; sleep 2; do $@ && return; done }
 # setup configuration
 cp /root/config.toml /root/.lotus/config.toml
 
-while getopts sdc option
+while getopts sdci option
 do
     case "${option}" in
         s) SYNC=true;;
         d) DAEMON=true;;
         c) CHAINWATCH=true;;
+        i) IMPORT=true;;
     esac
 done
-    
-if [ "$DAEMON" == true ] ; then
+
+if [ "$DAEMON" = true ] ; then
     echo "Starting daemon"
     # Start the daemon process
-    lotus daemon
+    CHAIN_CAR="/chain/chain.car"
+    if [ "$IMPORT" = true ] && [ -f "$CHAIN_CAR" ] && [ ! -e "/root/.lotus/datastore" ]; then
+      lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
+      touch /root/.lotus/import-complete
+    else
+      lotus daemon
+    fi
 fi
 
-if [ "$SYNC" == true ] ; then
+if [ "$SYNC" = true ] ; then
     echo "Starting sync wait"
     # Start the daemon process and put it in the background
     lotus daemon &
@@ -28,7 +35,7 @@ if [ "$SYNC" == true ] ; then
     repeat lotus sync wait
 fi
 
-if [ "$CHAINWATCH" == true ] ; then
+if [ "$CHAINWATCH" = true ] ; then
     echo "Starting chainwatch"
     # Start the daemon process and put it in the background
     lotus daemon &

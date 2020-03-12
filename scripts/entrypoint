@@ -15,15 +15,12 @@ do
     esac
 done
 
-if [ "$DAEMON" = true ] ; then
-    echo "Starting daemon"
-    # Start the daemon process
+if [ "$IMPORT" = true ] ; then
+    echo "Starting import wait"
     CHAIN_CAR="/chain/chain.car"
-    if [ "$IMPORT" = true ] && [ -f "$CHAIN_CAR" ] && [ ! -e "/root/.lotus/datastore" ]; then
+    if [ -f "$CHAIN_CAR" ] && [ ! -e "/root/.lotus/datastore" ]; then
       lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
       touch /root/.lotus/import-complete
-    else
-      lotus daemon
     fi
 fi
 
@@ -43,4 +40,10 @@ if [ "$CHAINWATCH" = true ] ; then
     sleep 120
     # Start the chainwatch process
     repeat chainwatch run
+fi
+
+if [ "$DAEMON" = true ] ; then
+    echo "Starting daemon"
+    # Start the daemon process
+    lotus daemon
 fi

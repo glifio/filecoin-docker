@@ -3,7 +3,17 @@
 repeat() { while :; sleep 2; do $@ && return; done }
 
 # setup configuration
-cp /root/config.toml /root/.lotus/config.toml
+if [ -f "/root/config.toml" ]; then
+    cp /root/config.toml /root/.lotus/config.toml
+fi
+
+# make sure key/token permissions are correct 
+if [ -d ~/.lotus/keystore ]; then
+    chmod -f 600 ~/.lotus/keystore/*
+fi
+if [ -f ~/.lotus/token ]; then
+    chmod -f 600 ~/.lotus/token
+fi
 
 while getopts sdci option
 do

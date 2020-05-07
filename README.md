@@ -57,7 +57,7 @@ docker ps
 
 ## Find Us
 
-- [Website](www.openworklabs.com)
+- [Website](https://www.openworklabs.com)
 - [GitHub](https://github.com/openworklabs)
 - [Docker Hub](https://hub.docker.com/orgs/openworklabs/repositories)
 

@@ -1,25 +1,28 @@
 # build container stage
-FROM golang:1.13 AS build-env
+FROM golang:1.14.2 AS build-env
+
+# branch or tag of the lotus version to build
+ARG BRANCH=interop.5.5
+
+RUN echo "Building lotus from branch $BRANCH"
+
 RUN apt-get update -y && \
     apt-get install sudo curl git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config -y
-RUN git clone https://github.com/filecoin-project/lotus.git && \
+
+RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $BRANCH && \
     cd lotus && \
-    git pull && \
-    git fetch --tags && \
-    latestTag=$(git describe --tags `git rev-list --tags --max-count=1`) && \
-    git checkout $latestTag && \
     make clean && \
-    make lotus chainwatch && \
-    install -C ./lotus /usr/local/bin/lotus && \
-    install -C ./chainwatch /usr/local/bin/chainwatch
+    make lotus && \
+    install -C ./lotus /usr/local/bin/lotus
 
 # runtime container stage
 FROM ubuntu:18.04
-#RUN apt-get update && \
+
+# Instead of running apt-get just copy the certs and binaries that keeps the runtime image nice and small
+# RUN apt-get update && \
 #    apt-get install sudo ca-certificates mesa-opencl-icd ocl-icd-opencl-dev -y && \
 #    rm -rf /var/lib/apt/lists/*
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
-COPY --from=build-env /usr/local/bin/chainwatch /usr/local/bin/chainwatch
 COPY --from=build-env /etc/ssl/certs /etc/ssl/certs
 COPY LOTUS_VERSION /VERSION
 
@@ -39,3 +42,4 @@ EXPOSE 1234/tcp
 EXPOSE 1235/tcp
 
 ENTRYPOINT ["/bin/entrypoint"]
+CMD ["-d"]

@@ -1,6 +1,16 @@
-build: build_lotus
+BRANCH = interop.5.5
 
-rebuild: rebuild_lotus
+.PHONY: build
+build:
+	docker image build --build-arg BRANCH=$(BRANCH) -t openworklabs/lotus:$(BRANCH) . 
+
+.PHONY: rebuild
+rebuild:
+	docker image build --no-cache --build-arg BRANCH=$(BRANCH) -t openworklabs/lotus:$(BRANCH) . 
+
+.PHONY: push
+push:
+	docker push openworklabs/lotus:$(BRANCH)
 
 tag: tag_lotus
 
@@ -13,8 +23,14 @@ rebuild_lotus:
 tag_lotus:
 	./build/tag_lotus.sh
 
+.PHONY: run
 run:
-	docker container run -p 1235:1235 -p 1234:1234 --detach --name lotus openworklabs/lotus:latest
+	docker run --detach \
+	--publish 1234:1234 \
+	--name lotus \
+	--restart always \
+	--volume $(HOME)/.lotus:/root/.lotus \
+	openworklabs/lotus:$(BRANCH)
 
 run-bash:
 	docker container run -p 1235:1235 -p 1234:1234 -it --entrypoint=/bin/bash --name lotus --rm openworklabs/lotus:latest
@@ -29,4 +45,5 @@ log:
 	docker logs lotus -f
 
 rm:
+	docker stop lotus
 	docker rm lotus

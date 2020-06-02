@@ -1,4 +1,4 @@
-BRANCH = interop.5.5
+BRANCH = interop.5.7
 
 .PHONY: build
 build:

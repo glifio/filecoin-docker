@@ -1,4 +1,4 @@
-BRANCH = v0.3.0
+BRANCH = interop.6.1
 
 .PHONY: build
 build:

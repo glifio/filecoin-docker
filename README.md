@@ -41,7 +41,7 @@ docker ps
 
 #### Useful File Locations
 
-- `/script/entrypoint` - Docker entrypoint script
+- `/scripts/entrypoint` - Docker entrypoint script
 
 ## Dependencies
 

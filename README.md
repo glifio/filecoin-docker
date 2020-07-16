@@ -55,6 +55,25 @@ docker ps
 - jq
 - Lotus
 
+##Automatic build in docker hub
+
+If you want to start automatic build in Docker Hub, you have to change variable `ARG BRANCH`
+in `Dockerfile`, push changes, create new tag, push tag to repo.
+If you want run manually from master branch, you have to start build on Docker Hub web page.
+
+Example:
+ 
+    git commit -a -m "ntwk-butterfly-7.10.0" && git push && \
+    git tag ntwk-butterfly-7.10.0 && git push --tags
+
+List of `tag` you may find in [lotus perository](https://github.com/filecoin-project/lotus/tags)
+
+It works with next tags:
+* v*
+* ntwk-butterfly-*
+* ntwk-nerpa-*
+
+New version is available in [Docker Hub](https://hub.docker.com/r/openworklabs/lotus/tags)
 ## Find Us
 
 - [Website](https://www.openworklabs.com)
@@ -64,3 +83,4 @@ docker ps
 ## License
 
 This project is licensed under the [Apache 2.0](https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE) license.
+

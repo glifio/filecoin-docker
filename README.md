@@ -55,7 +55,7 @@ docker ps
 - jq
 - Lotus
 
-##Automatic build in docker hub
+## Automatic build in docker hub
 
 If you want to start automatic build in Docker Hub, you have to change variable `ARG BRANCH`
 in `Dockerfile`, push changes, create new tag, push tag to repo.

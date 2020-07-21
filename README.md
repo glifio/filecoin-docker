@@ -58,20 +58,22 @@ docker ps
 ## Automatic build in docker hub
 
 If you want to start automatic build in Docker Hub, you have to change variable `ARG BRANCH`
-in `Dockerfile`, push changes, create new tag, push tag to repo.
-If you want run manually from master branch, you have to start build on Docker Hub web page.
+in `Dockerfile`, push changes, create new tag, push tag to repo or change variable `ARG BRANCH` 
+in `Dockerfile` and execute `make git-push`
+
+If you want run build manually from master branch, you have to change variable `ARG BRANCH`
+ in `Dockerfile` push to repository, start build on Docker Hub web page.
 
 Example:
  
     git commit -a -m "ntwk-butterfly-7.10.0" && git push && \
     git tag ntwk-butterfly-7.10.0 && git push --tags
 
-List of `tag` you may find in [lotus perository](https://github.com/filecoin-project/lotus/tags)
+List of `tag` you may find in [lotus repository](https://github.com/filecoin-project/lotus/tags)
 
 It works with next tags:
 * v*
-* ntwk-butterfly-*
-* ntwk-nerpa-*
+* ntwk-*
 
 New version is available in [Docker Hub](https://hub.docker.com/r/openworklabs/lotus/tags)
 ## Find Us

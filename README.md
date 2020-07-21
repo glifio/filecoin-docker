@@ -62,7 +62,7 @@ If you want to start automatic build in Docker Hub, you have to:
 - change variable `ARG BRANCH` in `Dockerfile`, push changes, create new tag, push tag to repository 
 
 or 
-- change variable `ARG BRANCH` in `Dockerfile` and execute `make git-push`
+- change variable `ARG BRANCH` in `Dockerfile`, `BRANCH` in `Makefile` and execute `make git-push`
 
 If you want run build manually from master branch, you have to change variable `ARG BRANCH`
  in `Dockerfile` push to repository, start build on Docker Hub web page.

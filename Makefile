@@ -1,4 +1,4 @@
-BRANCH = v0.4.1
+BRANCH = ntwk-calibration-7.21.0
 
 .PHONY: build
 build:
@@ -22,6 +22,9 @@ rebuild_lotus:
 
 tag_lotus:
 	./build/tag_lotus.sh
+
+git-push:
+	git commit -a -m "$(BRANCH)" && git push && git tag $(BRANCH) && git push --tags
 
 .PHONY: run
 run:

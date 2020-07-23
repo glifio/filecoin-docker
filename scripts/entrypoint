@@ -4,6 +4,7 @@ repeat() { while :; sleep 2; do $@ && return; done }
 
 # setup configuration
 if [ -f "/root/config.toml" ]; then
+    mkdir /root/.lotus && \
     cp /root/config.toml /root/.lotus/config.toml
 fi
 

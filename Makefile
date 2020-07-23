@@ -1,4 +1,4 @@
-BRANCH = ntwk-calibration-7.21.0
+BRANCH = ntwk-butterfly-7.20.0
 
 .PHONY: build
 build:

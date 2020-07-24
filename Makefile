@@ -1,4 +1,4 @@
-BRANCH = ntwk-butterfly-7.20.0
+BRANCH = v0.4.2
 
 .PHONY: build
 build:

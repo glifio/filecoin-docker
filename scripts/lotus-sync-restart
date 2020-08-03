@@ -3,6 +3,6 @@
 if pgrep -f "/bin/bash /bin/entrypoint -s"
 then
         if ! pgrep -f "lotus daemon"
-        then /bin/entrypoint -d
+               then /bin/entrypoint -d
         fi
 fi

@@ -1,0 +1,8 @@
+#restart lotus in daemon mode if lotus in sync status failed
+#!/bin/sh
+if pgrep -f "/bin/bash /bin/entrypoint -s"
+then
+	if ! pgrep -f "lotus daemon"
+		then /bin/entrypoint -d
+	fi
+fi

@@ -4,11 +4,19 @@ repeat() { while :; sleep 2; do $@ && return; done }
 
 # setup configuration
 if [ -f "/root/config.toml" ]; then
-    mkdir /root/.lotus && \
-    cp /root/config.toml /root/.lotus/config.toml
+    if [ ! -d /root/.lotus ]; then
+	mkdir /root/.lotus && \
+    	cp /root/config.toml /root/.lotus/config.toml
+    else cp /root/config.toml /root/.lotus/config.toml
+    fi
 fi
 
-# make sure key/token permissions are correct 
+#start cron
+if ! pgrep -f "/usr/sbin/cron"; then
+	/etc/init.d/cron start
+fi
+
+# make sure key/token permissions are correct
 if [ -d ~/.lotus/keystore ]; then
     chmod -f 600 ~/.lotus/keystore/*
 fi
@@ -30,7 +38,7 @@ if [ "$IMPORT" = true ] ; then
     echo "Starting import wait"
     CHAIN_CAR="/chain/chain.car"
     if [ -f "$CHAIN_CAR" ] && [ ! -e "/root/.lotus/datastore" ]; then
-      lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
+      /usr/local/bin/lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
       touch /root/.lotus/import-complete
     fi
 fi
@@ -38,15 +46,15 @@ fi
 if [ "$SYNC" = true ] ; then
     echo "Starting sync wait"
     # Start the daemon process and put it in the background
-    lotus daemon &
+    /usr/local/bin/lotus daemon &
     # Run the sync process until it dies
-    repeat lotus sync wait
+    repeat /usr/local/bin/lotus sync wait
 fi
 
 if [ "$CHAINWATCH" = true ] ; then
     echo "Starting chainwatch"
     # Start the daemon process and put it in the background
-    lotus daemon &
+    /usr/local/bin/lotus daemon &
     # wait until we are sure daemon is up (chainwatch will fail if daemon is not running and return 0 even when failing so repeat is not working)
     sleep 120
     # Start the chainwatch process
@@ -56,5 +64,5 @@ fi
 if [ "$DAEMON" = true ] ; then
     echo "Starting daemon"
     # Start the daemon process
-    lotus daemon
+    /usr/local/bin/lotus daemon
 fi

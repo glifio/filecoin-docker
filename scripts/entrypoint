@@ -1,6 +1,6 @@
 #!/bin/bash
 
-repeat() { while :; sleep 2; do $@ && return; done }
+repeat() { while :; sleep 3; do $@ && return; done }
 
 # setup configuration
 if [ -f "/root/config.toml" ]; then

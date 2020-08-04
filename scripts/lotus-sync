@@ -1,2 +1,3 @@
 # run lotus-sync-restart every 15 min
 */7 * * * * /bin/lotus-sync-restart
+

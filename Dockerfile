@@ -2,7 +2,7 @@
 FROM golang:1.14.2 AS build-env
 
 # branch or tag of the lotus version to build
-ARG BRANCH=ntwk-calibration-8.1.0
+ARG BRANCH=master
 
 RUN echo "Building lotus from branch $BRANCH"
 
@@ -17,6 +17,7 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
 
 # runtime container stage
 FROM ubuntu:18.04
+
 #creating cron job to check lotus sync status and restart it if process is killed
 RUN  mkdir /etc/cron.d && \
      mkdir -p /var/spool/cron/crontabs

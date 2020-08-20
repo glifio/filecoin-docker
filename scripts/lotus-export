@@ -1,0 +1,6 @@
+#!/bin/sh
+# Perform a periodic export if export is enabled
+
+if [ "$LOTUS_EXPORT" -eq "true" ]; then
+  lotus chain export $LOTUS_EXPORT_PATH
+fi

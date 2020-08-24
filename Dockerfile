@@ -4,6 +4,7 @@ FROM golang:1.14.2 AS build-env
 # branch or tag of the lotus version to build
 ARG BRANCH=v0.5.0
 
+
 RUN echo "Building lotus from branch $BRANCH"
 
 RUN apt-get update -y && \

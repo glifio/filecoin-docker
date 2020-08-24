@@ -1,4 +1,4 @@
-BRANCH = ntwk-calibration-8.1.0
+BRANCH = v0.5.0
 
 .PHONY: build
 build:

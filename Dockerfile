@@ -21,12 +21,13 @@ FROM ubuntu:18.04
 #creating cron job to check lotus sync status and restart it if process is killed
 RUN  mkdir /etc/cron.d && \
      mkdir -p /var/spool/cron/crontabs
-COPY scripts/lotus-sync /etc/cron.d
+COPY scripts/cron /etc/cron.d/
 COPY --from=build-env /usr/bin/crontab /usr/bin/crontab
 COPY --from=build-env /etc/init.d/cron /etc/init.d/cron
 COPY --from=build-env /usr/sbin/cron /usr/sbin/cron
 COPY scripts/lotus-sync-restart /bin/lotus-sync-restart
-RUN  crontab -u root /etc/cron.d/lotus-sync
+COPY scripts/lotus-export /bin/lotus-export
+RUN  crontab -u root /etc/cron.d/cron
 
 # Instead of running apt-get just copy the certs and binaries that keeps the runtime image nice and small
 # RUN apt-get update && \

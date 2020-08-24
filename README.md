@@ -34,6 +34,8 @@ docker ps
 #### Environment Variables
 
 - `BRANCH` - The git release, tag or branch
+- `LOTUS_EXPORT` - Set to true if you want to export chain snapshots on a daily basis somewhere
+- `LOTUS_EXPORT_PATH` - If LOTUS_EXPORT is set to true - specify whether `.car` file should be saved
 
 #### Volumes
 

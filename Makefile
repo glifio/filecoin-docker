@@ -1,4 +1,4 @@
-BRANCH = v0.5.3
+BRANCH = v0.5.6
 
 .PHONY: build
 build:

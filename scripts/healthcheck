@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+if [[ $(curl -sk https://api.filscan.io/) ]]
+  then
+    global=$(curl -s --header "Content-Type: application/json" --request POST --data '{"id": 1, "jsonrpc": "2.0", "method": "filscan.StatChainInfo"}' https://api.filscan.io:8700/rpc/v1 | jq -r '.result.data.latest_height')
+    local=$(curl -s localhost:1234/debug/metrics | grep ^lotus_chain_node_worker_height | awk '{print $2}')
+    count=$(echo $global-250 | bc)
+    if [[ $count -lt $local ]]
+      then exit 0
+    else exit 1
+    fi
+  else
+    local=$(curl -s localhost:1234/debug/metrics | grep ^lotus_chain_node_worker_height | awk '{print $2}')
+    global=$(for i in {1..5}; do curl -s https://node.glif.io/space0$i/lotus/debug/metrics | grep ^lotus_chain_node_height | awk '{print $2}'; done | sort -r | head -1)
+    count=$(echo $global-250 | bc)
+      if [[ $count -lt $local ]]
+        then exit 0
+      else exit 1
+      fi
+fi

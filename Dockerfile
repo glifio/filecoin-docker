@@ -7,7 +7,7 @@ ARG BRANCH=v0.6.0
 RUN echo "Building lotus from branch $BRANCH"
 
 RUN apt-get update -y && \
-    apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq bc pkg-config -y
+    apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config -y
 
 RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $BRANCH && \
     cd lotus && \
@@ -44,7 +44,7 @@ COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0 /lib/libOpe
 COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libjq.so.1 /usr/lib/x86_64-linux-gnu/
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libonig.so.5.0.0 /usr/lib/x86_64-linux-gnu/libonig.so.5
 
-COPY --from=build-env /usr/bin/jq /usr/bin/bc /usr/bin/
+COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /root/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
 

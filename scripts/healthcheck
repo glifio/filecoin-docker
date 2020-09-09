@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #this script compare block on api.filscan and on node.
 #if api.filscan unavailable, it will compare with block on node witch has higher block from 5 node.
 set -e

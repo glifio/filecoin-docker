@@ -1,6 +1,6 @@
 #!/bin/bash
 #this script compare block on api.filscan and on node.
-#if api.filscan unavailable, it will compare with block on node witch has higher block from 5 node.
+#if api.filscan unavailable, it will compare with block on node witch has higher block from several nodes.
 set -e
 if [[ $(curl -sk https://api.filscan.io/) ]]
   then
@@ -8,6 +8,9 @@ if [[ $(curl -sk https://api.filscan.io/) ]]
     '{"id": 1, "jsonrpc": "2.0", "method": "filscan.StatChainInfo"}' https://api.filscan.io:8700/rpc/v1 |\
      jq -r '.result.data.latest_height')
     local=$(curl -s localhost:1234/debug/metrics | grep ^lotus_chain_node_worker_height | awk '{print $2}')
+    if [ -z "$global" ]
+        then global=0
+    fi
     count=$(echo $(( $global-250 )))
     if [[ $count -lt $local ]]
       then exit 0

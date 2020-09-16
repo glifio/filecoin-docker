@@ -61,6 +61,14 @@ if [ "$CHAINWATCH" = true ] ; then
     repeat chainwatch run
 fi
 
+if [ "$SHEDEXPORT" = true ] ; then
+    while true; do
+    echo "Exporting state"
+    /usr/local/bin/lotus-shed export --skip-old-msgs --recent-stateroots=900 $SHEDEXPORTPATH
+    timeout $SHEDEXPORTPERIOD /usr/local/bin/lotus daemon
+    done
+fi
+
 if [ "$DAEMON" = true ] ; then
     echo "Starting daemon"
     # Start the daemon process

@@ -1,4 +1,4 @@
-BRANCH = v0.6.0
+BRANCH = ntwk-nerpa-9.15.0
 
 .PHONY: build
 build:

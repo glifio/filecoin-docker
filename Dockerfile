@@ -11,7 +11,8 @@ RUN apt-get update -y && \
 
 RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $BRANCH && \
     cd lotus && \
-    make clean lotus lotus-shed && \
+    make clean && \
+    make lotus lotus-shed && \
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 

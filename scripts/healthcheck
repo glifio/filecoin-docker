@@ -29,4 +29,3 @@ if [[ $(curl -sk https://api.filscan.io/) ]]
       else exit 1
       fi
 fi
-

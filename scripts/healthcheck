@@ -13,7 +13,7 @@ if [[ $(curl -sk https://api.filscan.io/) ]]
     if [ -z "$global" ]
         then global=0
     fi
-    count=$(echo $(( $(printf '%s\n'  $global $local $node | sort -nr | head -1)-250 )))
+    count=$(echo $(( $(printf '%s\n'  $global $node | sort -nr | head -1)-250 )))
 
       if [[ $count -lt $local ]]
          then exit 0

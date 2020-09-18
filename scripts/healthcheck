@@ -1,6 +1,6 @@
 #!/bin/bash
-#this script compare block on api.filscan and on node.
-#if api.filscan unavailable, it will compare with block on node witch has higher block from several nodes.
+#this script compare block on api.filscan and on nodes.
+#if api.filscan unavailable, it will compare with block on node which has higher block from several nodes.
 set -e
 if [[ $(curl -sk https://api.filscan.io/) ]]
   then

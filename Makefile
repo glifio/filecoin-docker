@@ -1,8 +1,11 @@
-BRANCH = ntwk-nerpa-9.15.0
+BRANCH = v0.7.1
 
 .PHONY: build
 build:
-	docker image build --build-arg BRANCH=$(BRANCH) -t openworklabs/lotus:$(BRANCH) . 
+	docker image build --build-arg BRANCH=$(BRANCH) -t openworklabs/lotus:$(BRANCH) .
+
+build_host:
+	docker image build --network host --build-arg BRANCH=$(BRANCH) -t openworklabs/lotus:$(BRANCH) .
 
 .PHONY: rebuild
 rebuild:

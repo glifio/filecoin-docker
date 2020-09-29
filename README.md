@@ -36,6 +36,9 @@ docker ps
 - `BRANCH` - The git release, tag or branch
 - `LOTUS_EXPORT` - Set to true if you want to export chain snapshots on a daily basis somewhere
 - `LOTUS_EXPORT_PATH` - If LOTUS_EXPORT is set to true - specify whether `.car` file should be saved
+- `SHEDEXPORT` - Set to true if you want to export chain snapshots using `lotus-shed`
+- `SHEDEXPORTPERIOD` - Defines period of chain snapshotting. Examples: 1m, 1h, 1d
+- `SHEDEXPORTPATH` - Defines path where to export chain snapshot
 
 #### Volumes
 

@@ -2,7 +2,7 @@
 FROM golang:1.14.2 AS build-env
 
 # branch or tag of the lotus version to build
-ARG BRANCH=v0.6.0
+ARG BRANCH=v0.7.1
 
 RUN echo "Building lotus from branch $BRANCH"
 
@@ -12,8 +12,9 @@ RUN apt-get update -y && \
 RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $BRANCH && \
     cd lotus && \
     make clean && \
-    make lotus && \
-    install -C ./lotus /usr/local/bin/lotus
+    make lotus lotus-shed && \
+    install -C ./lotus /usr/local/bin/lotus && \
+    install -C ./lotus-shed /usr/local/bin/lotus-shed
 
 # runtime container stage
 FROM ubuntu:18.04
@@ -33,6 +34,7 @@ COPY scripts/lotus-sync-restart scripts/lotus-export  /bin/
 RUN  crontab -u root /etc/cron.d/cron
 
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
+COPY --from=build-env /usr/local/bin/lotus-shed /usr/local/bin/lotus-shed
 COPY --from=build-env /etc/ssl/certs /etc/ssl/certs
 COPY --from=build-env /lib/x86_64-linux-gnu /lib/
 COPY LOTUS_VERSION /VERSION

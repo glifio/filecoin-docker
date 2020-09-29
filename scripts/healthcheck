@@ -15,10 +15,12 @@ if [[ $(curl -sk https://api.filscan.io/) ]]
     fi
     count=$(echo $(( $(printf '%s\n'  $global $node | sort -nr | head -1)-250 )))
 
-      if [[ $count -lt $local ]]
-         then exit 0
-      elif [[ -n $(lotus sync status | grep "Stage: error") ]]
-         then exit 0
+      if [[ -n $(lotus sync status | grep "Stage: error") ]]
+      then
+            if [[ $count -lt $local ]]
+            then exit 0
+            else exit 1
+            fi
       else exit 1
       fi
   else
@@ -26,8 +28,13 @@ if [[ $(curl -sk https://api.filscan.io/) ]]
     node=$(for i in {01..10}; do curl -s https://node.glif.io/space$i/lotus/debug/metrics | \
     grep ^lotus_chain_node_height | awk '{print $2}'; done | sort -nr | head -1)
     count=$(echo $(( $node-250 )))
-      if [[ $count -lt $local ]]
-        then exit 0
+
+      if [[ -n $(lotus sync status | grep "Stage: error") ]]
+      then
+            if [[ $count -lt $local ]]
+            then exit 0
+            else exit 1
+            fi
       else exit 1
       fi
-fi
+      

@@ -1,19 +1,19 @@
-BRANCH = v0.8.0
+BRANCH = v0.8.1
 
 .PHONY: build
 build:
-	docker image build --build-arg BRANCH=$(BRANCH) -t openworklabs/lotus:$(BRANCH) .
+	docker image build --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .
 
 build_host:
-	docker image build --network host --build-arg BRANCH=$(BRANCH) -t openworklabs/lotus:$(BRANCH) .
+	docker image build --network host --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .
 
 .PHONY: rebuild
 rebuild:
-	docker image build --no-cache --build-arg BRANCH=$(BRANCH) -t openworklabs/lotus:$(BRANCH) . 
+	docker image build --no-cache --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) . 
 
 .PHONY: push
 push:
-	docker push openworklabs/lotus:$(BRANCH)
+	docker push glif/lotus:$(BRANCH)
 
 tag: tag_lotus
 
@@ -36,10 +36,10 @@ run:
 	--name lotus \
 	--restart always \
 	--volume $(HOME)/.lotus:/root/.lotus \
-	openworklabs/lotus:$(BRANCH)
+	glif/lotus:$(BRANCH)
 
 run-bash:
-	docker container run -p 1235:1235 -p 1234:1234 -it --entrypoint=/bin/bash --name lotus --rm openworklabs/lotus:latest
+	docker container run -p 1235:1235 -p 1234:1234 -it --entrypoint=/bin/bash --name lotus --rm glif/lotus:latest
 
 bash:
 	docker exec -it lotus /bin/bash

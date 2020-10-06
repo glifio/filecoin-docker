@@ -24,14 +24,14 @@ if [ -f ~/.lotus/token ]; then
     chmod -f 600 ~/.lotus/token
 fi
 
-while getopts sdci option
+while getopts sdcin option
 do
     case "${option}" in
         s) SYNC=true;;
         d) DAEMON=true;;
         c) CHAINWATCH=true;;
         i) IMPORT=true;;
-        is) IMPORT_SNAPSHOT=true
+        n) IMPORT_SNAPSHOT=true;;
     esac
 done
 
@@ -47,11 +47,11 @@ fi
 if [ "$IMPORT_SNAPSHOT" = true ] ; then
     echo "Starting import wait"
     if [ ! -e "/root/.lotus/datastore" ]; then
-      /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $IMPORT_SNAPSHOTPATH
+      /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
       touch /root/.lotus/import-complete
       else
         rm -fr ~/.lotus/datastore/chain/*
-        /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $IMPORT_SNAPSHOTPATH
+        /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
         touch /root/.lotus/import-complete
     fi
 fi

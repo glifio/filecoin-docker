@@ -2,12 +2,18 @@
 FROM golang:1.14.2 AS build-env
 
 # branch or tag of the lotus version to build
-ARG BRANCH=v0.8.1
+ARG BRANCH
 
 RUN echo "Building lotus from branch $BRANCH"
 
 RUN apt-get update -y && \
-    apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config -y
+    apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config clang -y
+
+ENV RUSTFLAGS="-C target-cpu=native -g"
+ENV FFI_BUILD_FROM_SOURCE=1
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $BRANCH && \
     cd lotus && \

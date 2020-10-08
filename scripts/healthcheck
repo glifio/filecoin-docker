@@ -5,7 +5,8 @@ set -e
 if [[ -n $(lotus sync status | grep "Stage: error") ]]
     then exit 1
 else
-    if [[ $(curl -sk https://api.filscan.io/) ]]
+    if [[ $(curl -kfs --header "Content-Type: application/json" --request POST --data \
+    '{"id": 1, "jsonrpc": "2.0", "method": "filscan.StatChainInfo"}' https://api.filscan.io:8700/rpc/v1) ]]
       then
         global=$(curl -s --header "Content-Type: application/json" --request POST --data \
         '{"id": 1, "jsonrpc": "2.0", "method": "filscan.StatChainInfo"}' https://api.filscan.io:8700/rpc/v1 |\

@@ -24,7 +24,7 @@ if [ -f ~/.lotus/token ]; then
     chmod -f 600 ~/.lotus/token
 fi
 
-while getopts sdcin option
+while getopts sdcinf option
 do
     case "${option}" in
         s) SYNC=true;;
@@ -32,6 +32,7 @@ do
         c) CHAINWATCH=true;;
         i) IMPORT=true;;
         n) IMPORT_SNAPSHOT=true;;
+	f) IMPORT_SNAPSHOT_FROM_IPFS=true;;
     esac
 done
 
@@ -42,6 +43,15 @@ if [ "$IMPORT" = true ] ; then
       /usr/local/bin/lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
       touch /root/.lotus/import-complete
     fi
+fi
+
+if [ "$IMPORT_SNAPSHOT_FROM_IPFS" = true ] ; then
+    echo "Fetching IPFS CID..."
+    CID=$(curl $SNAPSHOT_CID)
+    echo "Fetched. CID is $CID"
+    SNAPSHOTURL="$IPFS_GW/$CID"
+    echo "Full URL to snapshot is $SNAPSHOTURL"
+    IMPORT_SNAPSHOT=true
 fi
 
 if [ "$IMPORT_SNAPSHOT" = true ] ; then

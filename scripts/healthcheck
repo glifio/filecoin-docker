@@ -2,10 +2,18 @@
 #this script compares block on api.filscan and on nodes and checks if lotus sync status isn't error
 #if api.filscan unavailable, it will compare with block on node which has higher block from several nodes.
 
-NODES=(space00 space01 space07 space09 space11 api-read)
+### READ THE LIST OF THE NODES FROM THE GITHUB. If no list - default list will be used
+readarray -t NODES < <(curl -sfk --max-time 3 $HEALTH_CHECK_GIST)
+if [ ${#errors[@]} -eq 0 ]; then
+  NODES=(space00 space01 space07 space09 space11 api-read)
+fi
+
+# Set allowed number of block node can have a delay of
 ALLOWED_DELAY=10
+# Set a helper variables
 re='^[0-9]+$'
 
+# If Lotus tells there is an error - throw error
 if [[ -n $(lotus sync status | grep "Stage: error") ]]
     then exit 1
 else
@@ -18,26 +26,20 @@ else
         SUM_OF_BLOCKS=$(($TEMP_TOTAL+$i))
     done
 
-    if [[ $FILSCAN_BLOCK =~ $re ]]
-      then
-	
+# If there Filscan available - add it's data and make it to have a 10 time more priority
+
+    if [[ $FILSCAN_BLOCK =~ $re ]]; then
         AVERAGE_BLOCK=$((($SUM_OF_BLOCKS+10*$FILSCAN_BLOCK)/(${#NODES[@]}+10)))
         MIN_ALLOWED_BLOCK=$(($AVERAGE_BLOCK-$ALLOWED_DELAY))       
-        
-        if [[ $OUR_BLOCK -ge $MIN_ALLOWED_BLOCK ]]; then
-          exit 0
-        else 
-          exit 1
-        fi
-      else
-    
-        AVERAGE_BLOCK=$(($SUM_OF_BLOCKS/${#NODES[@]}))
+    else 
+	AVERAGE_BLOCK=$(($SUM_OF_BLOCKS/${#NODES[@]}))
         MIN_ALLOWED_BLOCK=$(($AVERAGE_BLOCK-$ALLOWED_DELAY))
+    fi
 
-        if [[ $OUR_BLOCK -ge $MIN_ALLOWED_BLOCK ]]; then
-          exit 0
-        else 
-          exit 1
-        fi
+# If local block is lower than minimum allowed block - the health is bad
+    if [[ $OUR_BLOCK -ge $MIN_ALLOWED_BLOCK ]]; then
+        exit 0
+    else 
+        exit 1
     fi
 fi

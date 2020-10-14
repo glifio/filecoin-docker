@@ -19,16 +19,16 @@ if [[ -n $(lotus sync status | grep "Stage: error") ]]
 else
     FILSCAN_BLOCK=$(curl -kfs --header "Content-Type: application/json" --request POST --max-time 3 --data '{"id": 1, "jsonrpc": "2.0", "method": "filscan.StatChainInfo"}' https://api.filscan.io:8700/rpc/v1 | jq -r '.result.data.latest_height')
     OUR_BLOCK=$(curl -s --max-time 3 localhost:1234/debug/metrics | grep ^lotus_chain_node_worker_height | awk '{print $2}')
-    OTHER_KNOWN_BLOCKS=$(for i in "${NODES[@]}"; do curl -sk --max-time 3 http://${i}-lotus-service:1234/debug/metrics | grep ^lotus_chain_node_height | awk '{print $2}'; done)
-    if [ -z ${OTHER_KNOWN_BLOCKS[@]}]; then
+    readarray -t OTHER_KNOWN_BLOCKS < <(for i in "${NODES[@]}"; do curl -sk --max-time 3 http://${i}-lotus-service:1234/debug/metrics | grep ^lotus_chain_node_height | awk '{print $2}'; done)
+    if [[ -z "${OTHER_KNOWN_BLOCKS[@]}" ]]; then
         OTHER_KNOWN_BLOCKS_COUNT=0
     else
 	OTHER_KNOWN_BLOCKS_COUNT=${#OTHER_KNOWN_BLOCKS[@]}
     fi
 
     SUM_OF_BLOCKS=0
-    for i in "${NODES[@]}"; do
-        SUM_OF_BLOCKS=$(($TEMP_TOTAL+$i))
+    for i in "${OTHER_KNOWN_BLOCKS[@]}"; do
+        SUM_OF_BLOCKS=$(($SUM_OF_BLOCKS+$i))
     done
 
 # If there Filscan available - add it's data and make it to have a 10 time more priority

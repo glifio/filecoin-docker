@@ -12,32 +12,37 @@ else
     FILSCAN_BLOCK=$(curl -kfs --header "Content-Type: application/json" --request POST --max-time 3 --data '{"id": 1, "jsonrpc": "2.0", "method": "filscan.StatChainInfo"}' https://api.filscan.io:8700/rpc/v1 | jq -r '.result.data.latest_height')
     OUR_BLOCK=$(curl -s --max-time 3 localhost:1234/debug/metrics | grep ^lotus_chain_node_worker_height | awk '{print $2}')
     OTHER_KNOWN_BLOCKS=$(for i in "${NODES[@]}"; do curl -sk --max-time 3 http://${i}-lotus-service:1234/debug/metrics | grep ^lotus_chain_node_height | awk '{print $2}'; done)
-    
+    if [ -z ${OTHER_KNOWN_BLOCKS[@]}]; then
+        OTHER_KNOWN_BLOCKS_COUNT=0
+    else
+	OTHER_KNOWN_BLOCKS_COUNT=${#OTHER_KNOWN_BLOCKS[@]}
+    fi
+
     SUM_OF_BLOCKS=0
     for i in "${NODES[@]}"; do
         SUM_OF_BLOCKS=$(($TEMP_TOTAL+$i))
     done
 
-    if [[ $FILSCAN_BLOCK =~ $re ]]
-      then
+    if [[ $FILSCAN_BLOCK =~ $re ]]; then
 	
-        AVERAGE_BLOCK=$((($SUM_OF_BLOCKS+10*$FILSCAN_BLOCK)/(${#NODES[@]}+10)))
+        AVERAGE_BLOCK=$((($SUM_OF_BLOCKS+10*$FILSCAN_BLOCK)/($OTHER_KNOWN_BLOCKS_COUNT+10)))
         MIN_ALLOWED_BLOCK=$(($AVERAGE_BLOCK-$ALLOWED_DELAY))       
         
         if [[ $OUR_BLOCK -ge $MIN_ALLOWED_BLOCK ]]; then
-          exit 0
+            exit 0
         else 
-          exit 1
+            exit 1
         fi
-      else
-    
-        AVERAGE_BLOCK=$(($SUM_OF_BLOCKS/${#NODES[@]}))
+
+    else
+
+        AVERAGE_BLOCK=$(($SUM_OF_BLOCKS/$OTHER_KNOWN_BLOCKS_COUNT))
         MIN_ALLOWED_BLOCK=$(($AVERAGE_BLOCK-$ALLOWED_DELAY))
 
         if [[ $OUR_BLOCK -ge $MIN_ALLOWED_BLOCK ]]; then
-          exit 0
+            exit 0
         else 
-          exit 1
+            exit 1
         fi
     fi
 fi

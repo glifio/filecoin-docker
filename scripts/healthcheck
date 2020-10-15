@@ -3,7 +3,7 @@
 ALLOWED_DELAY=10
 BLOCK_TIME=30
 
-GENESIS_TIMESTAMP=$(date +"%s" -d $(curl -s https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/${NETWORK}.json | jq .Genesis.Timestamp -r))
+GENESIS_TIMESTAMP=$(date +"%s" -d $(cat /networks/${NETWORK}.json | jq .Genesis.Timestamp -r))
 CURRENT_TIMESTAMP=$(date +"%s")
 DIFFERENCE_IN_TIME=$(( $CURRENT_TIMESTAMP - $GENESIS_TIMESTAMP ))
 MIN_ALLOWED_BLOCK=$(( $DIFFERENCE_IN_TIME / $BLOCK_TIME - $ALLOWED_DELAY ))

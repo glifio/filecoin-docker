@@ -57,6 +57,11 @@ COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /root/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
 
+ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/butterfly.json /networks/
+ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/calibration.json /networks/
+ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/mainnet.json /networks/
+ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/nerpa.json /networks/
+
 # API port
 EXPOSE 1234/tcp
 

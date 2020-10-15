@@ -9,6 +9,7 @@ RUN echo "Building lotus from branch $BRANCH"
 RUN apt-get update -y && \
     apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config clang -y
 
+ENV CGO_CFLAGS="-D__BLST_PORTABLE__"
 ENV RUSTFLAGS="-C target-cpu=native -g"
 ENV FFI_BUILD_FROM_SOURCE=1
 

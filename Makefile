@@ -7,6 +7,9 @@ build:
 build_host:
 	docker image build --network host --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .
 
+build_docker:
+	./build/build_docker.sh $(latestTag)
+
 .PHONY: rebuild
 rebuild:
 	docker image build --no-cache --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) . 

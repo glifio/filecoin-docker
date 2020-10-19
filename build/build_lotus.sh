@@ -1,9 +1,9 @@
 #!/bin/bash
-echo $1
-if [[ $1 != '' ]]; then
-  if [[ $1 == "rebuild" ]]; then
-    docker image build --no-cache -t openworklabs/lotus:latest -f lotus.dockerfile .
-  fi
+
+if [ -z $1 ]
+then
+      echo "TAG is not defined"
 else
-  docker image build -t openworklabs/lotus:latest -f lotus.dockerfile .
+      echo The latest tag is $1;
+      docker image build --no-cache --network host --build-arg BRANCH=$1 -t glif/lotus:$1 .
 fi

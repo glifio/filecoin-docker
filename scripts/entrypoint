@@ -3,11 +3,11 @@
 repeat() { while :; sleep 3; do $@ && return; done }
 
 # setup configuration
-if [ -f "/root/config.toml" ]; then
-    if [ ! -d /root/.lotus ]; then
-	mkdir /root/.lotus && \
-    	cp /root/config.toml /root/.lotus/config.toml
-    else cp /root/config.toml /root/.lotus/config.toml
+if [ -f "~/config.toml" ]; then
+    if [ ! -d ~/.lotus ]; then
+	mkdir ~/.lotus && \
+    	cp ~/config.toml ~/.lotus/config.toml
+    else cp ~/config.toml ~/.lotus/config.toml
     fi
 fi
 
@@ -39,9 +39,9 @@ done
 if [ "$IMPORT" = true ] ; then
     echo "Starting import wait"
     CHAIN_CAR="/chain/chain.car"
-    if [ -f "$CHAIN_CAR" ] && [ ! -e "/root/.lotus/datastore" ]; then
+    if [ -f "$CHAIN_CAR" ] && [ ! -e "~/.lotus/datastore" ]; then
       /usr/local/bin/lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
-      touch /root/.lotus/import-complete
+      touch ~/.lotus/import-complete
     fi
 fi
 
@@ -56,13 +56,13 @@ fi
 
 if [ "$IMPORT_SNAPSHOT" = true ] ; then
     echo "Starting import wait"
-    if [ ! -e "/root/.lotus/datastore" ]; then
+    if [ ! -e "~/.lotus/datastore" ]; then
       /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
-      touch /root/.lotus/import-complete
+      touch ~/.lotus/import-complete
       else
         rm -fr ~/.lotus/datastore/chain/*
         /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
-        touch /root/.lotus/import-complete
+        touch ~/.lotus/import-complete
     fi
 fi
 

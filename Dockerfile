@@ -38,8 +38,6 @@ COPY --from=build-env /etc/init.d/cron /etc/init.d/cron
 COPY --from=build-env /usr/sbin/cron /usr/sbin/cron
 COPY scripts/lotus-sync-restart scripts/lotus-export  /bin/
 
-RUN  crontab -u root /etc/cron.d/cron
-
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
 COPY --from=build-env /usr/local/bin/lotus-shed /usr/local/bin/lotus-shed
 COPY --from=build-env /etc/ssl/certs /etc/ssl/certs
@@ -61,6 +59,16 @@ ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/stati
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/calibration.json /networks/
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/mainnet.json /networks/
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/nerpa.json /networks/
+
+# create nonroot user
+ENV HOME_PATH /lotus_home
+
+RUN mkdir -p $HOME_PATH && \
+    adduser --home $HOME_PATH --uid 2000 --gecos "" --disabled-password --quiet lotus_user &&\
+    chown lotus_user: $HOME_PATH &&\
+    crontab -u lotus_user /etc/cron.d/cron
+
+USER lotus_user
 
 # API port
 EXPOSE 1234/tcp

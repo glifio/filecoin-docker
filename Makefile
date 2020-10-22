@@ -18,7 +18,7 @@ push:
 tag: tag_lotus
 
 build_lotus:
-	./build/build_lotus.sh $(latestTag)
+	./build/build_lotus.sh
 
 rebuild_lotus:
 	./build/build_lotus.sh rebuild

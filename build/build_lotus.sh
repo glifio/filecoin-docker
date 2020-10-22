@@ -1,9 +1,16 @@
 #!/bin/bash
 
-if [ -z $1 ]
-then
-      echo "TAG is not defined"
-else
-      echo The latest tag is $1;
-      docker image build --no-cache --network host --build-arg BRANCH=$1 -t glif/lotus:$1 .
+if [ -z $latestLotusTag]
+ then
+  echo "\$latestLotusTag is NOT defined"
+  exit
 fi
+
+if [ -z $imageTag]
+  then
+    echo "\$imageTag is not defined. Setting \$imageTag ..."
+    export imageTag=$latestLotusTag
+fi
+
+echo "latestLotusTag = $latestLotusTag  imageTag = $imageTag"
+docker image build --no-cache --network host --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .

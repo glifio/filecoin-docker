@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/bash -e
 
-if [ -z $latestLotusTag]
+if [ -z $latestLotusTag ]
  then
   echo "\$latestLotusTag is NOT defined"
-  exit
+  exit 1
 fi
 
-if [ -z $imageTag]
+if [ -z $imageTag ]
   then
     echo "\$imageTag is not defined. Setting \$imageTag ..."
     export imageTag=$latestLotusTag

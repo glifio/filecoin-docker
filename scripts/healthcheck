@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-ALLOWED_DELAY=10
-BLOCK_TIME=30
+ALLOWED_DELAY=${ALLOWED_DELAY:=10}
+BLOCK_TIME=$(cat /networks/${NETWORK}.json | jq .NetworkParameters.EpochDurationSeconds -r)
 
 GENESIS_TIMESTAMP=$(date +"%s" -d $(cat /networks/${NETWORK}.json | jq .Genesis.Timestamp -r))
 CURRENT_TIMESTAMP=$(date +"%s")

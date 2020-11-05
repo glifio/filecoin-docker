@@ -57,6 +57,17 @@ COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /root/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
 
+COPY scripts/bash-config /etc/lotus/docker/
+COPY scripts/configure /etc/lotus/docker/
+COPY scripts/run /etc/lotus/docker/
+COPY scripts/launch /etc/lotus/docker/
+COPY scripts/ensure /etc/lotus/docker/
+
+RUN chmod +x /etc/lotus/docker/run
+RUN chmod +x /etc/lotus/docker/configure
+RUN chmod +x /etc/lotus/docker/ensure
+RUN chmod +x /etc/lotus/docker/launch
+
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/butterfly.json /networks/
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/calibration.json /networks/
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/mainnet.json /networks/
@@ -68,5 +79,4 @@ EXPOSE 1234/tcp
 # P2P port
 EXPOSE 1235/tcp
 
-ENTRYPOINT ["/bin/entrypoint"]
-CMD ["-d"]
+ENTRYPOINT ["/etc/lotus/docker/run"]

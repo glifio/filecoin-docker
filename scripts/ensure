@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+. /etc/lotus/docker/bash-config
+
+key_permissions

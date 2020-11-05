@@ -1,0 +1,35 @@
+#set -o nounset \
+#    -o errexit
+
+
+function show_env {
+    env | sort
+}
+
+function prepare_config {
+  if [ -f "/root/config.toml" ]; then
+      if [ ! -d /root/.lotus ]; then
+        mkdir /root/.lotus && \
+        cp /root/config.toml /root/.lotus/config.toml
+      else
+        cp /root/config.toml /root/.lotus/config.toml
+      fi
+  fi
+}
+
+function start_cron {
+  if ! pgrep -f "/usr/sbin/cron"; then
+    /etc/init.d/cron start
+  fi
+}
+
+function key_permissions {
+  # make sure key/token permissions are correct
+  if [ -d ~/.lotus/keystore ]; then
+      chmod -f 600 ~/.lotus/keystore/*
+  fi
+  if [ -f ~/.lotus/token ]; then
+      chmod -f 600 ~/.lotus/token
+  fi
+}
+

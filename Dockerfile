@@ -27,16 +27,9 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
 FROM ubuntu:18.04
 
 #creating cron job to check lotus sync status and restart it if process is killed
-RUN  mkdir /etc/cron.d && \
-     mkdir -p /var/spool/cron/crontabs && \
-     apt-get update && \
+RUN  apt-get update && \
      apt-get install curl -y && \
      rm -rf /var/lib/apt/lists/*
-COPY scripts/cron /etc/cron.d/
-COPY --from=build-env /usr/bin/crontab /usr/bin/crontab
-COPY --from=build-env /etc/init.d/cron /etc/init.d/cron
-COPY --from=build-env /usr/sbin/cron /usr/sbin/cron
-COPY scripts/lotus-sync-restart scripts/lotus-export  /bin/
 
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
 COPY --from=build-env /usr/local/bin/lotus-shed /usr/local/bin/lotus-shed
@@ -58,8 +51,7 @@ ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/stati
 
 # create nonroot user and lotus folder
 RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user &&\
-        chown -R lotus_user: /networks &&\
-        crontab -u lotus_user /etc/cron.d/cron
+        chown -R lotus_user: /networks
 
 # copy jq, script/config files
 COPY --from=build-env /usr/bin/jq /usr/bin/

@@ -54,7 +54,7 @@ elif [ "$SYNC" = true ]; then
   # Start the daemon process and put it in the background
 # /usr/local/bin/lotus daemon &
   # Run the sync process until it dies
-  repeat /usr/local/bin/lotus sync wait
+  lotus sync wait
 elif [ "$SYNC" = false ]; then
   echo "SYNC disabled."
 fi

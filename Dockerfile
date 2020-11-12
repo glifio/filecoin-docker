@@ -52,6 +52,8 @@ COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /home/lotus_user/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
 
+USER lotus_user
+
 # API port
 EXPOSE 1234/tcp
 

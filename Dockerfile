@@ -28,7 +28,7 @@ FROM ubuntu:18.04
 
 #creating cron job to check lotus sync status and restart it if process is killed
 RUN  apt-get update && \
-     apt-get install curl nano git libhwloc-dev -y && \
+     apt-get install curl nano libhwloc-dev -y && \
      rm -rf /var/lib/apt/lists/*
 
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus

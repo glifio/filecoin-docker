@@ -44,8 +44,14 @@ COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0 /lib/libOpe
 COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libjq.so.1 /usr/lib/x86_64-linux-gnu/
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libonig.so.5.0.0 /usr/lib/x86_64-linux-gnu/libonig.so.5
 
+ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/butterfly.json /networks/	
+ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/calibration.json /networks/	
+ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/mainnet.json /networks/	
+ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/nerpa.json /networks/
+
 # create nonroot user and lotus folder
-RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
+RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user &&\
+        chown -R 2000: /networks
 
 # copy jq, script/config files
 COPY --from=build-env /usr/bin/jq /usr/bin/

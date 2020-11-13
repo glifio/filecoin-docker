@@ -51,7 +51,7 @@ ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/stati
 
 # create nonroot user and lotus folder
 RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user &&\
-        chown -R 2000: /networks
+        chown -R lotus_user: /networks
 
 # copy jq, script/config files
 COPY --from=build-env /usr/bin/jq /usr/bin/

@@ -27,18 +27,9 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
 FROM ubuntu:18.04
 
 #creating cron job to check lotus sync status and restart it if process is killed
-RUN  mkdir /etc/cron.d && \
-     mkdir -p /var/spool/cron/crontabs && \
-     apt-get update && \
-     apt-get install curl -y && \
+RUN  apt-get update && \
+     apt-get install curl nano git -y && \
      rm -rf /var/lib/apt/lists/*
-COPY scripts/cron /etc/cron.d/
-COPY --from=build-env /usr/bin/crontab /usr/bin/crontab
-COPY --from=build-env /etc/init.d/cron /etc/init.d/cron
-COPY --from=build-env /usr/sbin/cron /usr/sbin/cron
-COPY scripts/lotus-sync-restart scripts/lotus-export  /bin/
-
-RUN  crontab -u root /etc/cron.d/cron
 
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
 COPY --from=build-env /usr/local/bin/lotus-shed /usr/local/bin/lotus-shed
@@ -53,9 +44,15 @@ COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0 /lib/libOpe
 COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libjq.so.1 /usr/lib/x86_64-linux-gnu/
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libonig.so.5.0.0 /usr/lib/x86_64-linux-gnu/libonig.so.5
 
+# create nonroot user and lotus folder
+RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
+
+# copy jq, script/config files
 COPY --from=build-env /usr/bin/jq /usr/bin/
-COPY config/config.toml /root/config.toml
+COPY config/config.toml /home/lotus_user/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
+
+USER lotus_user
 
 # API port
 EXPOSE 1234/tcp

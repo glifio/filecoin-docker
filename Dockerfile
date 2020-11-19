@@ -1,5 +1,5 @@
 # build container stage
-FROM golang:1.14.2 AS build-env
+FROM golang:1.15.5 AS build-env
 
 # branch or tag of the lotus version to build
 ARG BRANCH

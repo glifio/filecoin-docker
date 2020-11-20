@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-docker rmi $(docker images -q)
+docker rmi -f $(docker images -q)
 
 if [ -z $latestLotusTag ]
  then

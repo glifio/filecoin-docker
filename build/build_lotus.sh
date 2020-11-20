@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+docker rmi $(docker images -q)
+
 if [ -z $latestLotusTag ]
  then
   echo "\$latestLotusTag is NOT defined"

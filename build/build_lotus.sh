@@ -1,6 +1,6 @@
 #!/bin/bash -e
-
-docker rmi -f $(docker images -q)
+### delete images on worker if exist
+[ ! -z "$(docker images -q)" ] &&  docker rmi -f $(docker images -q) || echo no images
 
 if [ -z $latestLotusTag ]
  then

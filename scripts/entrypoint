@@ -12,11 +12,6 @@ if [ -f "/home/lotus_user/config.toml" ]; then
     fi
 fi
 
-#start cron
-if ! pgrep -f "/usr/sbin/cron"; then
-	/etc/init.d/cron start
-fi
-
 # make sure key/token permissions are correct
 if [ -d /home/lotus_user/.lotus/keystore ]; then
     chmod -f 600 /home/lotus_user/.lotus/keystore/*

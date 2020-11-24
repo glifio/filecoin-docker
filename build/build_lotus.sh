@@ -14,5 +14,10 @@ if [ -z $imageTag ]
     export imageTag=$latestLotusTag
 fi
 
+### updated tag name to the :latest for calibration, nerpa networks
+if [[ $imageTag =~ ^v.*$ ]]
+	then echo "accepted tag"
+    else imageTag=$(echo $imageTag | sed 's/\/.*/:latest/')
+fi
 echo "latestLotusTag = $latestLotusTag  imageTag = $imageTag"
 docker image build --no-cache --network host --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .

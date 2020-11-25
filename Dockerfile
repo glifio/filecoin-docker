@@ -18,6 +18,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $BRANCH && \
     cd lotus && \
+    git submodule update --init --recursive &&
     make clean && \
     make lotus lotus-shed && \
     install -C ./lotus /usr/local/bin/lotus && \

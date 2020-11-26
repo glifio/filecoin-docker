@@ -4,15 +4,17 @@
 
 prepare_config
 
+check_home_dir
+
 if [[ -z "$IMPORT" ]]
 then
   echo "IMPORT not defined. Please setting up ..."
 elif [ "$IMPORT" = true ]; then
   echo "Starting import wait"
   CHAIN_CAR="/chain/chain.car"
-  if [ -f "$CHAIN_CAR" ] && [ ! -e "/root/.lotus/datastore" ]; then
+  if [ -f "$CHAIN_CAR" ] && [ ! -e "/home/lotus_user/.lotus/datastore" ]; then
     /usr/local/bin/lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
-    touch /root/.lotus/import-complete
+    touch /home/lotus_user/.lotus/import-complete
   fi
 elif [ "$IMPORT" = false ]; then
   echo "IMPORT disabled."
@@ -34,13 +36,13 @@ fi
 
 if [ "$IMPORT_SNAPSHOT" = true ] ; then
     echo "Starting import wait"
-    if [ ! -e "/root/.lotus/datastore" ]; then
+    if [ ! -e "/home/lotus_user/.lotus/datastore" ]; then
       /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
-      touch /root/.lotus/import-complete
+      touch /home/lotus_user/.lotus/import-complete
       else
         rm -fr ~/.lotus/datastore/chain/*
         /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
-        touch /root/.lotus/import-complete
+        touch /home/lotus_user/.lotus/import-complete
     fi
 elif [ "$IMPORT_SNAPSHOT" = false ] ; then
   echo "IMPORT_SNAPSHOT disabled."

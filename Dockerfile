@@ -53,8 +53,6 @@ COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /home/lotus_user/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
 
-USER lotus_user
-
 COPY scripts/bash-config /etc/lotus/docker/
 COPY scripts/configure /etc/lotus/docker/
 COPY scripts/run /etc/lotus/docker/
@@ -71,6 +69,7 @@ ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/stati
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/mainnet.json /networks/
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/nerpa.json /networks/
 
+USER lotus_user
 # API port
 EXPOSE 1234/tcp
 

@@ -6,13 +6,21 @@ function show_env {
     env | sort
 }
 
+function check_home_dir() {
+  if [[ -z "$INFRA_LOTUS_HOME" ]]; then
+    echo "INFRA_LOTUS_HOME not defined. Please setting up ..."
+    exit 1
+  fi
+
+}
+
 function prepare_config {
-  if [ -f "/root/config.toml" ]; then
-      if [ ! -d /root/.lotus ]; then
-        mkdir /root/.lotus && \
-        cp /root/config.toml /root/.lotus/config.toml
+  if [ -f "$INFRA_LOTUS_HOME/config.toml" ]; then
+      if [ ! -d $INFRA_LOTUS_HOME/.lotus ]; then
+        mkdir $INFRA_LOTUS_HOME/.lotus && \
+        cp $INFRA_LOTUS_HOME/config.toml $INFRA_LOTUS_HOME/.lotus/config.toml
       else
-        cp /root/config.toml /root/.lotus/config.toml
+        cp $INFRA_LOTUS_HOME/config.toml $INFRA_LOTUS_HOME/.lotus/config.toml
       fi
   fi
 }
@@ -25,11 +33,11 @@ function start_cron {
 
 function key_permissions {
   # make sure key/token permissions are correct
-  if [ -d ~/.lotus/keystore ]; then
-      chmod -f 600 ~/.lotus/keystore/*
+  if [ -d $INFRA_LOTUS_HOME/.lotus/keystore ]; then
+      chmod -f 600 $INFRA_LOTUS_HOME/.lotus/keystore/*
   fi
   if [ -f ~/.lotus/token ]; then
-      chmod -f 600 ~/.lotus/token
+      chmod -f 600 $INFRA_LOTUS_HOME/.lotus/token
   fi
 }
 

@@ -6,46 +6,46 @@ prepare_config
 
 check_home_dir
 
-if [[ -z "$IMPORT" ]]
+if [[ -z "$INFRA_IMPORT" ]]
 then
-  echo "IMPORT not defined. Please setting up ..."
-elif [ "$IMPORT" = true ]; then
+  echo "INFRA_IMPORT not defined. Please setting up ..."
+elif [ "$INFRA_IMPORT" = true ]; then
   echo "Starting import wait"
   CHAIN_CAR="/chain/chain.car"
-  if [ -f "$CHAIN_CAR" ] && [ ! -e "/home/lotus_user/.lotus/datastore" ]; then
-    /usr/local/bin/lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
-    touch /home/lotus_user/.lotus/import-complete
+  if [ -f "$CHAIN_CAR" ] && [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
+    lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
+    touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
   fi
-elif [ "$IMPORT" = false ]; then
-  echo "IMPORT disabled."
+elif [ "$INFRA_IMPORT" = false ]; then
+  echo "INFRA_IMPORT disabled."
 fi
 
-if [[ -z "$IMPORT_SNAPSHOT_FROM_IPFS" ]]
+if [[ -z "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" ]]
 then
-  echo "IMPORT_SNAPSHOT_FROM_IPFS not defined. Please setting up ..."
-elif [ "$IMPORT_SNAPSHOT_FROM_IPFS" = true ]; then
+  echo "INFRA_IMPORT_SNAPSHOT_FROM_IPFS not defined. Please setting up ..."
+elif [ "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" = true ]; then
   echo "Fetching IPFS CID..."
   CID=$(curl $SNAPSHOT_CID)
   echo "Fetched. CID is $CID"
   SNAPSHOTURL="$IPFS_GW/$CID"
   echo "Full URL to snapshot is $SNAPSHOTURL"
-  IMPORT_SNAPSHOT=true
+  INFRA_IMPORT_SNAPSHOT=true
 elif [ "$IMPORT_SNAPSHOT_FROM_IPFS" = false ]; then
   echo "IMPORT_SNAPSHOT_FROM_IPFS disabled."
 fi
 
-if [ "$IMPORT_SNAPSHOT" = true ] ; then
+if [ "$INFRA_IMPORT_SNAPSHOT" = true ] ; then
     echo "Starting import wait"
-    if [ ! -e "/home/lotus_user/.lotus/datastore" ]; then
-      /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
-      touch /home/lotus_user/.lotus/import-complete
+    if [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
+      lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
+      touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
       else
-        rm -fr ~/.lotus/datastore/chain/*
-        /usr/local/bin/lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
-        touch /home/lotus_user/.lotus/import-complete
+        rm -fr "$INFRA_LOTUS_HOME/.lotus/datastore/chain/*"
+        lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
+        touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
     fi
-elif [ "$IMPORT_SNAPSHOT" = false ] ; then
-  echo "IMPORT_SNAPSHOT disabled."
+elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
+  echo "INFRA_IMPORT_SNAPSHOT disabled."
 fi
 
 if [[ -z "$SYNC" ]]

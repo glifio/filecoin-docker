@@ -16,11 +16,11 @@ function check_home_dir() {
 
 function prepare_config {
   if [ -f "$INFRA_LOTUS_HOME/config.toml" ]; then
-      if [ ! -d $INFRA_LOTUS_HOME/.lotus ]; then
-        mkdir $INFRA_LOTUS_HOME/.lotus && \
-        cp $INFRA_LOTUS_HOME/config.toml $INFRA_LOTUS_HOME/.lotus/config.toml
+      if [ ! -d "$INFRA_LOTUS_HOME/.lotus" ]; then
+        mkdir "$INFRA_LOTUS_HOME/.lotus" && \
+        cp "$INFRA_LOTUS_HOME/config.toml" "$INFRA_LOTUS_HOME/.lotus/config.toml"
       else
-        cp $INFRA_LOTUS_HOME/config.toml $INFRA_LOTUS_HOME/.lotus/config.toml
+        cp "$INFRA_LOTUS_HOME/config.toml" "$INFRA_LOTUS_HOME/.lotus/config.toml"
       fi
   fi
 }
@@ -33,11 +33,11 @@ function start_cron {
 
 function key_permissions {
   # make sure key/token permissions are correct
-  if [ -d $INFRA_LOTUS_HOME/.lotus/keystore ]; then
-      chmod -f 600 $INFRA_LOTUS_HOME/.lotus/keystore/*
+  if [ -d "$INFRA_LOTUS_HOME/.lotus/keystore" ]; then
+      chmod -f 600 "$INFRA_LOTUS_HOME/.lotus/keystore/*"
   fi
-  if [ -f ~/.lotus/token ]; then
-      chmod -f 600 $INFRA_LOTUS_HOME/.lotus/token
+  if [ -f "$INFRA_LOTUS_HOME/.lotus/token" ]; then
+      chmod -f 600 "$INFRA_LOTUS_HOME/.lotus/token"
   fi
 }
 

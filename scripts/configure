@@ -3,8 +3,8 @@
 . /etc/lotus/docker/bash-config
 
 prepare_config
-
 check_home_dir
+repeat() { while :; sleep 3; do $@ && return; done }
 
 if [[ -z "$INFRA_IMPORT" ]]
 then
@@ -48,16 +48,16 @@ elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
   echo "INFRA_IMPORT_SNAPSHOT disabled."
 fi
 
-if [[ -z "$SYNC" ]]
+if [[ -z "$INFRA_SYNC" ]]
 then
-  echo "SYNC not defined. Please setting up ..."
-elif [ "$SYNC" = true ]; then
-  echo "Starting sync wait"
-  # Start the daemon process and put it in the background
-# /usr/local/bin/lotus daemon &
-  # Run the sync process until it dies
-  lotus sync wait
-elif [ "$SYNC" = false ]; then
+  echo "INFRA_SYNC not defined. Please setting up ..."
+elif [ "$INFRA_SYNC" = true ]; then
+    echo "Starting sync wait"
+    # Start the daemon process and put it in the background
+    lotus daemon &
+    # Run the sync process until it dies
+    repeat lotus sync wait
+elif [ "$INFRA_SYNC" = false ]; then
   echo "SYNC disabled."
 fi
 

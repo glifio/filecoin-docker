@@ -1,6 +1,6 @@
 #set -o nounset \
 #    -o errexit
-
+set -e
 
 function show_env {
     env | sort

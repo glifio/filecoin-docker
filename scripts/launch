@@ -2,13 +2,13 @@
 
 . /etc/lotus/docker/bash-config
 
-if [[ -z "$DAEMON" ]]
+if [[ -z "$INFRA_LOTUS_DAEMON" ]]
 then
-  echo "DAEMON not defined. Please setting up ..."
-elif [ "$DAEMON" = true ]; then
+  echo "INFRA_LOTUS_DAEMON not defined. Please setting up ..."
+elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
   echo "Starting daemon"
   # Start the daemon process
-  /usr/local/bin/lotus daemon
-elif [ "$DAEMON" = false ]; then
+  lotus daemon
+elif [ "$INFRA_LOTUS_DAEMON" = false ]; then
   echo "DAEMON disabled."
 fi

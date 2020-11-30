@@ -70,7 +70,7 @@ then
 elif [ "$INFRA_SYNC" = true ]; then
     echo "Starting sync wait"
     # Start the daemon process and put it in the background
-    lotus daemon &
+#    lotus daemon &
     # Run the sync process until it dies
     repeat lotus sync wait
 elif [ "$INFRA_SYNC" = false ]; then

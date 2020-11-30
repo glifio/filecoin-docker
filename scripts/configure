@@ -3,7 +3,7 @@
 . /etc/lotus/docker/bash-config
 
 prepare_config
-check_home_dir
+check_lotus_home_dir
 repeat() { while :; sleep 3; do $@ && return; done }
 
 if [[ -z "$INFRA_IMPORT" ]]
@@ -32,6 +32,18 @@ elif [ "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" = true ]; then
   INFRA_IMPORT_SNAPSHOT=true
 elif [ "$IMPORT_SNAPSHOT_FROM_IPFS" = false ]; then
   echo "IMPORT_SNAPSHOT_FROM_IPFS disabled."
+fi
+
+## Delete all data every pod restart
+if [[ -z "$INFRA_CLEAR_RESTART" ]]
+then
+  echo "INFRA_CLEAR_RESTART not defined"
+elif [ "$INFRA_CLEAR_RESTART" = true ]; then
+  echo "I'll remove ALL LOTUS DATA from $INFRA_LOTUS_HOME/.lotus/"
+  echo " -------> Removing ... <---------"
+  rm -rf "$INFRA_LOTUS_HOME/.lotus/"
+elif [ "$INFRA_CLEAR_RESTART" = false ]; then
+  echo "INFRA_CLEAR_RESTART disabled."
 fi
 
 if [ -f "$INFRA_LOTUS_HOME/.lotus/import-complete" ]; then

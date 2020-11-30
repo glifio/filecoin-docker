@@ -34,6 +34,9 @@ elif [ "$IMPORT_SNAPSHOT_FROM_IPFS" = false ]; then
   echo "IMPORT_SNAPSHOT_FROM_IPFS disabled."
 fi
 
+if [ -f "$INFRA_LOTUS_HOME/.lotus/import-complete" ]; then
+  echo "IMPORT was completed before."
+else
 if [ "$INFRA_IMPORT_SNAPSHOT" = true ] ; then
     echo "Starting import wait"
     if [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
@@ -46,6 +49,7 @@ if [ "$INFRA_IMPORT_SNAPSHOT" = true ] ; then
     fi
 elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
   echo "INFRA_IMPORT_SNAPSHOT disabled."
+fi
 fi
 
 if [[ -z "$INFRA_SYNC" ]]

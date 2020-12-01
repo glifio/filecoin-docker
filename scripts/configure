@@ -11,7 +11,7 @@ elif [ "$INFRA_CLEAR_RESTART" = true ]; then
   echo " -------> Removing ... <---------"
   rm -rf "$INFRA_LOTUS_HOME/.lotus/*"
   sleep 5
-  ls -alh
+  ls -alh "$INFRA_LOTUS_HOME/.lotus/"
 elif [ "$INFRA_CLEAR_RESTART" = false ]; then
   echo "INFRA_CLEAR_RESTART disabled."
 fi

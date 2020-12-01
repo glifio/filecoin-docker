@@ -9,7 +9,7 @@ then
 elif [ "$INFRA_CLEAR_RESTART" = true ]; then
   echo "I'll remove ALL LOTUS DATA from $INFRA_LOTUS_HOME/.lotus/"
   echo " -------> Removing ... <---------"
-  rm -rf "$INFRA_LOTUS_HOME/.lotus/"
+  rm -rf "$INFRA_LOTUS_HOME/.lotus/*"
 elif [ "$INFRA_CLEAR_RESTART" = false ]; then
   echo "INFRA_CLEAR_RESTART disabled."
 fi

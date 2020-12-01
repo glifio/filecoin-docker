@@ -2,6 +2,18 @@
 
 . /etc/lotus/docker/bash-config
 
+## Delete all data every pod restart
+if [[ -z "$INFRA_CLEAR_RESTART" ]]
+then
+  echo "INFRA_CLEAR_RESTART not defined"
+elif [ "$INFRA_CLEAR_RESTART" = true ]; then
+  echo "I'll remove ALL LOTUS DATA from $INFRA_LOTUS_HOME/.lotus/"
+  echo " -------> Removing ... <---------"
+  rm -rf "$INFRA_LOTUS_HOME/.lotus/"
+elif [ "$INFRA_CLEAR_RESTART" = false ]; then
+  echo "INFRA_CLEAR_RESTART disabled."
+fi
+
 prepare_config
 check_lotus_home_dir
 repeat() { while :; sleep 3; do $@ && return; done }
@@ -34,18 +46,6 @@ elif [ "$IMPORT_SNAPSHOT_FROM_IPFS" = false ]; then
   echo "IMPORT_SNAPSHOT_FROM_IPFS disabled."
 fi
 
-## Delete all data every pod restart
-if [[ -z "$INFRA_CLEAR_RESTART" ]]
-then
-  echo "INFRA_CLEAR_RESTART not defined"
-elif [ "$INFRA_CLEAR_RESTART" = true ]; then
-  echo "I'll remove ALL LOTUS DATA from $INFRA_LOTUS_HOME/.lotus/"
-  echo " -------> Removing ... <---------"
-  rm -rf "$INFRA_LOTUS_HOME/.lotus/"
-elif [ "$INFRA_CLEAR_RESTART" = false ]; then
-  echo "INFRA_CLEAR_RESTART disabled."
-fi
-
 if [ -f "$INFRA_LOTUS_HOME/.lotus/import-complete" ]; then
   echo "IMPORT was completed before."
 else
@@ -73,7 +73,6 @@ elif [ "$INFRA_SYNC" = true ]; then
     lotus daemon &
     # Run the sync process until it dies
     repeat lotus sync wait
-    lotus daemon stop
 elif [ "$INFRA_SYNC" = false ]; then
   echo "SYNC disabled."
 fi

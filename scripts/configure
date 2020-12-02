@@ -83,12 +83,12 @@ elif [ "$INFRA_SYNC" = true ]; then
     # lotus daemon &
     # Run the sync process until it dies
     # repeat lotus sync wait
-    ( repeat nohup lotus sync wait
+    repeat nohup lotus sync wait &
     if [ $? -eq 0 ]
     then
       echo "Sync complete. File creating..."
       touch $INFRA_LOTUS_HOME/.lotus/sync-complete
-    fi &)
+    fi
 elif [ "$INFRA_SYNC" = false ]; then
   echo "SYNC disabled."
 fi

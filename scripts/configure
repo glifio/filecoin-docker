@@ -2,6 +2,7 @@
 
 . /etc/lotus/docker/bash-config
 
+repeat() { while :; sleep 3; do $@ && return; done }
 ## Delete all data every pod restart
 if [[ -z "$INFRA_CLEAR_RESTART" ]]
 then
@@ -9,16 +10,13 @@ then
 elif [ "$INFRA_CLEAR_RESTART" = true ]; then
   echo "I'll remove ALL LOTUS DATA from $INFRA_LOTUS_HOME/.lotus/"
   echo " -------> Removing ... <---------"
-  rm -rf "$INFRA_LOTUS_HOME/.lotus/*"
-  sleep 5
-  ls -alh "$INFRA_LOTUS_HOME/.lotus/"
+  repeat rm -rf "$INFRA_LOTUS_HOME/.lotus/*"
 elif [ "$INFRA_CLEAR_RESTART" = false ]; then
   echo "INFRA_CLEAR_RESTART disabled."
 fi
 
 prepare_config
 check_lotus_home_dir
-repeat() { while :; sleep 3; do $@ && return; done }
 
 if [[ -z "$INFRA_IMPORT" ]]
 then
@@ -66,15 +64,23 @@ elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
 fi
 fi
 
+function sync_wait() {
+  repeat lotus sync wait &
+  if [ $? -eq 0 ]
+  then
+    touch $INFRA_LOTUS_HOME/.lotus/sync-complete
+}
+
 if [[ -z "$INFRA_SYNC" ]]
 then
   echo "INFRA_SYNC not defined. Please setting up ..."
 elif [ "$INFRA_SYNC" = true ]; then
     echo "Starting sync wait"
     # Start the daemon process and put it in the background
-    lotus daemon &
+    sync_wait
+    # lotus daemon &
     # Run the sync process until it dies
-    repeat lotus sync wait
+    # repeat lotus sync wait
 elif [ "$INFRA_SYNC" = false ]; then
   echo "SYNC disabled."
 fi

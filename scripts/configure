@@ -65,7 +65,7 @@ fi
 fi
 
 function sync_wait() {
-  repeat lotus sync wait & && echo "sync wait trying"
+  repeat lotus sync wait &
   if [ $? -eq 0 ]
   then
     echo "Sync complete. File creating..."

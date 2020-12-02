@@ -3,6 +3,8 @@
 . /etc/lotus/docker/bash-config
 
 repeat() { while :; sleep 3; do $@ && return; done }
+repeat_sync () { while :; sleep 3; do $@ && return;if [ $? -eq 0 ]; then echo "Sync complete. File creating..." && touch $INFRA_LOTUS_HOME/.lotus/sync-complete; fi; done }
+
 ## Delete all data every pod restart
 if [[ -z "$INFRA_CLEAR_RESTART" ]]
 then
@@ -83,12 +85,7 @@ elif [ "$INFRA_SYNC" = true ]; then
     # lotus daemon &
     # Run the sync process until it dies
     # repeat lotus sync wait
-    repeat lotus sync wait &
-    if [ $? -eq 0 ]
-    then
-      echo "Sync complete. File creating..."
-      touch $INFRA_LOTUS_HOME/.lotus/sync-complete
-    fi
+    repeat_sync lotus sync wait &
 elif [ "$INFRA_SYNC" = false ]; then
   echo "SYNC disabled."
 fi

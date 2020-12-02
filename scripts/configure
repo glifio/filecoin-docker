@@ -64,14 +64,15 @@ elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
 fi
 fi
 
-function sync_wait() {
-  repeat lotus sync wait &
-  if [ $? -eq 0 ]
-  then
-    echo "Sync complete. File creating..."
-    touch $INFRA_LOTUS_HOME/.lotus/sync-complete
-  fi
-}
+#function sync_wait() {
+#  sleep 10
+#  repeat lotus sync wait &
+#  if [ $? -eq 0 ]
+#  then
+#    echo "Sync complete. File creating..."
+#    touch $INFRA_LOTUS_HOME/.lotus/sync-complete
+#  fi
+#}
 
 if [[ -z "$INFRA_SYNC" ]]
 then
@@ -79,10 +80,16 @@ then
 elif [ "$INFRA_SYNC" = true ]; then
     echo "Starting sync wait"
     # Start the daemon process and put it in the background
-    sync_wait
     # lotus daemon &
     # Run the sync process until it dies
     # repeat lotus sync wait
+    sleep 10
+    repeat lotus sync wait &
+    if [ $? -eq 0 ]
+    then
+      echo "Sync complete. File creating..."
+      touch $INFRA_LOTUS_HOME/.lotus/sync-complete
+    fi
 elif [ "$INFRA_SYNC" = false ]; then
   echo "SYNC disabled."
 fi

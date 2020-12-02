@@ -65,9 +65,10 @@ fi
 fi
 
 function sync_wait() {
-  repeat lotus sync wait &
+  repeat lotus sync wait & && echo "sync wait trying"
   if [ $? -eq 0 ]
   then
+    echo "Sync complete. File creating..."
     touch $INFRA_LOTUS_HOME/.lotus/sync-complete
   fi
 }

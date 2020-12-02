@@ -69,6 +69,7 @@ function sync_wait() {
   if [ $? -eq 0 ]
   then
     touch $INFRA_LOTUS_HOME/.lotus/sync-complete
+  fi
 }
 
 if [[ -z "$INFRA_SYNC" ]]

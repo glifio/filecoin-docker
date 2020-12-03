@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
 ALLOWED_DELAY=${ALLOWED_DELAY:=10}
-BLOCK_TIME=$(cat /networks/${NETWORK}.json | jq .NetworkParameters.EpochDurationSeconds -r)
-
+#BLOCK_TIME=$(cat /networks/${NETWORK}.json | jq .NetworkParameters.EpochDurationSeconds -r)
+BLOCK_TIME=30
 GENESIS_TIMESTAMP=$(timeout -k3 3 lotus chain getblock $(timeout -k60 60 lotus chain list --count 1 --height 0 --format="<tipset>") | jq .Timestamp -r)
 CURRENT_TIMESTAMP=$(date +"%s")
 DIFFERENCE_IN_TIME=$(( $CURRENT_TIMESTAMP - $GENESIS_TIMESTAMP ))

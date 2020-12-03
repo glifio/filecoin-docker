@@ -51,13 +51,14 @@ ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/stati
 ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/nerpa.json /networks/
 
 # create nonroot user and lotus folder
-RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user &&\
-        chown -R lotus_user: /networks
+RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
         
 # copy jq, script/config files
 COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /home/lotus_user/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
+
+RUN chown -R lotus_user: /networks /bin/healthcheck /bin/entrypoint
 
 USER lotus_user
 

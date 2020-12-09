@@ -3,7 +3,6 @@
 . /etc/lotus/docker/bash-config
 
 repeat() { while :; sleep 3; do $@ && return; done }
-repeat_sync () { while :; sleep 3; do $@ && return;if [ $? -eq 0 ]; then echo "Sync complete. File creating..." && touch $INFRA_LOTUS_HOME/.lotus/sync-complete; fi; done }
 
 ## Delete all data every pod restart
 if [[ -z "$INFRA_CLEAR_RESTART" ]]
@@ -66,35 +65,10 @@ elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
 fi
 fi
 
-#function sync_wait() {
-#  sleep 10
-#  repeat lotus sync wait &
-#  if [ $? -eq 0 ]
-#  then
-#    echo "Sync complete. File creating..."
-#    touch $INFRA_LOTUS_HOME/.lotus/sync-complete
-#  fi
-#}
-
-if [[ -z "$INFRA_SYNC" ]]
+if [[ -z "$INFRA_CHAINWATCH" ]]
 then
-  echo "INFRA_SYNC not defined. Please setting up ..."
-elif [ "$INFRA_SYNC" = true ]; then
-    echo "Starting sync wait"
-    # Start the daemon process and put it in the background
-    # lotus daemon &
-    # Run the sync process until it dies
-    # repeat lotus sync wait
-    ( repeat lotus sync wait && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &)
-elif [ "$INFRA_SYNC" = false ]; then
-  echo "SYNC disabled."
-fi
-
-
-if [[ -z "$CHAINWATCH" ]]
-then
-  echo "CHAINWATCH not defined. Please setting up ..."
-elif [ "$CHAINWATCH" = true ]; then
+  echo "INFRACHAINWATCH not defined. Please setting up ..."
+elif [ "$INFRA_CHAINWATCH" = true ]; then
   echo "Starting chainwatch"
   # Start the daemon process and put it in the background
   /usr/local/bin/lotus daemon &
@@ -102,19 +76,29 @@ elif [ "$CHAINWATCH" = true ]; then
   sleep 120
   # Start the chainwatch process
   repeat chainwatch run
-elif [ "$CHAINWATCH" = false ]; then
+elif [ "$INFRA_CHAINWATCH" = false ]; then
   echo "CHAINWATCH disabled."
 fi
 
-if [[ -z "$SHEDEXPORT" ]]
+if [[ -z "$INFRA_SHEDEXPORT" ]]
 then
-  echo "SHEDEXPORT not defined. Please setting up ..."
-elif [ "$CHAINWATCH" = true ]; then
+  echo "INFRA_SHEDEXPORT not defined. Please setting up ..."
+elif [ "$INFRA_CHAINWATCH" = true ]; then
   while true; do
   echo "Exporting state"
   /usr/local/bin/lotus-shed export --skip-old-msgs --recent-stateroots=900 $SHEDEXPORTPATH
   timeout $SHEDEXPORTPERIOD /usr/local/bin/lotus daemon
   done
-elif [ "$SHEDEXPORT" = false ]; then
-  echo "SHEDEXPORT disabled."
+elif [ "$INFRA_SHEDEXPORT" = false ]; then
+  echo "INFRA_SHEDEXPORT disabled."
+fi
+
+if [[ -z "$INFRA_SYNC" ]]
+then
+  echo "INFRA_SYNC not defined. Please setting up ..."
+elif [ "$INFRA_SYNC" = true ]; then
+    echo "Starting sync wait"
+    ( repeat lotus sync wait && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &)
+elif [ "$INFRA_SYNC" = false ]; then
+  echo "SYNC disabled."
 fi

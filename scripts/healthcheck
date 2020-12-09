@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+if [ ! -f "$INFRA_LOTUS_HOME/.lotus/sync-complete" ]; then
+    exit 1
+fi
+
 ALLOWED_DELAY=${ALLOWED_DELAY:=10}
 BLOCK_TIME=$(cat /networks/${NETWORK}.json | jq .NetworkParameters.EpochDurationSeconds -r)
 

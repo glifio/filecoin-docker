@@ -25,12 +25,6 @@ function prepare_config {
   fi
 }
 
-function start_cron {
-  if ! pgrep -f "/usr/sbin/cron"; then
-    /etc/init.d/cron start
-  fi
-}
-
 function key_permissions {
   # make sure key/token permissions are correct
   if [ -d "$INFRA_LOTUS_HOME/.lotus/keystore" ]; then
@@ -41,3 +35,13 @@ function key_permissions {
   fi
 }
 
+function keys_management() {
+  mkdir -p "$INFRA_LOTUS_HOME/.lotus/keystore";
+  if [[ $INFRA_PERSISTNODEID = true ]]; then
+    cp /keystore/nodeid "$INFRA_LOTUS_HOME/.lotus/keystore/NRUWE4BSOAWWQ33TOQ";
+  else
+    rm -f "$INFRA_LOTUS_HOME/.lotus/keystore/NRUWE4BSOAWWQ33TOQ";
+  fi
+  cp /keystore/token "$INFRA_LOTUS_HOME/.lotus/token";
+  cp /keystore/privatekey "$INFRA_LOTUS_HOME/.lotus/keystore/MF2XI2BNNJ3XILLQOJUXMYLUMU";
+}

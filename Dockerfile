@@ -66,22 +66,6 @@ RUN chmod +x /etc/lotus/docker/launch
 
 USER lotus_user
 
-COPY scripts/bash-config /etc/lotus/docker/
-COPY scripts/configure /etc/lotus/docker/
-COPY scripts/run /etc/lotus/docker/
-COPY scripts/launch /etc/lotus/docker/
-COPY scripts/ensure /etc/lotus/docker/
-
-RUN chmod +x /etc/lotus/docker/run
-RUN chmod +x /etc/lotus/docker/configure
-RUN chmod +x /etc/lotus/docker/ensure
-RUN chmod +x /etc/lotus/docker/launch
-
-ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/butterfly.json /networks/
-ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/calibration.json /networks/
-ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/mainnet.json /networks/
-ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/nerpa.json /networks/
-
 # API port
 EXPOSE 1234/tcp
 

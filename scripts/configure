@@ -70,29 +70,14 @@ elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
 fi
 fi
 
-if [[ -z "$INFRA_CHAINWATCH" ]]
-then
-  echo "INFRACHAINWATCH not defined. Please setting up ..."
-elif [ "$INFRA_CHAINWATCH" = true ]; then
-  echo "Starting chainwatch"
-  # Start the daemon process and put it in the background
-  /usr/local/bin/lotus daemon &
-  # wait until we are sure daemon is up (chainwatch will fail if daemon is not running and return 0 even when failing so repeat is not working)
-  sleep 120
-  # Start the chainwatch process
-  repeat chainwatch run
-elif [ "$INFRA_CHAINWATCH" = false ]; then
-  echo "CHAINWATCH disabled."
-fi
-
 if [[ -z "$INFRA_SHEDEXPORT" ]]
 then
   echo "INFRA_SHEDEXPORT not defined. Please setting up ..."
-elif [ "$INFRA_CHAINWATCH" = true ]; then
+elif [ "$INFRA_SHEDEXPORT" = true ]; then
   while true; do
   echo "Exporting state"
-  /usr/local/bin/lotus-shed export --skip-old-msgs --recent-stateroots=900 $SHEDEXPORTPATH
-  timeout $SHEDEXPORTPERIOD /usr/local/bin/lotus daemon
+  /usr/local/bin/lotus-shed export --skip-old-msgs --recent-stateroots=900 $INFRA_SHEDEXPORTPATH
+  timeout $INFRA_SHEDEXPORTPERIOD /usr/local/bin/lotus daemon
   done
 elif [ "$INFRA_SHEDEXPORT" = false ]; then
   echo "INFRA_SHEDEXPORT disabled."

@@ -27,9 +27,9 @@ function prepare_config {
 
 function key_permissions {
   # make sure key/token permissions are correct
-#  if [ -d "$INFRA_LOTUS_HOME/.lotus/keystore" ]; then
-      chmod -f 600 "$INFRA_LOTUS_HOME/.lotus/keystore/*"
-#  fi
+  if [ -d "$INFRA_LOTUS_HOME/.lotus/keystore" ]; then
+      find "$INFRA_LOTUS_HOME/.lotus/keystore/" -type f -exec chmod 600 {} \;
+  fi
   if [ -f "$INFRA_LOTUS_HOME/.lotus/token" ]; then
       chmod -f 600 "$INFRA_LOTUS_HOME/.lotus/token"
   fi

@@ -15,7 +15,6 @@ elif [ "$INFRA_CLEAR_RESTART" = true ]; then
   repeat rm -rf "$INFRA_LOTUS_HOME/.lotus/*"
 elif [ "$INFRA_CLEAR_RESTART" = false ]; then
   echo "INFRA_CLEAR_RESTART disabled."
-  exit 0
 fi
 
 if [[ "$INFRA_SECRETVOLUME" = true  ]]; then

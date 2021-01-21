@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+#set -x
 . /etc/lotus/docker/bash-config
 
 repeat() { while :; sleep 3; do $@ && return; done }

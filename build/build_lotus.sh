@@ -1,6 +1,6 @@
 #!/bin/bash -e
 ### delete images on worker if exist
-#[ ! -z "$(docker images -q)" ] &&  docker rmi -f $(docker images -q) || echo no images
+[ ! -z "$(docker images -q)" ] &&  docker rmi -f $(docker images -q) || echo no images
 
 if [ -z $latestLotusTag ]
  then
@@ -20,5 +20,5 @@ if [[ $imageTag =~ ^v.*$ ]]
     else imageTag=$(echo $imageTag | sed 's/\/.*//')
 fi
 echo "latestLotusTag = $latestLotusTag  imageTag = $imageTag"
-#docker image build --no-cache  --network host --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
-docker image build  --network host --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
+docker image build --no-cache  --network host --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
+

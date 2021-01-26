@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+#set -x
+. /etc/lotus/docker/bash-config
+
+repeat() { while :; sleep 3; do $@ && return; done }
+
+check_lotus_home_dir
+# Delete all data every pod restart
+if [[ -z "$INFRA_CLEAR_RESTART" ]]
+then
+  echo "INFRA_CLEAR_RESTART not defined"
+elif [ "$INFRA_CLEAR_RESTART" = true ]; then
+  echo "I'll remove ALL LOTUS DATA from $INFRA_LOTUS_HOME/.lotus/"
+  echo " -------> Removing ... <---------"
+  repeat rm -rf "$INFRA_LOTUS_HOME/.lotus/*"
+elif [ "$INFRA_CLEAR_RESTART" = false ]; then
+  echo "INFRA_CLEAR_RESTART disabled."
+fi
+
+if [[ "$INFRA_SECRETVOLUME" = true  ]]; then
+  keys_management
+fi
+
+prepare_config
+key_permissions
+
+if [[ -z "$INFRA_IMPORT" ]]
+then
+  echo "INFRA_IMPORT not defined. Please setting up ..."
+elif [ "$INFRA_IMPORT" = true ]; then
+  echo "Starting import wait"
+  CHAIN_CAR="/chain/chain.car"
+  if [ -f "$CHAIN_CAR" ] && [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
+    lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
+    touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
+  fi
+elif [ "$INFRA_IMPORT" = false ]; then
+  echo "INFRA_IMPORT disabled."
+fi
+
+if [[ -z "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" ]]
+then
+  echo "INFRA_IMPORT_SNAPSHOT_FROM_IPFS not defined. Please setting up ..."
+elif [ "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" = true ]; then
+  echo "Fetching IPFS CID..."
+  CID=$(curl $SNAPSHOT_CID)
+  echo "Fetched. CID is $CID"
+  SNAPSHOTURL="$IPFS_GW/$CID"
+  echo "Full URL to snapshot is $SNAPSHOTURL"
+  INFRA_IMPORT_SNAPSHOT=true
+elif [ "$IMPORT_SNAPSHOT_FROM_IPFS" = false ]; then
+  echo "IMPORT_SNAPSHOT_FROM_IPFS disabled."
+fi
+
+if [ -f "$INFRA_LOTUS_HOME/.lotus/import-complete" ]; then
+  echo "IMPORT was completed before."
+else
+if [ "$INFRA_IMPORT_SNAPSHOT" = true ] ; then
+    echo "Starting import wait"
+    if [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
+      lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
+      touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
+      else
+        rm -fr "$INFRA_LOTUS_HOME/.lotus/datastore/chain/*"
+        lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
+        touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
+    fi
+elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
+  echo "INFRA_IMPORT_SNAPSHOT disabled."
+fi
+fi
+
+if [[ -z "$INFRA_SHEDEXPORT" ]]
+then
+  echo "INFRA_SHEDEXPORT not defined. Please setting up ..."
+elif [ "$INFRA_SHEDEXPORT" = true ]; then
+  while true; do
+  echo "Exporting state"
+  /usr/local/bin/lotus-shed export --skip-old-msgs --recent-stateroots=900 $INFRA_SHEDEXPORTPATH
+  timeout $INFRA_SHEDEXPORTPERIOD /usr/local/bin/lotus daemon
+  done
+elif [ "$INFRA_SHEDEXPORT" = false ]; then
+  echo "INFRA_SHEDEXPORT disabled."
+fi
+
+if [[ -z "$INFRA_SYNC" ]]
+then
+  echo "INFRA_SYNC not defined. Please setting up ..."
+elif [ "$INFRA_SYNC" = true ]; then
+    echo "Starting sync wait"
+    ( repeat lotus sync wait && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &)
+elif [ "$INFRA_SYNC" = false ]; then
+  echo "SYNC disabled."
+fi

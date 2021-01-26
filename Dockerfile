@@ -58,7 +58,18 @@ COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /home/lotus_user/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
 
-RUN chown -R lotus_user: /bin/healthcheck /bin/entrypoint
+
+COPY scripts/bash-config /etc/lotus/docker/
+COPY scripts/configure /etc/lotus/docker/
+COPY scripts/run /etc/lotus/docker/
+COPY scripts/launch /etc/lotus/docker/
+COPY scripts/ensure /etc/lotus/docker/
+
+RUN chmod +x /etc/lotus/docker/run
+RUN chmod +x /etc/lotus/docker/configure
+RUN chmod +x /etc/lotus/docker/ensure
+RUN chmod +x /etc/lotus/docker/launch
+
 
 USER lotus_user
 
@@ -68,5 +79,6 @@ EXPOSE 1234/tcp
 # P2P port
 EXPOSE 1235/tcp
 
-ENTRYPOINT ["/bin/entrypoint"]
-CMD ["-d"]
+ENTRYPOINT ["/etc/lotus/docker/run"]
+#ENTRYPOINT ["/bin/entrypoint"]
+#CMD ["-d"]

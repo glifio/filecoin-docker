@@ -20,4 +20,5 @@ if [[ $imageTag =~ ^v.*$ ]]
     else imageTag=$(echo $imageTag | sed 's/\/.*//')
 fi
 echo "latestLotusTag = $latestLotusTag  imageTag = $imageTag"
-docker image build --no-cache --network host --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
+docker image build --no-cache  --network host --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
+

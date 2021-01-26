@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+. /etc/lotus/docker/bash-config
+
+# Set environment values if they exist as arguments
+if [ $# -ne 0 ]; then
+  echo "===> Overriding env params with args ..."
+  for var in "$@"
+  do
+    export "$var"
+  done
+fi
+
+echo "===> ENV Variables ..."
+show_env
+
+echo "===> Configuring ..."
+/etc/lotus/docker/configure
+
+#echo "===> Running preflight checks ... "
+#/etc/lotus/docker/ensure
+
+echo "===> Launching ... "
+exec /etc/lotus/docker/launch

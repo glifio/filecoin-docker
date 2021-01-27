@@ -20,7 +20,8 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
     cd lotus && \
     git submodule update --init --recursive && \
     make clean && \
-    make lotus lotus-shed && \
+    make calibnet && \
+#    make lotus lotus-shed && \
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 

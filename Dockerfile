@@ -20,8 +20,8 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
     cd lotus && \
     git submodule update --init --recursive && \
     make clean && \
-    make calibnet && \
-#    make lotus lotus-shed && \
+#    make calibnet && \
+    make lotus lotus-shed && \
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 
@@ -45,11 +45,6 @@ COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0 /lib/libOpe
 # jq libraries
 COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libjq.so.1 /usr/lib/x86_64-linux-gnu/
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libonig.so.5.0.0 /usr/lib/x86_64-linux-gnu/libonig.so.5
-
-#ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/butterfly.json /networks/
-#ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/calibration.json /networks/
-#ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/mainnet.json /networks/
-#ADD https://raw.githubusercontent.com/filecoin-project/network-info/master/static/networks/nerpa.json /networks/
 
 # create nonroot user and lotus folder
 RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
@@ -81,5 +76,3 @@ EXPOSE 1234/tcp
 EXPOSE 1235/tcp
 
 ENTRYPOINT ["/etc/lotus/docker/run"]
-#ENTRYPOINT ["/bin/entrypoint"]
-#CMD ["-d"]

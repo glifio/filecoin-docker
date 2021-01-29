@@ -19,6 +19,12 @@ if [[ $imageTag =~ ^v.*$ ]]
 	then echo "accepted tag"
     else imageTag=$(echo $imageTag | sed 's/\/.*//')
 fi
+
+### update tag name if is not mainnet
+if [ $NETWORK != lotus ]
+  then imageTag="$imageTag"-"$NETWORK"
+fi
+
 echo "latestLotusTag = $latestLotusTag  imageTag = $imageTag"
-docker image build --no-cache  --network host --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
+docker image build --no-cache  --network host --build-arg NETWORK=$NETWORK --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
 

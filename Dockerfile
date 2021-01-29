@@ -3,8 +3,9 @@ FROM golang:1.15.5 AS build-env
 
 # branch or tag of the lotus version to build
 ARG BRANCH
+ARG NETWORK
 
-RUN echo "Building lotus from branch $BRANCH"
+RUN echo "Building lotus from branch $BRANCH in network $NETWORK"
 
 RUN apt-get update -y && \
     apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config clang  libhwloc-dev -y
@@ -20,8 +21,7 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
     cd lotus && \
     git submodule update --init --recursive && \
     make clean && \
-#    make calibnet && \
-    make lotus lotus-shed && \
+    make $NETWORK lotus-shed && \
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 
@@ -54,18 +54,7 @@ COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /home/lotus_user/config.toml
 COPY scripts/entrypoint scripts/healthcheck /bin/
 
-
-COPY scripts/bash-config /etc/lotus/docker/
-COPY scripts/configure /etc/lotus/docker/
-COPY scripts/run /etc/lotus/docker/
-COPY scripts/launch /etc/lotus/docker/
-COPY scripts/ensure /etc/lotus/docker/
-
-RUN chmod +x /etc/lotus/docker/run
-RUN chmod +x /etc/lotus/docker/configure
-RUN chmod +x /etc/lotus/docker/ensure
-RUN chmod +x /etc/lotus/docker/launch
-
+COPY scripts/bash-config scripts/configure scripts/run scripts/launch scripts/ensure /etc/lotus/docker/
 
 USER lotus_user
 

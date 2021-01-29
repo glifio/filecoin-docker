@@ -3,7 +3,7 @@ FROM golang:1.15.5 AS build-env
 
 # branch or tag of the lotus version to build
 ARG BRANCH
-ARG NETWORK
+ARG NETWORK=lotus
 
 RUN echo "Building lotus from branch $BRANCH in network $NETWORK"
 

@@ -1,30 +1,26 @@
-BRANCH = v1.1.2
+BRANCH = master
+NETWORK= lotus
 
 .PHONY: build
 build:
-	docker image build --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .
+	docker image build --no-cache --build-arg NETWORK=$NETWORK --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
 
 build_host:
-	docker image build --network host --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .
+	docker image build --no-cache  --network host --build-arg NETWORK=$NETWORK --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
 
 .PHONY: rebuild
 rebuild:
-	docker image build --no-cache --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) . 
+	docker image build --no-cache  --network host --build-arg NETWORK=$NETWORK --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag . 
 
 .PHONY: push
 push:
 	docker push glif/lotus:$(BRANCH)
-
-tag: tag_lotus
 
 build_lotus:
 	./build/build_lotus.sh
 
 rebuild_lotus:
 	./build/build_lotus.sh rebuild
-
-tag_lotus:
-	./build/tag_lotus.sh
 
 git-push:
 	git commit -a -m "$(BRANCH)" && git push && git tag $(BRANCH) && git push --tags
@@ -35,7 +31,7 @@ run:
 	--publish 1234:1234 \
 	--name lotus \
 	--restart always \
-	--volume $(HOME)/.lotus:/root/.lotus \
+	--volume $(HOME)/.lotus:/home/lotus_user/.lotus \
 	glif/lotus:$(BRANCH)
 
 run-bash:

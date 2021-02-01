@@ -3,14 +3,14 @@ NETWORK= lotus
 
 .PHONY: build
 build:
-	docker image build --no-cache --build-arg NETWORK=$NETWORK --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
+	docker image build --no-cache --build-arg NETWORK=$NETWORK --build-arg BRANCH=$BRANCH -t glif/lotus:$imageTag .
 
 build_host:
-	docker image build --no-cache  --network host --build-arg NETWORK=$NETWORK --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
+	docker image build --no-cache  --network host --build-arg NETWORK=$NETWORK --build-arg BRANCH=$BRANCH -t glif/lotus:$imageTag .
 
 .PHONY: rebuild
 rebuild:
-	docker image build --no-cache  --network host --build-arg NETWORK=$NETWORK --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag . 
+	docker image build --no-cache  --network host --build-arg NETWORK=$NETWORK --build-arg BRANCH=$BRANCH -t glif/lotus:$imageTag . 
 
 .PHONY: push
 push:

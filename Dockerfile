@@ -28,6 +28,7 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
 # runtime container stage
 FROM ubuntu:18.04
 
+ARG UID
 #creating cron job to check lotus sync status and restart it if process is killed
 RUN  apt-get update && \
      apt-get install curl nano libhwloc-dev -y && \
@@ -47,7 +48,7 @@ COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libjq.so.1 /usr/lib/x86_64-lin
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libonig.so.5.0.0 /usr/lib/x86_64-linux-gnu/libonig.so.5
 
 # create nonroot user and lotus folder
-RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
+RUN     adduser --uid $UID --gecos "" --disabled-password --quiet lotus_user
         
 # copy jq, script/config files
 COPY --from=build-env /usr/bin/jq /usr/bin/

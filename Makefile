@@ -1,17 +1,18 @@
 BRANCH = master
 NETWORK= lotus
-UID = 2000
+USER_ID = 2000
+SOURCE_DIR = "$(HOME)/lotus"
 
 .PHONY: build
 build:
-	docker image build --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) --build-arg UID=$(UID) -t glif/lotus:$(BRANCH) .
+	docker image build --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) --build-arg UID=$(USER_ID) -t glif/lotus:$(BRANCH) .
 
 build_host:
-	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) --build-arg UID=$(UID) -t glif/lotus:$(BRANCH) .
+	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) --build-arg UID=$(USER_ID) -t glif/lotus:$(BRANCH) .
 
 .PHONY: build_local
 build_local:
-	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) --build-arg UID=$(id -u) -t glif/lotus:$(BRANCH) .
+	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) --build-arg UID=$(shell id -u) -t glif/lotus:$(BRANCH) .
 
 .PHONY: rebuild
 rebuild:
@@ -32,11 +33,17 @@ git-push:
 
 .PHONY: run
 run:
-	docker run --detach \
-	--publish 1234:1234 \
-	--name lotus \
+	docker run -d --name lotus \
+	--user $(id -u):$(id -g) \
+	-p 1234:1234 -p 1235:1235 \
+	-e INFRA_LOTUS_DAEMON="true" \
+	-e INFRA_LOTUS_HOME="/home/lotus_user" \
+	-e INFRA_IMPORT_SNAPSHOT="true" \
+	-e SNAPSHOTURL="https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car" \
+	-e INFRA_SYNC="true" \
+	--network host \
 	--restart always \
-	--volume $(HOME)/.lotus:/home/lotus_user/.lotus \
+	--mount type=bind,source=$(SOURCE_DIR),target=/home/lotus_user \
 	glif/lotus:$(BRANCH)
 
 run-bash:

@@ -1,6 +1,5 @@
 BRANCH = master
 NETWORK= lotus
-USER_ID = 2000
 SOURCE_DIR = "$(HOME)/lotus"
 
 .PHONY: build
@@ -9,10 +8,6 @@ build:
 
 build_host:
 	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) --build-arg USER_ID=$(USER_ID) -t glif/lotus:$(BRANCH) .
-
-.PHONY: build_local
-build_local:
-	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) --build-arg USER_ID=$(shell id -u) -t glif/lotus:$(BRANCH) .
 
 .PHONY: rebuild
 rebuild:

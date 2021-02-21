@@ -1,5 +1,6 @@
 BRANCH = master
 NETWORK= lotus
+SOURCE_DIR = "$(HOME)/lotus"
 
 .PHONY: build
 build:
@@ -27,11 +28,17 @@ git-push:
 
 .PHONY: run
 run:
-	docker run --detach \
-	--publish 1234:1234 \
-	--name lotus \
+	docker run -d --name lotus \
+	--user $(shell id -u):$(shell id -g) \
+	-p 1234:1234 -p 1235:1235 \
+	-e INFRA_LOTUS_DAEMON="true" \
+	-e INFRA_LOTUS_HOME="/home/lotus_user" \
+	-e INFRA_IMPORT_SNAPSHOT="true" \
+	-e SNAPSHOTURL="https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car" \
+	-e INFRA_SYNC="true" \
+	--network host \
 	--restart always \
-	--volume $(HOME)/.lotus:/home/lotus_user/.lotus \
+	--mount type=bind,source=$(SOURCE_DIR),target=/home/lotus_user \
 	glif/lotus:$(BRANCH)
 
 run-bash:

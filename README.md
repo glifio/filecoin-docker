@@ -24,6 +24,14 @@ make build
 ## Run the Docker container
 make run
 ```
+or
+```shell
+## Build the Docker image
+docker-compose build
+## Run the Docker container
+## Set TAG before up
+docker-compose up -d
+```
 
 Verify that the container is running successfully with:
 
@@ -36,17 +44,23 @@ docker ps
 - `BRANCH` - The git release, tag or branch
 - `LOTUS_EXPORT` - Set to true if you want to export chain snapshots on a daily basis somewhere
 - `LOTUS_EXPORT_PATH` - If LOTUS_EXPORT is set to true - specify whether `.car` file should be saved
-- `SHEDEXPORT` - Set to true if you want to export chain snapshots using `lotus-shed`
-- `SHEDEXPORTPERIOD` - Defines period of chain snapshotting. Examples: 1m, 1h, 1d
-- `SHEDEXPORTPATH` - Defines path where to export chain snapshot
+- `INFRA_SHEDEXPORT` - Set to true if you want to export chain snapshots using `lotus-shed`
+- `INFRA_SHEDEXPORTPERIOD` - Defines period of chain snapshotting. Examples: 1m, 1h, 1d
+- `INFRA_SHEDEXPORTPATH` - Defines path where to export chain snapshot
+- `INFRA_CLEAR_RESTART` - Set true if you want to remove all data when container will fail
+- `INFRA_LOTUS_HOME` - Define lotus home dir
+- `INFRA_IMPORT_SNAPSHOT` - Set true for import snapshot
+- `SNAPSHOTURL` - SNAPSHOT URL (https://...)
+- `INFRA_LOTUS_DAEMON` - Set true to start daemon after configure
+
 
 #### Volumes
 
-- `/root/.lotus` - lotus main folder
+- `/home/lotus_user/.lotus` - lotus main folder
 
 #### Useful File Locations
 
-- `/scripts/entrypoint` - Docker entrypoint script
+- `/scripts/run` - Docker entrypoint script
 
 ## Dependencies
 
@@ -56,7 +70,7 @@ docker ps
 - mesa-opencl-icd
 - ocl-icd-opencl-dev
 - gcc
-- bzr 
+- bzr
 - jq
 - Lotus
 
@@ -64,16 +78,16 @@ docker ps
 
 If you want to start automatic build in Docker Hub, you have to:
 
-- change variable `ARG BRANCH` in `Dockerfile`, push changes, create new tag, push tag to repository 
+- change variable `ARG BRANCH` in `Dockerfile`, push changes, create new tag, push tag to repository
 
-or 
+or
 - change variable `ARG BRANCH` in `Dockerfile`, `BRANCH` in `Makefile` and execute `make git-push`
 
 If you want run build manually from master branch, you have to change variable `ARG BRANCH`
  in `Dockerfile` push to repository, start build on Docker Hub web page.
 
 Example:
- 
+
     git commit -a -m "ntwk-butterfly-7.10.0" && git push && \
     git tag ntwk-butterfly-7.10.0 && git push --tags
 
@@ -93,4 +107,3 @@ New version is available in [Docker Hub](https://hub.docker.com/r/openworklabs/l
 ## License
 
 This project is licensed under the [Apache 2.0](https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE) license.
-

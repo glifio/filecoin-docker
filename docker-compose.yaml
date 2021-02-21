@@ -1,0 +1,22 @@
+version: "3"
+services:
+  lotus:
+    build:
+      context: .
+      args:
+        - BRANCH=master
+        - NETWORK=lotus
+    image: 'glif/lotus:$TAG'
+    environment:
+     - INFRA_LOTUS_DAEMON=true
+     - INFRA_LOTUS_HOME=/home/lotus_user
+     - INFRA_IMPORT_SNAPSHOT=true
+     - SNAPSHOTURL=https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car
+     - INFRA_SYNC=true
+    volumes:
+      - type: bind
+        source: $HOME/lotus
+        target: /home/lotus_user
+    ports:
+      - "1234:1234"
+      - "1235:1235"

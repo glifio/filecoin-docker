@@ -1,5 +1,5 @@
 BRANCH = master
-NETWORK= lotus
+NETWORK := lotus
 SOURCE_DIR = "$(HOME)/lotus"
 
 .PHONY: build

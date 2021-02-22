@@ -25,6 +25,6 @@ if [ $NETWORK != lotus ]
   then imageTag="$imageTag"-"$NETWORK"
 fi
 
-echo "latestLotusTag = $latestLotusTag  imageTag = $imageTag"
+echo "latestLotusTag = $latestLotusTag  imageTag = $imageTag NETWORK = $NETWORK"
 docker image build --no-cache  --network host --build-arg NETWORK=$NETWORK --build-arg BRANCH=$latestLotusTag -t glif/lotus:$imageTag .
 

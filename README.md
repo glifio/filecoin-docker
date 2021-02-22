@@ -1,6 +1,6 @@
 # filecoin-docker
 
-[![CircleCI](https://circleci.com/gh/openworklabs/filecoin-docker.svg?style=svg)](https://circleci.com/gh/openworklabs/filecoin-docker)
+[![CircleCI](https://circleci.com/gh/glifio/filecoin-docker.svg?style=svg)](https://circleci.com/gh/openworklabs/filecoin-docker)
 
 A Docker image for [Lotus](https://github.com/filecoin-project/lotus) Filecoin nodes.
 

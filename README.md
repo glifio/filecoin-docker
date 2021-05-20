@@ -20,7 +20,8 @@ In order to run this container you'll need docker installed.
 ```shell
 ## Build the Docker image
 make build
-## Run the Docker container
+## Create folder and run the Docker container
+mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
 make run
 ```
 or using our image(intel cpu only)

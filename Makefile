@@ -26,7 +26,6 @@ git-push:
 .PHONY: run
 run:
 	docker run -d --name lotus \
-	--user $(shell id -u):$(shell id -g) \
 	-p 1234:1234 -p 1235:1235 \
 	-e INFRA_LOTUS_DAEMON="true" \
 	-e INFRA_LOTUS_HOME="/home/lotus_user" \

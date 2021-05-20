@@ -20,7 +20,7 @@ if [ -f /home/lotus_user/.lotus/token ]; then
     chmod -f 600 /home/lotus_user/.lotus/token
 fi
 
-while getopts sdcinf option
+while getopts sdcinfl option
 do
     case "${option}" in
         s) SYNC=true;;
@@ -28,7 +28,8 @@ do
         c) CHAINWATCH=true;;
         i) IMPORT=true;;
         n) IMPORT_SNAPSHOT=true;;
-	f) IMPORT_SNAPSHOT_FROM_IPFS=true;;
+	      f) IMPORT_SNAPSHOT_FROM_IPFS=true;;
+	      l) LOTUS_LITE=true;;
     esac
 done
 
@@ -92,4 +93,13 @@ if [ "$DAEMON" = true ] ; then
     echo "Starting daemon"
     # Start the daemon process
     /usr/local/bin/lotus daemon
+fi
+
+if [ "$LOTUS_LITE" = true ]; then
+  if [[ -z "$FULLNODE_API_INFO" ]]; then
+    echo "Where is no FULLNODE_API_INFO variable"
+    exit 0
+  else
+    lotus daemon --lite
+  fi
 fi

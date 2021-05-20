@@ -26,7 +26,7 @@ key_permissions
 
 if [[ -z "$INFRA_IMPORT" ]]
 then
-  echo "INFRA_IMPORT not defined. Please setting up ..."
+  echo "INFRA_IMPORT not defined. "
 elif [ "$INFRA_IMPORT" = true ]; then
   echo "Starting import wait"
   CHAIN_CAR="/chain/chain.car"
@@ -40,7 +40,7 @@ fi
 
 if [[ -z "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" ]]
 then
-  echo "INFRA_IMPORT_SNAPSHOT_FROM_IPFS not defined. Please setting up ..."
+  echo "INFRA_IMPORT_SNAPSHOT_FROM_IPFS not defined."
 elif [ "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" = true ]; then
   echo "Fetching IPFS CID..."
   CID=$(curl $SNAPSHOT_CID)
@@ -72,7 +72,7 @@ fi
 
 if [[ -z "$INFRA_SHEDEXPORT" ]]
 then
-  echo "INFRA_SHEDEXPORT not defined. Please setting up ..."
+  echo "INFRA_SHEDEXPORT not defined."
 elif [ "$INFRA_SHEDEXPORT" = true ]; then
   while true; do
   echo "Exporting state"
@@ -85,7 +85,7 @@ fi
 
 if [[ -z "$INFRA_SYNC" ]]
 then
-  echo "INFRA_SYNC not defined. Please setting up ..."
+  echo "INFRA_SYNC not defined."
 elif [ "$INFRA_SYNC" = true ]; then
     echo "Starting sync wait"
     ( repeat lotus sync wait && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &)

@@ -17,14 +17,26 @@ In order to run this container you'll need docker installed.
 - [Linux](https://docs.docker.com/linux/started/)
 
 ### Usage
-
 ```shell
 ## Build the Docker image
 make build
 ## Run the Docker container
 make run
 ```
-or
+or using our image(intel cpu only)
+```
+docker run -d --name lotus \
+-p 1234:1234 -p 1235:1235 \
+-e INFRA_LOTUS_DAEMON="true" \
+-e INFRA_LOTUS_HOME="/home/lotus_user" \
+-e INFRA_IMPORT_SNAPSHOT="true" \
+-e SNAPSHOTURL="https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car" \
+-e INFRA_SYNC="true" \
+--network host \
+-v /tmp/lotus:/home/lotus_user \
+glif/lotus:v1.9.0
+```
+or with compose
 ```shell
 ## Build the Docker image
 docker-compose build

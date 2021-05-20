@@ -52,8 +52,7 @@ RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
 # copy jq, script/config files
 COPY --from=build-env /usr/bin/jq /usr/bin/
 COPY config/config.toml /home/lotus_user/config.toml
-COPY scripts/entrypoint scripts/healthcheck /bin/
-
+COPY scripts/healthcheck /bin/
 COPY scripts/bash-config scripts/configure scripts/run scripts/launch scripts/ensure /etc/lotus/docker/
 
 USER lotus_user

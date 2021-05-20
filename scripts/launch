@@ -4,11 +4,18 @@
 
 if [[ -z "$INFRA_LOTUS_DAEMON" ]]
 then
-  echo "INFRA_LOTUS_DAEMON not defined. Please setting up ..."
+  echo "INFRA_LOTUS_DAEMON isn't defined. Please setting up ..."
 elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
   echo "Starting daemon"
   # Start the daemon process
   lotus daemon
+elif [ "$LOTUS_LITE" = true ]; then
+  if [[ -z "$FULLNODE_API_INFO" ]]; then
+    echo "FULLNODE_API_INFO isn't defined. Please setting up ..."
+    exit 1
+  else
+    lotus daemon --lite
+  fi
 elif [ "$INFRA_LOTUS_DAEMON" = false ]; then
   echo "DAEMON disabled."
 fi

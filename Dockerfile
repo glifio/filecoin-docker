@@ -8,7 +8,7 @@ ARG NETWORK
 RUN echo "Building lotus from branch $BRANCH in network $NETWORK"
 
 RUN apt-get update -y && \
-    apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config clang  libhwloc-dev -y
+    apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config clang  libhwloc-dev ocl-icd-opencl-dev -y
 
 ENV CGO_CFLAGS="-D__BLST_PORTABLE__"
 ENV RUSTFLAGS="-C target-cpu=native -g"
@@ -21,8 +21,9 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
     cd lotus && \
     git submodule update --init --recursive && \
     make clean && \
-    make $NETWORK lotus-shed && \
+    make $NETWORK lotus-shed lotus-gateway && \
     install -C ./lotus /usr/local/bin/lotus && \
+    install -C ./lotus-gateway /usr/local/bin/lotus-gateway && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 
 # runtime container stage
@@ -30,10 +31,11 @@ FROM ubuntu:18.04
 
 #creating cron job to check lotus sync status and restart it if process is killed
 RUN  apt-get update && \
-     apt-get install curl nano libhwloc-dev -y && \
+     apt-get install curl nano libhwloc-dev  -y && \
      rm -rf /var/lib/apt/lists/*
 
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
+COPY --from=build-env /usr/local/bin/lotus-gateway /usr/local/bin/lotus-gateway
 COPY --from=build-env /usr/local/bin/lotus-shed /usr/local/bin/lotus-shed
 COPY --from=build-env /etc/ssl/certs /etc/ssl/certs
 COPY --from=build-env /lib/x86_64-linux-gnu /lib/

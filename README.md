@@ -61,11 +61,12 @@ docker ps
 - `INFRA_SHEDEXPORTPERIOD` - Defines period of chain snapshotting. Examples: 1m, 1h, 1d
 - `INFRA_SHEDEXPORTPATH` - Defines path where to export chain snapshot
 - `INFRA_CLEAR_RESTART` - Set true if you want to remove all data when container will fail
+- `INFRA_LOTUS_DAEMON` - Set true to start daemon after configure
 - `INFRA_LOTUS_HOME` - Define lotus home dir
+- `INFRA_LOTUS_LITE` - Set true to start lotus [lite](https://docs.filecoin.io/build/lotus/lotus-lite/#start-the-lite-node) mode
+    - `FULLNODE_API_INFO` - Set if you want to start lotus in [lite](https://docs.filecoin.io/build/lotus/lotus-lite/#start-the-lite-node) mode.
 - `INFRA_IMPORT_SNAPSHOT` - Set true for import snapshot
 - `SNAPSHOTURL` - SNAPSHOT URL (https://...)
-- `INFRA_LOTUS_DAEMON` - Set true to start daemon after configure
-
 
 #### Volumes
 
@@ -78,7 +79,7 @@ docker ps
 ## Dependencies
 
 - ubuntu:18.04
-- golang:1.13
+- golang:1.15.5
 - git
 - mesa-opencl-icd
 - ocl-icd-opencl-dev

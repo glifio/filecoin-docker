@@ -1,6 +1,6 @@
 # filecoin-docker
 
-[![CircleCI](https://circleci.com/gh/glifio/filecoin-docker.svg?style=svg)](https://circleci.com/gh/openworklabs/filecoin-docker)
+[![CircleCI](https://circleci.com/gh/glifio/filecoin-docker.svg?style=svg)](https://app.circleci.com/pipelines/github/glifio/filecoin-docker)
 
 A Docker image for [Lotus](https://github.com/filecoin-project/lotus) Filecoin nodes.
 
@@ -17,14 +17,27 @@ In order to run this container you'll need docker installed.
 - [Linux](https://docs.docker.com/linux/started/)
 
 ### Usage
-
 ```shell
 ## Build the Docker image
 make build
-## Run the Docker container
+## Create folder and run the Docker container
+mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
 make run
 ```
-or
+or using our image(intel cpu only)
+```
+docker run -d --name lotus \
+-p 1234:1234 -p 1235:1235 \
+-e INFRA_LOTUS_DAEMON="true" \
+-e INFRA_LOTUS_HOME="/home/lotus_user" \
+-e INFRA_IMPORT_SNAPSHOT="true" \
+-e SNAPSHOTURL="https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car" \
+-e INFRA_SYNC="true" \
+--network host \
+-v /tmp/lotus:/home/lotus_user \
+glif/lotus:v1.9.0
+```
+or with compose
 ```shell
 ## Build the Docker image
 docker-compose build
@@ -48,11 +61,12 @@ docker ps
 - `INFRA_SHEDEXPORTPERIOD` - Defines period of chain snapshotting. Examples: 1m, 1h, 1d
 - `INFRA_SHEDEXPORTPATH` - Defines path where to export chain snapshot
 - `INFRA_CLEAR_RESTART` - Set true if you want to remove all data when container will fail
+- `INFRA_LOTUS_DAEMON` - Set true to start daemon after configure
 - `INFRA_LOTUS_HOME` - Define lotus home dir
+- `INFRA_LOTUS_LITE` - Set true to start lotus [lite](https://docs.filecoin.io/build/lotus/lotus-lite/#start-the-lite-node) mode
+    - `FULLNODE_API_INFO` - Set if you want to start lotus in [lite](https://docs.filecoin.io/build/lotus/lotus-lite/#start-the-lite-node) mode.
 - `INFRA_IMPORT_SNAPSHOT` - Set true for import snapshot
 - `SNAPSHOTURL` - SNAPSHOT URL (https://...)
-- `INFRA_LOTUS_DAEMON` - Set true to start daemon after configure
-
 
 #### Volumes
 
@@ -65,7 +79,7 @@ docker ps
 ## Dependencies
 
 - ubuntu:18.04
-- golang:1.13
+- golang:1.15.5
 - git
 - mesa-opencl-icd
 - ocl-icd-opencl-dev

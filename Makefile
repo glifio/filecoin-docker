@@ -4,9 +4,6 @@ SOURCE_DIR = "$(HOME)/lotus"
 
 .PHONY: build
 build:
-	docker image build --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .
-
-build_host:
 	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .
 
 .PHONY: rebuild
@@ -29,7 +26,6 @@ git-push:
 .PHONY: run
 run:
 	docker run -d --name lotus \
-	--user $(shell id -u):$(shell id -g) \
 	-p 1234:1234 -p 1235:1235 \
 	-e INFRA_LOTUS_DAEMON="true" \
 	-e INFRA_LOTUS_HOME="/home/lotus_user" \

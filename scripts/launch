@@ -2,13 +2,19 @@
 
 . /etc/lotus/docker/bash-config
 
-if [[ -z "$INFRA_LOTUS_DAEMON" ]]
-then
-  echo "INFRA_LOTUS_DAEMON not defined. Please setting up ..."
+if [[ -z "$INFRA_LOTUS_DAEMON" && -z "$INFRA_LOTUS_LITE" ]]; then
+  echo "INFRA_LOTUS_DAEMON or INFRA_LOTUS_LITE aren't defined. Please setting up ..."
 elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
   echo "Starting daemon"
   # Start the daemon process
   lotus daemon
+elif [ "$INFRA_LOTUS_LITE" = true ]; then
+  if [[ -z "$FULLNODE_API_INFO" ]]; then
+    echo "FULLNODE_API_INFO isn't defined in lotus lite mode. Please setting up ..."
+  else
+  # Start lotus daemon in lite mode
+    lotus daemon --lite
+  fi
 elif [ "$INFRA_LOTUS_DAEMON" = false ]; then
   echo "DAEMON disabled."
 fi

@@ -62,6 +62,7 @@ docker ps
 - `INFRA_SHEDEXPORTPATH` - Defines path where to export chain snapshot
 - `INFRA_CLEAR_RESTART` - Set true if you want to remove all data when container will fail
 - `INFRA_LOTUS_DAEMON` - Set true to start daemon after configure
+- `INFRA_LOTUS_GATEWAY` - Set true to start lotus gateway service.
 - `INFRA_LOTUS_HOME` - Define lotus home dir
 - `INFRA_LOTUS_LITE` - Set true to start lotus [lite](https://docs.filecoin.io/build/lotus/lotus-lite/#start-the-lite-node) mode
     - `FULLNODE_API_INFO` - Set if you want to start lotus in [lite](https://docs.filecoin.io/build/lotus/lotus-lite/#start-the-lite-node) mode.
@@ -78,7 +79,6 @@ docker ps
 
 ## Dependencies
 
-- ubuntu:18.04
 - golang:1.15.5
 - git
 - mesa-opencl-icd
@@ -86,7 +86,10 @@ docker ps
 - gcc
 - bzr
 - jq
-- Lotus
+- pkg-config 
+- clang  
+- libhwloc-dev 
+- ocl-icd-opencl-dev
 
 ## Automatic build in docker hub
 
@@ -111,12 +114,22 @@ It works with next tags:
 * v*
 * ntwk-*
 
-New version is available in [Docker Hub](https://hub.docker.com/r/openworklabs/lotus/tags)
+New version is available in [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)
+
+Docker image contains:
+- ubuntu:18.04
+- curl 
+- nano 
+- libhwloc-dev 
+- lotus
+- lotus-shed
+- lotus-gateway
+
 ## Find Us
 
-- [Website](https://www.openworklabs.com)
-- [GitHub](https://github.com/openworklabs)
-- [Docker Hub](https://hub.docker.com/orgs/openworklabs/repositories)
+- [Website](http://glif.io/)
+- [GitHub](https://github.com/glifio)
+- [Docker Hub](https://hub.docker.com/r/glif/lotus/tag)
 
 ## License
 

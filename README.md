@@ -129,7 +129,7 @@ Docker image contains:
 
 - [Website](http://glif.io/)
 - [GitHub](https://github.com/glifio)
-- [Docker Hub](https://hub.docker.com/r/glif/lotus/tag)
+- [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)
 
 ## License
 

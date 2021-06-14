@@ -79,7 +79,7 @@ docker ps
 
 ## Dependencies
 
-- golang:1.15.5
+- golang:1.16.5
 - git
 - mesa-opencl-icd
 - ocl-icd-opencl-dev

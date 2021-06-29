@@ -37,6 +37,30 @@ run:
 	--mount type=bind,source=$(SOURCE_DIR),target=/home/lotus_user \
 	glif/lotus:$(BRANCH)
 
+.PHONY: run-calibnet
+run-calibnet:
+	docker run -d --name lotus \
+	-p 1234:1234 -p 1235:1235 \
+	-e INFRA_LOTUS_DAEMON="true" \
+	-e INFRA_LOTUS_HOME="/home/lotus_user" \
+	-e INFRA_SYNC="true" \
+	--network host \
+	--restart always \
+	--mount type=bind,source=$(SOURCE_DIR),target=/home/lotus_user \
+	glif/lotus:$(BRANCH)
+
+.PHONY: run-nerpanet
+run-nerpanet:
+	docker run -d --name lotus \
+	-p 1234:1234 -p 1235:1235 \
+	-e INFRA_LOTUS_DAEMON="true" \
+	-e INFRA_LOTUS_HOME="/home/lotus_user" \
+	-e INFRA_SYNC="true" \
+	--network host \
+	--restart always \
+	--mount type=bind,source=$(SOURCE_DIR),target=/home/lotus_user \
+	glif/lotus:$(BRANCH)
+
 run-bash:
 	docker container run -p 1235:1235 -p 1234:1234 -it --entrypoint=/bin/bash --name lotus --rm glif/lotus:latest
 

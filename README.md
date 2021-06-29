@@ -4,6 +4,8 @@
 
 A Docker image for [Lotus](https://github.com/filecoin-project/lotus) Filecoin nodes.
 
+The have actual images in our [docker hub](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel CPU only)
+
 ## Getting Started
 
 These instructions will cover usage information and for the docker container
@@ -18,13 +20,30 @@ In order to run this container you'll need docker installed.
 
 ### Usage
 ```shell
-## Build the Docker image
-make build
-## Create folder and run the Docker container
-mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
-make run
+### mainnet
+## Build the Docker image for mainnet
+    make build
+## Create folder and run the Docker container with mainnet
+    mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
+    make run
+
+### calibrationnet
+## Build the Docker image for calibrationnet
+    make -e NETWORK=calibnet build
+## Create folder and run the Docker container with calibrationnet
+    mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
+    make run-calibnet
+
+### nerpanet
+## Build the Docker image for nerpanet
+    make -e NETWORK=nerpanet build
+## Create folder and run the Docker container with calibrationnet
+    mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
+    make run-nerpanet
 ```
 or using our image(intel cpu only)
+
+mainnet
 ```
 docker run -d --name lotus \
 -p 1234:1234 -p 1235:1235 \
@@ -35,7 +54,7 @@ docker run -d --name lotus \
 -e INFRA_SYNC="true" \
 --network host \
 -v /tmp/lotus:/home/lotus_user \
-glif/lotus:v1.9.0
+glif/lotus:v1.10.0
 ```
 or with compose
 ```shell

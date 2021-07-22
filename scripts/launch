@@ -28,6 +28,7 @@ elif [ "$INFRA_LOTUS_LITE" = true ]; then
     echo "FULLNODE_API_INFO isn't defined in lotus lite mode. Please setting up ..."
   else
   # Start lotus daemon in lite mode
+    echo "Starting lotus daemon in lite mode"
     lotus daemon --lite
   fi
 elif [ "$INFRA_LOTUS_DAEMON" = false ]; then

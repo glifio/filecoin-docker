@@ -45,6 +45,7 @@ or using our image(intel cpu only)
 
 mainnet
 ```
+mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
 docker run -d --name lotus \
 -p 1234:1234 -p 1235:1235 \
 -e INFRA_LOTUS_DAEMON="true" \
@@ -53,11 +54,27 @@ docker run -d --name lotus \
 -e SNAPSHOTURL="https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car" \
 -e INFRA_SYNC="true" \
 --network host \
--v /tmp/lotus:/home/lotus_user \
-glif/lotus:v1.10.0
+-v $HOME/lotus:/home/lotus_user \
+glif/lotus:v1.11.0
 ```
-or with compose
+nerpanet
+```
+mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
+docker run -d --name lotus \
+-p 1234:1234 -p 1235:1235 \
+-e INFRA_LOTUS_DAEMON="true" \
+-e INFRA_LOTUS_HOME="/home/lotus_user" \
+-e INFRA_IMPORT_SNAPSHOT="true" \
+-e SNAPSHOTURL="https://dev.node.glif.io/nerpa00/ipfs/8080/ipfs/$(curl -s https://gist.githubusercontent.com/openworklabbot/d32543d42ed318f6dfde516c3d8668a0/raw/snapshot.log)" \
+-e INFRA_SYNC="true" \
+--network host \
+-v $HOME/lotus:/home/lotus_user \
+glif/lotus:nerpa-v1.11.1-dev-nerpanet
+```
+or with compose(mainnet)
 ```shell
+## Create folder
+mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
 ## Build the Docker image
 docker-compose build
 ## Run the Docker container

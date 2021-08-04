@@ -55,6 +55,8 @@ run-nerpanet:
 	-p 1234:1234 -p 1235:1235 \
 	-e INFRA_LOTUS_DAEMON="true" \
 	-e INFRA_LOTUS_HOME="/home/lotus_user" \
+	-e INFRA_IMPORT_SNAPSHOT="true" \
+	-e SNAPSHOTURL="https://dev.node.glif.io/nerpa00/ipfs/8080/ipfs/$(curl -s https://gist.githubusercontent.com/openworklabbot/d32543d42ed318f6dfde516c3d8668a0/raw/snapshot.log)" \
 	-e INFRA_SYNC="true" \
 	--network host \
 	--restart always \

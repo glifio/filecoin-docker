@@ -14,34 +14,36 @@ These instructions will cover usage information and for the docker container
 
 In order to run this container you'll need docker installed.
 
-- [Windows](https://docs.docker.com/windows/started)
 - [OS X](https://docs.docker.com/mac/started/)
 - [Linux](https://docs.docker.com/linux/started/)
 
 ### Usage
+
+### mainnet from snapshot
 ```shell
-### mainnet
 ## Build the Docker image for mainnet
     make build
 ## Create folder and run the Docker container with mainnet
     mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
     make run
-
-### calibrationnet
+```
+### calibrationnet from scratch
+```shell
 ## Build the Docker image for calibrationnet
     make -e NETWORK=calibnet build
 ## Create folder and run the Docker container with calibrationnet
     mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
     make run-calibnet
-
-### nerpanet
+```
+### nerpanet from snapshot
+```shell
 ## Build the Docker image for nerpanet
     make -e NETWORK=nerpanet build
 ## Create folder and run the Docker container with calibrationnet
     mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
     make run-nerpanet
 ```
-or using our image(intel cpu only)
+or using our [image](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel cpu only)
 
 mainnet
 ```
@@ -71,9 +73,9 @@ docker run -d --name lotus \
 -v $HOME/lotus:/home/lotus_user \
 glif/lotus:nerpa-v1.11.1-dev-nerpanet
 ```
-or with compose
+or with [docker-compose](https://docs.docker.com/compose/install/)
 
-mainnet
+### mainnet from snapshot
 ```shell
 ## Create folder
 mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
@@ -83,7 +85,7 @@ docker-compose build
 docker-compose up -d
 ```
 
-nerpanet
+### nerpanet from snapshot
 ```shell
 ## Create folder
 mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
@@ -93,6 +95,7 @@ bash ./docker-compose-nerpanet-variable.sh
 docker-compose -f docker-compose-nerpanet.yaml build
 ## Run the Docker container
 docker-compose -f docker-compose-nerpanet.yaml up -d
+```
 
 Verify that the container is running successfully with:
 
@@ -156,13 +159,9 @@ Example:
     git commit -a -m "ntwk-butterfly-7.10.0" && git push && \
     git tag ntwk-butterfly-7.10.0 && git push --tags
 
-List of `tag` you may find in [lotus repository](https://github.com/filecoin-project/lotus/tags)
+List of `tag` you may find on [lotus repository](https://github.com/filecoin-project/lotus/tags)
 
-It works with next tags:
-* v*
-* ntwk-*
-
-New version is available in [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)
+New version is available on [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)
 
 Docker image contains:
 - ubuntu:18.04

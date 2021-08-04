@@ -71,7 +71,9 @@ docker run -d --name lotus \
 -v $HOME/lotus:/home/lotus_user \
 glif/lotus:nerpa-v1.11.1-dev-nerpanet
 ```
-or with compose(mainnet)
+or with compose
+
+mainnet
 ```shell
 ## Create folder
 mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
@@ -80,6 +82,17 @@ docker-compose build
 ## Run the Docker container
 docker-compose up -d
 ```
+
+nerpanet
+```shell
+## Create folder
+mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
+## Update environment
+bash ./docker-compose-nerpanet-variable.sh
+## Build the Docker image
+docker-compose -f docker-compose-nerpanet.yaml build
+## Run the Docker container
+docker-compose -f docker-compose-nerpanet.yaml up -d
 
 Verify that the container is running successfully with:
 

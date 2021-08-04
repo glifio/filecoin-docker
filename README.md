@@ -61,7 +61,6 @@ or with compose
 ## Build the Docker image
 docker-compose build
 ## Run the Docker container
-## Set TAG before up
 docker-compose up -d
 ```
 

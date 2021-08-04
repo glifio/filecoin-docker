@@ -5,7 +5,7 @@ if [ ! -f "$INFRA_LOTUS_HOME/.lotus/sync-complete" ]; then
 fi
 
 
-ALLOWED_DELAY=${ALLOWED_DELAY:=10}
+ALLOWED_DELAY=${ALLOWED_DELAY:=3}
 #BLOCK_TIME=$(cat /networks/${NETWORK}.json | jq .NetworkParameters.EpochDurationSeconds -r)
 BLOCK_TIME=30
 GENESIS_TIMESTAMP=$(timeout -k3 3 curl -s http://127.0.0.1:1234/rpc/v0 -X POST -H "Content-Type: application/json" --data '{ "jsonrpc": "2.0", "id":1, "method": "Filecoin.ChainGetGenesis", "params": [] }' | jq '.result.Blocks[0].Timestamp')

@@ -6,7 +6,7 @@ services:
       args:
         - BRANCH=master
         - NETWORK=lotus
-    image: 'glif/lotus:$TAG'
+    image: 'glif/lotus:master'
     environment:
      - INFRA_LOTUS_DAEMON=true
      - INFRA_LOTUS_HOME=/home/lotus_user

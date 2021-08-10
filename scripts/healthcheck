@@ -14,6 +14,10 @@ DIFFERENCE_IN_TIME=$(( $CURRENT_TIMESTAMP - $GENESIS_TIMESTAMP ))
 MIN_ALLOWED_BLOCK=$(( $DIFFERENCE_IN_TIME / $BLOCK_TIME - $ALLOWED_DELAY ))
 OUR_BLOCK=$(curl -s --max-time 3 localhost:1234/debug/metrics | grep ^lotus_chain_node_worker_height | awk '{print $2}')
 
+if [ ! -z $(echo $OUR_BLOCK | grep "e+") ]
+    then OUR_BLOCK=$(printf "%0.f" $OUR_BLOCK)
+fi
+
 # If local block is lower than minimum allowed block or we can't get block data - the health is bad
 if [[ "$OUR_BLOCK" -ge "$MIN_ALLOWED_BLOCK" && ! -z "$OUR_BLOCK" && ! -z "$MIN_ALLOWED_BLOCK" ]]; then
   exit 0

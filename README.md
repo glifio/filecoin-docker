@@ -79,10 +79,8 @@ or with [docker-compose](https://docs.docker.com/compose/install/)
 ```shell
 ## Create folder
 mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
-## Build the Docker image
-docker-compose build
-## Run the Docker container
-docker-compose up -d
+## Build and run docker container
+docker-compose up -d --build
 ```
 
 ### nerpanet from snapshot
@@ -91,10 +89,8 @@ docker-compose up -d
 mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
 ## Update environment
 bash ./docker-compose-nerpanet-variable.sh
-## Build the Docker image
-docker-compose -f docker-compose-nerpanet.yaml build
-## Run the Docker container
-docker-compose -f docker-compose-nerpanet.yaml up -d
+## Build and run docker container
+docker-compose -f docker-compose-nerpanet.yaml up -d --build
 ```
 
 Verify that the container is running successfully with:

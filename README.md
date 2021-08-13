@@ -4,7 +4,7 @@
 
 A Docker image for [Lotus](https://github.com/filecoin-project/lotus) Filecoin nodes.
 
-The have actual images in our [docker hub](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel CPU only)
+The have actual images in our [docker hub](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel CPU only, tags: v*. *. * is mainnet, *-nerpanet is nerpanet, *-calibnet is calibrationnet)
 
 ## Getting Started
 

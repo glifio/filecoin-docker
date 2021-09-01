@@ -27,7 +27,7 @@ In order to run this container you'll need docker installed.
     mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
     make run
 ```
-### calibrationnet from scratch
+### calibrationnet from snapshot
 ```shell
 ## Build the Docker image for calibrationnet
     make -e NETWORK=calibnet build
@@ -43,9 +43,9 @@ In order to run this container you'll need docker installed.
     mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
     make run-nerpanet
 ```
-or using our [image](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel cpu only)
+or using our [images](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel cpu only)
 
-mainnet
+mainnet from snapshot
 ```
 mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
 docker run -d --name lotus \
@@ -59,7 +59,21 @@ docker run -d --name lotus \
 -v $HOME/lotus:/home/lotus_user \
 glif/lotus:v1.11.0
 ```
-nerpanet
+calibrationnet from snapshot
+```
+docker run -d --name lotus \
+-p 1234:1234 -p 1235:1235 \
+-e INFRA_LOTUS_DAEMON="true" \
+-e INFRA_LOTUS_HOME="/home/lotus_user" \
+-e INFRA_IMPORT_SNAPSHOT="true" \
+-e SNAPSHOTURL="https://dev.node.glif.io/calibrationapi/ipfs/8080/ipfs/$(curl -s https://gist.githubusercontent.com/openworklabbot/95da15b014ffc3b5a170485001f46abd/raw/snapshot.log)" \
+-e INFRA_SYNC="true" \
+--network host \
+--restart always \
+--mount type=bind,source=$(SOURCE_DIR),target=/home/lotus_user \
+glif/lotus:v1.10.0-rc6-calibnet
+```
+nerpanet from snapshot
 ```
 mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
 docker run -d --name lotus \

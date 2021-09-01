@@ -43,6 +43,8 @@ run-calibnet:
 	-p 1234:1234 -p 1235:1235 \
 	-e INFRA_LOTUS_DAEMON="true" \
 	-e INFRA_LOTUS_HOME="/home/lotus_user" \
+	-e INFRA_IMPORT_SNAPSHOT="true" \
+	-e SNAPSHOTURL="https://dev.node.glif.io/calibrationapi/ipfs/8080/ipfs/$(curl -s https://gist.githubusercontent.com/openworklabbot/95da15b014ffc3b5a170485001f46abd/raw/snapshot.log)" \
 	-e INFRA_SYNC="true" \
 	--network host \
 	--restart always \

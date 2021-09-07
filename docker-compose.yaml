@@ -5,14 +5,14 @@ services:
       context: .
       args:
         - BRANCH=master
-        - NETWORK=lotus
+        - NETWORK=${NETWORK}
     image: 'glif/lotus:master'
     environment:
      - INFRA_LOTUS_DAEMON=true
      - INFRA_LOTUS_HOME=/home/lotus_user
      - INFRA_IMPORT_SNAPSHOT=true
-     - SNAPSHOTURL=https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car
      - INFRA_SYNC=true
+     - SNAPSHOTURL=${SNAPSHOTURL}
     volumes:
       - type: bind
         source: $HOME/lotus

@@ -3,6 +3,11 @@ NETWORK := lotus
 SOURCE_DIR = "$(HOME)/lotus"
 CALIBNET_SNAPSHOT = $(shell curl -s https://gist.githubusercontent.com/openworklabbot/95da15b014ffc3b5a170485001f46abd/raw/snapshot.log)
 NERPA_SNAPSHOT = $(shell curl -s https://gist.githubusercontent.com/openworklabbot/d32543d42ed318f6dfde516c3d8668a0/raw/snapshot.log)
+dc-run:
+	docker-compose up -d
+dc-run-nerpanet:
+	docker-compose run -e NETWORK=nerpanet -e SNAPSHOTURL=${NERPA_SNAPSHOT}  -d
+
 .PHONY: build
 build:
 	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .

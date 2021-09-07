@@ -8,7 +8,7 @@ ARG NETWORK
 RUN echo "Building lotus from branch $BRANCH in network $NETWORK"
 
 RUN apt-get update -y && \
-    apt-get install sudo cron git mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config clang  libhwloc-dev ocl-icd-opencl-dev -y
+    apt-get install sudo cron git mesa-opencl-icd gcc git bzr jq pkg-config clang libhwloc-dev ocl-icd-opencl-dev -y
 
 ENV CGO_CFLAGS="-D__BLST_PORTABLE__"
 ENV RUSTFLAGS="-C target-cpu=native -g"

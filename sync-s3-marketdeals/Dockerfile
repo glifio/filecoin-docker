@@ -1,6 +1,6 @@
 FROM alpine:3.14
 
-ENV GLIBC_VER=2.34-r0
+ENV GLIBC_VER=2.33-r0
 
 # install glibc compatibility for alpine
 # more info - https://stackoverflow.com/questions/60298619/awscli-version-2-on-alpine-linux

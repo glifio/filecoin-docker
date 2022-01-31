@@ -69,7 +69,7 @@ pipeline {
     }
     post {
         success {
-            slackSend channel: '#filecoin-alert-dev', 
+            slackSend channel: '#filecoin-monitoring-dev', 
                 color: '#24853E', 
                 failOnError: true, 
                 iconEmoji: ':smile:', 
@@ -79,7 +79,7 @@ pipeline {
                 username: 'jenkins'
         }
         unsuccessful {
-            slackSend channel: '#filecoin-alert-dev', 
+            slackSend channel: '#filecoin-monitoring-dev', 
                 color: '#852C24', 
                 failOnError: true, 
                 iconEmoji: ':sob:', 

@@ -12,6 +12,10 @@ dc-run-nerpanet:
 build:
 	docker image build --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .
 
+.PHONY: build_wallaby
+build_wallaby:
+	docker image build --network host -t witnsby/lotus:0.1 .
+
 .PHONY: rebuild
 rebuild:
 	docker image build --no-cache  --network host --build-arg NETWORK=$(NETWORK) --build-arg BRANCH=$(BRANCH) -t glif/lotus:$(BRANCH) .

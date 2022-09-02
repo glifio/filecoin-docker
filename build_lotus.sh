@@ -1,6 +1,8 @@
 #!/bin/bash -e
 ### delete images on worker if exist
-[ ! -z "$(docker images -q)" ] &&  docker rmi -f $(docker images -q) || echo no images
+# [ ! -z "$(docker images -q)" ] &&  docker rmi -f $(docker images -q) || echo no images
+latestLotusTag='experimental/fvm-m2'
+NETWORK='wallabynet'
 
 if [ -z $latestLotusTag ]
  then
@@ -17,7 +19,7 @@ fi
 ### updated tag name to the :latest for calibration, nerpa networks
 if [[ $imageTag =~ ^v.*$ ]]
 	then echo "accepted tag"
-    else imageTag=$(echo $imageTag | sed 's/\/.*//')
+    else imageTag=$(echo $imageTag | sed 's/\//-/g')
 fi
 
 ### update tag name if is not mainnet

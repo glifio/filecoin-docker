@@ -2,8 +2,8 @@
 FROM golang:1.17.9-buster AS build-env
 
 # branch or tag of the lotus version to build
-ARG BRANCH=experimental/fvm-m2
-ARG NETWORK=lotus
+ARG BRANCH=f8-wallaby-selenium
+ARG NETWORK=wallabynet
 
 RUN echo "Building lotus from branch $BRANCH in network $NETWORK"
 
@@ -17,14 +17,12 @@ ENV FFI_BUILD_FROM_SOURCE=1
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $BRANCH && \
+RUN git clone https://github.com/Factor8Solutions/lotus.git --depth 1 --branch $BRANCH && \
     cd lotus && \
     git submodule update --init --recursive && \
     make clean && \
-    make $NETWORK lotus-shed lotus-gateway && \
-    install -C ./lotus /usr/local/bin/lotus && \
-    install -C ./lotus-gateway /usr/local/bin/lotus-gateway && \
-    install -C ./lotus-shed /usr/local/bin/lotus-shed
+    make $NETWORK && \
+    install -C ./lotus /usr/local/bin/lotus
 
 # runtime container stage
 FROM ubuntu:20.04
@@ -35,8 +33,6 @@ RUN  apt-get update && \
      rm -rf /var/lib/apt/lists/*
 
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
-COPY --from=build-env /usr/local/bin/lotus-gateway /usr/local/bin/lotus-gateway
-COPY --from=build-env /usr/local/bin/lotus-shed /usr/local/bin/lotus-shed
 COPY --from=build-env /etc/ssl/certs /etc/ssl/certs
 COPY --from=build-env /lib/x86_64-linux-gnu /lib/
 COPY LOTUS_VERSION /VERSION

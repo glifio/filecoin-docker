@@ -1,5 +1,5 @@
 BRANCH = master
-NETWORK := lotus
+NETWORK := calibnet 
 SOURCE_DIR = "$(HOME)/lotus"
 CALIBNET_SNAPSHOT = $(shell curl -s https://gist.githubusercontent.com/openworklabbot/95da15b014ffc3b5a170485001f46abd/raw/snapshot.log)
 NERPA_SNAPSHOT = $(shell curl -s https://gist.githubusercontent.com/openworklabbot/d32543d42ed318f6dfde516c3d8668a0/raw/snapshot.log)

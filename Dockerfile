@@ -2,7 +2,7 @@
 FROM golang:1.18.1-buster AS build-env
 
 # branch or tag of the lotus version to build
-ARG BRANCH=f8-wallaby-selenium
+ARG BRANCH=f8-wallaby-latest
 ARG NETWORK=wallabynet
 
 RUN echo "Building lotus from branch $BRANCH in network $NETWORK"

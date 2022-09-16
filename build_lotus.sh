@@ -1,7 +1,7 @@
 #!/bin/bash -e
 ### delete images on worker if exist
 # [ ! -z "$(docker images -q)" ] &&  docker rmi -f $(docker images -q) || echo no images
-latestLotusTag='experimental/fvm-m2'
+latestLotusTag='f8-wallaby-latest'
 NETWORK='wallabynet'
 
 if [ -z $latestLotusTag ]

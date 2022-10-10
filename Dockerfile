@@ -33,6 +33,7 @@ RUN  apt-get update && \
      rm -rf /var/lib/apt/lists/*
 
 COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
+COPY --from=build-env /usr/local/bin/lotus-gateway /usr/local/bin/lotus-gateway
 COPY --from=build-env /etc/ssl/certs /etc/ssl/certs
 COPY --from=build-env /lib/x86_64-linux-gnu /lib/
 COPY LOTUS_VERSION /VERSION

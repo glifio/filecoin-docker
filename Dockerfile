@@ -21,8 +21,9 @@ RUN git clone https://github.com/Factor8Solutions/lotus.git --depth 1 --branch $
     cd lotus && \
     git submodule update --init --recursive && \
     make clean && \
-    make $NETWORK && \
-    install -C ./lotus /usr/local/bin/lotus
+    make $NETWORK lotus-gateway && \
+    install -C ./lotus /usr/local/bin/lotus && \
+    install -C ./lotus-gateway /usr/local/bin/lotus-gateway
 
 # runtime container stage
 FROM ubuntu:20.04

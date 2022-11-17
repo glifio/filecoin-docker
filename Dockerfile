@@ -2,7 +2,7 @@
 FROM golang:1.17.9-buster AS build-env
 
 # branch or tag of the lotus version to build
-ARG BRANCH=experimental/fvm-m2
+ARG BRANCH=release/fevm-wallaby
 ARG NETWORK=lotus
 
 RUN echo "Building lotus from branch $BRANCH in network $NETWORK"

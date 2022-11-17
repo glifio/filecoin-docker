@@ -6,3 +6,8 @@
   AnnounceAddresses = []
 [Pubsub]
   RemoteTracer = ""
+
+[ActorEvent]
+EnableRealTimeFilterAPI = true
+EnableHistoricFilterAPI = true
+ActorEventDatabasePath = ""

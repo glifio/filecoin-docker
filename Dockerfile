@@ -17,7 +17,7 @@ ENV FFI_BUILD_FROM_SOURCE=1
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-RUN git clone https://github.com/protofire/wallaby.git --depth 1 --branch $BRANCH && \
+RUN git clone https://github.com/protofire/wallaby.git --depth 1 --branch $BRANCH lotus && \
     cd lotus && \
     git submodule update --init --recursive && \
     make clean && \

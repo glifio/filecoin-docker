@@ -1,0 +1,12 @@
+[API]
+  ListenAddress = "/ip4/0.0.0.0/tcp/1234/http"
+  Timeout = "60s"
+[Libp2p]
+  ListenAddresses = ["/ip4/0.0.0.0/tcp/1235", "/ip6/::/tcp/1235"]
+  AnnounceAddresses = []
+  ConnMgrLow = 400
+  ConnMgrHigh = 500
+  ConnMgrGrace = "5m0s"
+  Bootstrapper = true
+[Pubsub]
+  RemoteTracer = ""

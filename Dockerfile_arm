@@ -29,7 +29,7 @@ RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 
 # runtime container stage
-FROM ubuntu:20.04
+FROM arm64/v8/ubuntu:20.04
 ENV DEBIAN_FRONTEND noninteractive
 #creating cron job to check lotus sync status and restart it if process is killed
 RUN  apt-get update && \

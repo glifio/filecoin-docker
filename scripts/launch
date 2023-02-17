@@ -10,15 +10,7 @@ elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
   echo "Starting lotus daemon with gateway"
   # Start the daemon process with gateway
   lotus daemon &
-  sleep 50
-  while true
-  do
-    if  pgrep -f "lotus daemon"
-      then lotus-gateway run && break
-    else
-      sleep 5
-    fi
-  done
+  lotus wait-api && lotus-gateway run
 elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
   echo "Starting daemon"
   # Start the daemon process

@@ -1,73 +1,86 @@
-# build container stage
-FROM golang:1.18.1-buster AS build-env
+FROM golang:1.18.8-alpine AS build-stage
 
-# branch or tag of the lotus version to build
+# Repository containing lotus code
+ARG REPOSITORY="filecoin-project/lotus"
+# Branch from which to build (main, ntwk/hyperspace, etc.)
 ARG BRANCH
+# Filecoin network to build binaries for (use 'lotus' for mainnet)
 ARG NETWORK
 
-RUN echo "Building lotus from branch $BRANCH in network $NETWORK"
+# Basic dependencies
+RUN apk add --no-cache git jq curl bash wget
 
-RUN apt-get update -y && \
-    apt-get install sudo cron git mesa-opencl-icd gcc bzr jq pkg-config clang libhwloc-dev ocl-icd-opencl-dev build-essential hwloc -y
-
+# Recommended tweaks (not sure if valueable)
 ENV CGO_CFLAGS="-D__BLST_PORTABLE__"
 ENV RUSTFLAGS="-C target-cpu=native -g"
 ENV FFI_BUILD_FROM_SOURCE=1
-
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-RUN git clone https://github.com/filecoin-project/lotus.git --depth 1 --branch $BRANCH && \
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+# Download lotus
+RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch ${BRANCH} && \
     cd lotus && \
-    git submodule update --init --recursive && \
+    git submodule update --init --recursive
+
+# Install lotus dependencies
+RUN apk add --no-cache build-base gcc hwloc hwloc-dev opencl opencl-dev libunwind libunwind-dev linux-headers coreutils
+
+# Build lotus binaries
+RUN cd lotus && \
     make clean && \
-    make $NETWORK lotus-shed lotus-gateway && \
+    make ${NETWORK} lotus-shed lotus-gateway && \
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-gateway /usr/local/bin/lotus-gateway && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 
-# runtime container stage
-FROM ubuntu:20.04
-ENV DEBIAN_FRONTEND noninteractive
-#creating cron job to check lotus sync status and restart it if process is killed
-RUN  apt-get update && \
-     apt-get install curl nano libhwloc-dev -y && \
-     rm -rf /var/lib/apt/lists/*
 
-COPY --from=build-env /usr/local/bin/lotus /usr/local/bin/lotus
-COPY --from=build-env /usr/local/bin/lotus-gateway /usr/local/bin/lotus-gateway
-COPY --from=build-env /usr/local/bin/lotus-shed /usr/local/bin/lotus-shed
-COPY --from=build-env /etc/ssl/certs /etc/ssl/certs
-COPY --from=build-env /lib/x86_64-linux-gnu /lib/
-COPY LOTUS_VERSION /VERSION
-# lotus libraries
-COPY --from=build-env   /lib/x86_64-linux-gnu/libutil.so.1 \
-                        /lib/x86_64-linux-gnu/librt.so.1 \
-                        /lib/x86_64-linux-gnu/libgcc_s.so.1 \
-                        /lib/x86_64-linux-gnu/libdl.so.2 \
-                        /usr/lib/x86_64-linux-gnu/libltdl.so.7 \
-                        /usr/lib/x86_64-linux-gnu/libnuma.so.1 \
-                        /usr/lib/x86_64-linux-gnu/libhwloc.so.5 /lib/
-COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0 /lib/libOpenCL.so.1
-# jq libraries
-COPY --from=build-env   /usr/lib/x86_64-linux-gnu/libjq.so.1 /usr/lib/x86_64-linux-gnu/
-COPY --from=build-env /usr/lib/x86_64-linux-gnu/libonig.so.5.0.0 /usr/lib/x86_64-linux-gnu/libonig.so.5
 
-# create nonroot user and lotus folder
-RUN     adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
+FROM alpine:latest
 
-# copy jq, script/config files
-COPY --from=build-env /usr/bin/jq /usr/bin/
+# Copy SSL certificates
+COPY --from=build-stage /etc/ssl/certs /etc/ssl/certs
+
+# Copy lotus dependencies
+COPY --from=build-stage /lib/libudev.so.1 /lib/
+COPY --from=build-stage /usr/lib/libhwloc.so.15 \
+                        /usr/lib/libOpenCL.so.1 \
+                        /usr/lib/libunwind.so.8 \
+                        /usr/lib/libgcc_s.so.1 \
+                        /usr/lib/liblzma.so.5 \
+                        /usr/lib/libxml2.so.2 \
+                        /usr/lib/
+
+# Copy lotus binaries
+COPY --from=build-stage /usr/local/bin/lotus \
+                        /usr/local/bin/lotus-gateway \
+                        /usr/local/bin/lotus-shed \
+                        /usr/local/bin/
+
+# Copy lotus config
 COPY config/config.toml /home/lotus_user/config.toml
+
+# Copy the healthcheck script
 COPY scripts/healthcheck /bin/
-COPY scripts/bash-config scripts/configure scripts/run scripts/launch scripts/ensure /etc/lotus/docker/
+# Copy config scripts
+COPY scripts/bash-config \
+     scripts/configure \
+     scripts/run \
+     scripts/launch \
+     scripts/ensure \
+     /etc/lotus/docker/
+
+# Create service user
+RUN adduser -u 2000 -g "" -D lotus_user
+
+# Install tooling dependencies
+RUN apk add --no-cache curl nano jq bash
 
 USER lotus_user
 
-# API port
 EXPOSE 1234/tcp
 
-# P2P port
 EXPOSE 1235/tcp
 
 ENTRYPOINT ["/etc/lotus/docker/run"]

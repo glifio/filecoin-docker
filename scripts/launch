@@ -10,7 +10,7 @@ elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
   echo "Starting lotus daemon with gateway"
   # Start the daemon process with gateway
   lotus daemon &
-  lotus wait-api --timeout 10m && lotus-gateway run
+  lotus wait-api --timeout 10m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s
 elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
   echo "Starting daemon"
   # Start the daemon process

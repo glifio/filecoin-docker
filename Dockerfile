@@ -1,4 +1,4 @@
-FROM golang:1.18.8-alpine AS build-stage
+FROM golang:1.19.7-alpine AS build-stage
 
 # Repository containing lotus code
 ARG REPOSITORY="filecoin-project/lotus"

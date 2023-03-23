@@ -6,3 +6,5 @@
   AnnounceAddresses = []
 [Pubsub]
   RemoteTracer = ""
+[Chainstore]
+  EnableSplitstore = false

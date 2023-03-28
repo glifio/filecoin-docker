@@ -12,8 +12,8 @@ RUN apk add --no-cache git jq curl bash wget
 
 # Recommended tweaks (not sure if valueable)
 ENV CGO_CFLAGS="-D__BLST_PORTABLE__"
-ENV RUSTFLAGS="-C target-cpu=native -g"
-ENV FFI_BUILD_FROM_SOURCE=1
+#ENV RUSTFLAGS="-C target-cpu=native -g"
+#ENV FFI_BUILD_FROM_SOURCE=1
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Install Rust

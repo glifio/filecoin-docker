@@ -31,7 +31,7 @@ elif [ "$INFRA_IMPORT" = true ]; then
   echo "Starting import wait"
   CHAIN_CAR="/chain/chain.car"
   if [ -f "$CHAIN_CAR" ] && [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
-    lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
+    eudico daemon --halt-after-import --import-chain "$CHAIN_CAR"
     touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
   fi
 elif [ "$INFRA_IMPORT" = false ]; then
@@ -58,11 +58,11 @@ else
 if [ "$INFRA_IMPORT_SNAPSHOT" = true ] ; then
     echo "Starting import wait"
     if [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
-      lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
+      eudico daemon --halt-after-import --import-snapshot $SNAPSHOTURL
       touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
       else
         rm -fr "$INFRA_LOTUS_HOME/.lotus/datastore/chain/*"
-        lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
+        eudico daemon --halt-after-import --import-snapshot $SNAPSHOTURL
         touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
     fi
 elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
@@ -77,7 +77,7 @@ elif [ "$INFRA_SHEDEXPORT" = true ]; then
   while true; do
   echo "Exporting state"
   /usr/local/bin/lotus-shed export --skip-old-msgs --recent-stateroots=900 $INFRA_SHEDEXPORTPATH
-  timeout $INFRA_SHEDEXPORTPERIOD /usr/local/bin/lotus daemon
+  timeout $INFRA_SHEDEXPORTPERIOD /usr/local/bin/eudico daemon
   done
 elif [ "$INFRA_SHEDEXPORT" = false ]; then
   echo "INFRA_SHEDEXPORT disabled."
@@ -88,7 +88,7 @@ then
   echo "INFRA_SYNC not defined."
 elif [ "$INFRA_SYNC" = true ]; then
     echo "Starting sync wait"
-    ( repeat lotus sync wait && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &)
+    ( repeat eudico sync wait && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &)
 elif [ "$INFRA_SYNC" = false ]; then
   echo "SYNC disabled."
 fi

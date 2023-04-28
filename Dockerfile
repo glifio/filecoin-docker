@@ -1,11 +1,11 @@
 FROM golang:1.19.7-buster AS lotus-build
 
 # Lotus repository
-ARG REPOSITORY="filecoin-project/lotus"
+ARG REPOSITORY="consensus-shipyard/lotus"
 # Git branch of the lotus repository
-ARG BRANCH="master"
+ARG BRANCH="v0.2.0"
 # Filecoin network. Valid values: lotus, calibnet, hyperspace
-ARG NETWORK="lotus"
+ARG NETWORK="spacenet"
 
 # Install packages required by lotus
 RUN apt-get update && \
@@ -35,10 +35,12 @@ RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH &&
     cd lotus && \
     make clean && \
     make deps && \
-    make $NETWORK lotus-shed lotus-gateway && \
-    install -C ./lotus /usr/local/bin/lotus && \
-    install -C ./lotus-gateway /usr/local/bin/lotus-gateway && \
-    install -C ./lotus-shed /usr/local/bin/lotus-shed
+    make $NETWORK lotus-gateway && \
+    install -C ./eudico /usr/local/bin/eudico && \
+    install -C ./lotus-seed /usr/local/bin/lotus-seed && \
+    install -C ./lotus-keygen /usr/local/bin/lotus-keygen && \
+    install -C ./lotus-shed /usr/local/bin/lotus-shed && \
+    install -C ./lotus-gateway /usr/local/bin/lotus-gateway
 
 FROM ubuntu:20.04 AS lotus-base
 
@@ -61,9 +63,10 @@ COPY --from=lotus-build \
 
 # Copy lotus binaries
 COPY --from=lotus-build \
-    /usr/local/bin/lotus \
+    /usr/local/bin/eudico \
+    /usr/local/bin/lotus-seed \
+    /usr/local/bin/lotus-keygen \
     /usr/local/bin/lotus-gateway \
-    /usr/local/bin/lotus-shed \
     /usr/local/bin/
 
 FROM lotus-base AS lotus-runtime

@@ -9,19 +9,19 @@ if [[ -z "$INFRA_VAR" ]] ; then
 elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
   echo "Starting lotus daemon with gateway"
   # Start the daemon process with gateway
-  lotus daemon &
-  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s
+  eudico daemon &
+  eudico wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s
 elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
   echo "Starting daemon"
   # Start the daemon process
-  lotus daemon
+  eudico daemon
 elif [ "$INFRA_LOTUS_LITE" = true ]; then
   if [[ -z "$FULLNODE_API_INFO" ]]; then
     echo "FULLNODE_API_INFO isn't defined in lotus lite mode. Please setting up ..."
   else
   # Start lotus daemon in lite mode
     echo "Starting lotus daemon in lite mode"
-    lotus daemon --lite
+    eudico daemon --lite
   fi
 elif [ "$INFRA_LOTUS_DAEMON" = false ]; then
   echo "DAEMON disabled."

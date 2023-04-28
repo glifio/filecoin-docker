@@ -7,6 +7,10 @@ ARG BRANCH="v0.2.0"
 # Filecoin network. Valid values: lotus, calibnet, hyperspace
 ARG NETWORK="spacenet"
 
+# Build FFI from source
+ENV RUSTFLAGS="-C target-cpu=native -g"
+ENV FFI_BUILD_FROM_SOURCE=1
+
 # Install packages required by lotus
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

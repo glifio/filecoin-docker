@@ -16,57 +16,17 @@ function launch_root_validator {
     attach-session -t "mir:0"
 }
 
-function launch_spacenet {
-  eudico mir daemon --bootstrap=true;
-}
-
-
 # Start the daemon process
 function launch_daemon() {
-  echo "Starting lotus daemon...";
-  #lotus daemon;
+  echo "Starting spacenet daemon...";
 
-  . /docker-eudico-entrypoint.sh
-}
-
-# Launch the daemon process with lotus gateway
-function launch_gateway() {
-  echo "Starting lotus daemon with the gateway...";
-  #lotus daemon &;
-  #lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
-
-  . /docker-eudico-entrypoint.sh
-}
-
-# Launch lotus daemon process in the lite mode
-function launch_lite() {
-  if [[ -z "$FULLNODE_API_INFO" ]]; then
-    echo "FULLNODE_API_INFO is empty, but required to run the lite node. Please set up.";
-    return 0;
-  fi
-
-  echo "Starting lotus daemon in the lite mode...";
-  lotus daemon --lite;
+  eudico mir daemon --bootstrap=true;
 }
 
 # Launch lotus in the selected mode
 function launch() {
-  let REQUIRED_VARIABLES=$(env | grep INFRA_LOTUS_);
-  if [[ -z "$REQUIRED_VARIABLES" ]] ; then
-    echo "No launch variables (INFRA_LOTUS_DAEMON, INFRA_LOTUS_GATEWAY, INFRA_LOTUS_LITE) are set.";
-    exit 1;
-  fi
-
-  if [ "$INFRA_LOTUS_SPACENET" = true ]; then
-    launch_spacenet;
-  elif [ "$INFRA_LOTUS_ROOT_VALIDATOR" = true ]; then
-    launch_root_validator;
-  elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
+  if [ "$INFRA_LOTUS_DAEMON" = true ]; then
     launch_daemon;
-  elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
-    launch_gateway;
-  elif [ "$INFRA_LOTUS_LITE" = true ]; then
-    launch_lite;
   fi
 }
 

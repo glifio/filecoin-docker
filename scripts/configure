@@ -89,7 +89,7 @@ copy_config;
 function run_import {
   echo "Starting import...";
   if [ -f "$SNAPSHOT_DEFAULT_PATH" ] && [ ! -e "$DATASTORE_TARGET_PATH" ]; then
-    eudico daemon --halt-after-import --import-chain "$SNAPSHOT_DEFAULT_PATH";
+    eudico mir daemon --halt-after-import --import-chain "$SNAPSHOT_DEFAULT_PATH";
     touch "$IMPORT_COMPLETE_PATH";
   fi
 }
@@ -101,7 +101,7 @@ validate_env_soft INFRA_IMPORT && run_import;
 # Handle INFRA_IMPORT_SNAPSHOT_FROM_IPFS variable
 function prepare_ipfs_import {
   echo "Fetching IPFS CID...";
-  let CID=$(curl $SNAPSHOT_CID);
+  local CID=$(curl $SNAPSHOT_CID);
   echo "Fetched. CID is $CID";
 
   SNAPSHOTURL="$IPFS_GW/$CID";
@@ -119,20 +119,20 @@ function is_import_completed {
   return 1;
 }
 
-function run_import {
+function run_ipfs_import {
   echo "Starting import...";
   # If datastore is not empty, delete the chain data.
   if [ ! -e "$DATASTORE_TARGET_PATH" ]; then
     rm -rf "$DATASTORE_TARGET_PATH/chain/*";
   fi
 
-  lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL;
+  eudico mir daemon --halt-after-import --import-snapshot $SNAPSHOTURL;
   touch "$IMPORT_COMPLETE_PATH";
 }
 
 validate_env_soft INFRA_IMPORT_SNAPSHOT_FROM_IPFS && prepare_ipfs_import;
 is_import_completed && echo "Import has already been completed" || (
-  validate_env_soft INFRA_IMPORT_SNAPSHOT && run_import
+  validate_env_soft INFRA_IMPORT_SNAPSHOT && run_ipfs_import
 );
 
 

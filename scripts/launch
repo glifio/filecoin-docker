@@ -25,7 +25,9 @@ function launch_daemon {
 
 # Launch lotus in the selected mode
 function launch {
-  if [ "$INFRA_LOTUS_DAEMON" = true ]; then
+  if [ "$INFRA_LOTUS_ROOT_VALIDATOR" = true ]; then
+    launch_root_validator;
+  elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
     launch_daemon;
   fi
 }

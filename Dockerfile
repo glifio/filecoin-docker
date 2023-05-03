@@ -104,6 +104,9 @@ COPY scripts/bash-config \
     scripts/ensure \
     scripts/root-single-validator \
     scripts/subnet-daemon \
+    config/genesis-test.json \
+    config/genesis.json \
+    config/wallet.key \
     /etc/lotus/docker/
 
 # Create lotus user

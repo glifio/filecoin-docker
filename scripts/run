@@ -21,4 +21,4 @@ echo "===> Configuring ..."
 #/etc/lotus/docker/ensure
 
 echo "===> Launching ... "
-exec /etc/lotus/docker/launch
+/etc/lotus/docker/launch

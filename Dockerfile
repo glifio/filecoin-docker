@@ -47,82 +47,83 @@ RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH &&
 
 
 
-FROM ubuntu:20.04 AS lotus-base
-
-# Copy software dependencies
-COPY --from=lotus-build \
-    /usr/lib/*/libhwloc.so.5 \
-    /usr/lib/*/libnuma.so.1 \
-    /usr/lib/*/libltdl.so.7 \
-    /lib/
-
-# Copy OpenCL
-COPY --from=lotus-build \
-    /usr/lib/*/libOpenCL.so.1.0.0 \
-    /lib/libOpenCL.so.1
-
-# Copy SSL certificates
-COPY --from=lotus-build \
-    /etc/ssl/certs \
-    /etc/ssl/certs
-
-# Copy lotus binaries
-COPY --from=lotus-build \
-    /usr/local/bin/eudico \
-    /usr/local/bin/lotus-seed \
-    /usr/local/bin/lotus-keygen \
-    /usr/local/bin/lotus-gateway \
-    /usr/local/bin/
-
-# Copy eudico configs
-COPY --from=lotus-build \
-    /lotus/eudico-core/genesis/genesis-test.json \
-    /lotus/eudico-core/genesis/genesis.json \
-    /lotus/scripts/ipc/src/wallet.key \
-    /etc/lotus/docker/
-
-
-FROM lotus-base AS lotus-runtime
-
-# Install JQ
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        jq  \
-        curl \
-        nano \
-        tmux && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copy lotus version
-COPY LOTUS_VERSION /VERSION
-
-# Copy lotus config
-COPY config/config.toml /home/lotus_user/config.toml
-
-# Copy the healthcheck script
-COPY scripts/healthcheck /bin/
-
-# Copy config scripts
-COPY scripts/bash-config \
-    scripts/configure \
-    scripts/run \
-    scripts/launch \
-    scripts/ensure \
-    scripts/root-single-validator \
-    scripts/subnet-daemon \
-    /etc/lotus/docker/
-
-# Create lotus user
-RUN adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
-
-# Add permissions for the lotus_user
-RUN chown lotus_user /home/lotus_user
-
-USER lotus_user
-
-EXPOSE 1234/tcp
-
-EXPOSE 1235/tcp
-
-ENTRYPOINT ["/etc/lotus/docker/run"]
+#FROM ubuntu:20.04 AS lotus-base
+#
+## Copy software dependencies
+#COPY --from=lotus-build \
+#    /usr/lib/*/libhwloc.so.5 \
+#    /usr/lib/*/libnuma.so.1 \
+#    /usr/lib/*/libltdl.so.7 \
+#    /lib/
+#
+## Copy OpenCL
+#COPY --from=lotus-build \
+#    /usr/lib/*/libOpenCL.so.1.0.0 \
+#    /lib/libOpenCL.so.1
+#
+## Copy SSL certificates
+#COPY --from=lotus-build \
+#    /etc/ssl/certs \
+#    /etc/ssl/certs
+#
+## Copy lotus binaries
+#COPY --from=lotus-build \
+#    /usr/local/bin/eudico \
+#    /usr/local/bin/lotus-seed \
+#    /usr/local/bin/lotus-keygen \
+#    /usr/local/bin/lotus-gateway \
+#    /usr/local/bin/
+#
+## Copy eudico configs
+#COPY --from=lotus-build \
+#    /lotus/eudico-core/genesis/genesis-test.json \
+#    /lotus/eudico-core/genesis/genesis.json \
+#    /lotus/scripts/ipc/src/wallet.key \
+#    /etc/lotus/docker/
+#
+#
+#FROM lotus-base AS lotus-runtime
+#
+## Install JQ
+#RUN apt-get update && \
+#    apt-get install -y --no-install-recommends \
+#        jq  \
+#        curl \
+#        nano \
+#        tmux && \
+#    apt-get clean && \
+#    rm -rf /var/lib/apt/lists/*
+#
+## Copy lotus version
+#COPY LOTUS_VERSION /VERSION
+#
+## Copy lotus config
+#COPY config/config.toml /home/lotus_user/config.toml
+#
+## Copy the healthcheck script
+#COPY scripts/healthcheck /bin/
+#
+## Copy config scripts
+#COPY scripts/bash-config \
+#    scripts/configure \
+#    scripts/run \
+#    scripts/launch \
+#    scripts/ensure \
+#    scripts/root-single-validator \
+#    scripts/subnet-daemon \
+#    /etc/lotus/docker/
+#
+## Create lotus user
+#RUN adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
+#
+## Add permissions for the lotus_user
+#RUN chown lotus_user /home/lotus_user
+#
+#USER lotus_user
+#
+#EXPOSE 1234/tcp
+#
+#EXPOSE 1235/tcp
+#
+#ENTRYPOINT ["/etc/lotus/docker/run"]
+#

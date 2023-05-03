@@ -16,6 +16,10 @@ function launch_root_validator {
     attach-session -t "mir:0"
 }
 
+function launch_spacenet {
+  eudico mir daemon --bootstrap=true;
+}
+
 
 # Start the daemon process
 function launch_daemon() {
@@ -53,7 +57,9 @@ function launch() {
     exit 1;
   fi
 
-  if [ "$INFRA_LOTUS_ROOT_VALIDATOR" = true ]; then
+  if [ "$INFRA_LOTUS_SPACENET" = true ]; then
+    launch_spacenet;
+  elif [ "$INFRA_LOTUS_ROOT_VALIDATOR" = true ]; then
     launch_root_validator;
   elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
     launch_daemon;

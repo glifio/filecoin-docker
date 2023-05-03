@@ -17,14 +17,14 @@ function launch_root_validator {
 }
 
 # Start the daemon process
-function launch_daemon() {
+function launch_daemon {
   echo "Starting spacenet daemon...";
 
   eudico mir daemon --bootstrap=true;
 }
 
 # Launch lotus in the selected mode
-function launch() {
+function launch {
   if [ "$INFRA_LOTUS_DAEMON" = true ]; then
     launch_daemon;
   fi

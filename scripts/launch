@@ -2,28 +2,66 @@
 
 . /etc/lotus/docker/bash-config
 
-INFRA_VAR=$(env | grep INFRA_LOTUS_)
 
-if [[ -z "$INFRA_VAR" ]] ; then
-  echo "INFRA_LOTUS_DAEMON or INFRA_LOTUS_LITE or INFRA_LOTUS_GATEWAY aren't defined. Please setting up ..."
-elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
-  echo "Starting lotus daemon with gateway"
-  # Start the daemon process with gateway
-  eudico daemon &
-  eudico wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s
-elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
-  echo "Starting daemon"
-  # Start the daemon process
-  eudico daemon
-elif [ "$INFRA_LOTUS_LITE" = true ]; then
+function launch_root_validator {
+  tmux new-session -d -s "mir" \; \
+    new-window   -t "mir" \; \
+    split-window -t "mir:0" -v \; \
+    \
+    send-keys -t "mir:0" "
+        /etc/lotus/docker/subnet-daemon /root" Enter \; \
+    send-keys -t "mir:0.0" "
+        /etc/lotus/docker/root-single-validator" Enter \; \
+    \
+    attach-session -t "mir:0"
+}
+
+
+# Start the daemon process
+function launch_daemon() {
+  echo "Starting lotus daemon...";
+  #lotus daemon;
+
+  . /docker-eudico-entrypoint.sh
+}
+
+# Launch the daemon process with lotus gateway
+function launch_gateway() {
+  echo "Starting lotus daemon with the gateway...";
+  #lotus daemon &;
+  #lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
+
+  . /docker-eudico-entrypoint.sh
+}
+
+# Launch lotus daemon process in the lite mode
+function launch_lite() {
   if [[ -z "$FULLNODE_API_INFO" ]]; then
-    echo "FULLNODE_API_INFO isn't defined in lotus lite mode. Please setting up ..."
-  else
-  # Start lotus daemon in lite mode
-    echo "Starting lotus daemon in lite mode"
-    eudico daemon --lite
+    echo "FULLNODE_API_INFO is empty, but required to run the lite node. Please set up.";
+    return 0;
   fi
-elif [ "$INFRA_LOTUS_DAEMON" = false ]; then
-  echo "DAEMON disabled."
-fi
 
+  echo "Starting lotus daemon in the lite mode...";
+  lotus daemon --lite;
+}
+
+# Launch lotus in the selected mode
+function launch() {
+  let REQUIRED_VARIABLES=$(env | grep INFRA_LOTUS_);
+  if [[ -z "$REQUIRED_VARIABLES" ]] ; then
+    echo "No launch variables (INFRA_LOTUS_DAEMON, INFRA_LOTUS_GATEWAY, INFRA_LOTUS_LITE) are set.";
+    exit 1;
+  fi
+
+  if [ "$INFRA_LOTUS_ROOT_VALIDATOR" = true ]; then
+    launch_root_validator;
+  elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
+    launch_daemon;
+  elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
+    launch_gateway;
+  elif [ "$INFRA_LOTUS_LITE" = true ]; then
+    launch_lite;
+  fi
+}
+
+launch;

@@ -37,14 +37,15 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # Install lotus
 RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH && \
     cd lotus && \
-    make clean && \
-    make deps && \
+    make clean deps && \
     make $NETWORK lotus-gateway && \
     install -C ./eudico /usr/local/bin/eudico && \
     install -C ./lotus-seed /usr/local/bin/lotus-seed && \
     install -C ./lotus-keygen /usr/local/bin/lotus-keygen && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed && \
     install -C ./lotus-gateway /usr/local/bin/lotus-gateway
+
+
 
 FROM ubuntu:20.04 AS lotus-base
 
@@ -73,6 +74,14 @@ COPY --from=lotus-build \
     /usr/local/bin/lotus-gateway \
     /usr/local/bin/
 
+# Copy eudico configs
+COPY --from=lotus-build \
+    /lotus/eudico-core/genesis/genesis-test.json \
+    /lotus/eudico-core/genesis/genesis.json \
+    /lotus/scripts/ipc/src/wallet.key \
+    /etc/lotus/docker/
+
+
 FROM lotus-base AS lotus-runtime
 
 # Install JQ
@@ -99,6 +108,8 @@ COPY scripts/bash-config \
     scripts/run \
     scripts/launch \
     scripts/ensure \
+    scripts/root-single-validator \
+    scripts/subnet-daemon \
     /etc/lotus/docker/
 
 # Create lotus user

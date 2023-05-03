@@ -1,47 +1,65 @@
-#set -o nounset \
-#    -o errexit
 set -e
 
 function show_env {
     env | sort | grep INFRA
 }
 
-function check_lotus_home_dir() {
-  if [[ -z "$INFRA_LOTUS_HOME" ]]; then
-    echo "INFRA_LOTUS_HOME not defined. Please setting up ..."
-    exit 1
+
+function validate_env {
+  local ENV_NAME=$1;
+  local ENV_VALUE=$(printenv $1);
+
+  local EXIT_FUNCTION=$2;
+  local EXIT_VALUE=$3;
+
+  if [[ -z "$ENV_VALUE" ]]; then
+    echo "$ENV_NAME is empty";
+    $EXIT_FUNCTION $EXIT_VALUE;
   fi
 
+  if [ "$ENV_VALUE" = false ]; then
+    echo "$ENV_NAME is disabled";
+    $EXIT_FUNCTION $EXIT_VALUE;
+  fi
+
+  return 0;
 }
 
-function prepare_config {
-  if [ -f "$INFRA_LOTUS_HOME/config.toml" ]; then
-      if [ ! -d "$INFRA_LOTUS_HOME/.lotus" ]; then
-        mkdir "$INFRA_LOTUS_HOME/.lotus" && \
-        cp "$INFRA_LOTUS_HOME/config.toml" "$INFRA_LOTUS_HOME/.lotus/config.toml"
-      else
-        cp "$INFRA_LOTUS_HOME/config.toml" "$INFRA_LOTUS_HOME/.lotus/config.toml"
-      fi
-  fi
+
+function validate_env_hard {
+  local ENV_NAME=$1;
+
+  validate_env $ENV_NAME exit 1;
 }
 
-function key_permissions {
-  # make sure key/token permissions are correct
-  if [ -d "$INFRA_LOTUS_HOME/.lotus/keystore" ]; then
-      find "$INFRA_LOTUS_HOME/.lotus/keystore/" -type f -exec chmod 600 {} \;
-  fi
-  if [ -f "$INFRA_LOTUS_HOME/.lotus/token" ]; then
-      chmod -f 600 "$INFRA_LOTUS_HOME/.lotus/token"
-  fi
+
+function validate_env_soft {
+  local ENV_NAME=$1;
+
+  validate_env $ENV_NAME return 1;
 }
 
-function keys_management() {
-  mkdir -p "$INFRA_LOTUS_HOME/.lotus/keystore";
-  if [[ $INFRA_PERSISTNODEID = true ]]; then
-    cp /keystore/nodeid "$INFRA_LOTUS_HOME/.lotus/keystore/NRUWE4BSOAWWQ33TOQ";
-  else
-    rm -f "$INFRA_LOTUS_HOME/.lotus/keystore/NRUWE4BSOAWWQ33TOQ";
-  fi
-  cp /keystore/token "$INFRA_LOTUS_HOME/.lotus/token";
-  cp /keystore/privatekey "$INFRA_LOTUS_HOME/.lotus/keystore/MF2XI2BNNJ3XILLQOJUXMYLUMU";
-}
+
+export LOTUS_DIR="$INFRA_LOTUS_HOME/.lotus";
+
+export LOTUS_CONFIG_SOURCE_PATH="$INFRA_LOTUS_HOME/config.toml";
+export LOTUS_CONFIG_TARGET_PATH="$LOTUS_DIR/config.toml";
+
+export KEYSTORE_SOURCE_DIR="/keystore";
+export KEYSTORE_TARGET_DIR="$LOTUS_DIR/keystore";
+
+export TOKEN_SOURCE_PATH="$KEYSTORE_SOURCE_DIR/token";
+export TOKEN_TARGET_PATH="$LOTUS_DIR/token";
+
+export PRIVATE_KEY_SOURCE_PATH="$KEYSTORE_SOURCE_DIR/privatekey";
+export PRIVATE_KEY_TARGET_PATH="$KEYSTORE_TARGET_DIR/MF2XI2BNNJ3XILLQOJUXMYLUMU";
+
+export NODE_ID_SOURCE_PATH="$KEYSTORE_SOURCE_DIR/nodeid";
+export NODE_ID_TARGET_PATH="$KEYSTORE_TARGET_DIR/NRUWE4BSOAWWQ33TOQ";
+
+export SNAPSHOT_DEFAULT_PATH="/chain/chain.car";
+
+export DATASTORE_TARGET_PATH="$LOTUS_DIR/datastore";
+
+export IMPORT_COMPLETE_PATH="$LOTUS_DIR/import-complete";
+export SYNC_COMPLETE_PATH="$LOTUS_DIR/sync-complete";

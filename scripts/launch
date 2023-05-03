@@ -4,16 +4,8 @@
 
 
 function launch_root_validator {
-  tmux new-session -d -s "mir" \; \
-    new-window   -t "mir" \; \
-    split-window -t "mir:0" -v \; \
-    \
-    send-keys -t "mir:0" "
-        /etc/lotus/docker/subnet-daemon /root" Enter \; \
-    send-keys -t "mir:0.0" "
-        /etc/lotus/docker/root-single-validator" Enter \; \
-    \
-    attach-session -t "mir:0"
+  /etc/lotus/docker/subnet-daemon /root &
+  /etc/lotus/docker/root-single-validator &
 }
 
 # Start the daemon process

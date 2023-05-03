@@ -89,7 +89,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         jq  \
         curl \
-        nano && \
+        nano \
+        tmux && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

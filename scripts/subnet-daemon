@@ -19,7 +19,7 @@ else
 fi
 
 echo "[*] Starting daemon"
-eudico mir daemon --genesis=subnet.car --bootstrap=false
+eudico mir daemon --genesis=/home/lotus_user/subnet.car --bootstrap=false
 
 eudico wait-api --timeout=300s
 sleep 5

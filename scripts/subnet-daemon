@@ -13,9 +13,9 @@ SUBNETID=$1
 
 echo "[*] Generate genesis for subnet deterministically"
 if [[ "$SUBNETID" == "/root" ]]; then
-    eudico genesis new --subnet-id=$SUBNETID --template=/etc/lotus/docker/genesis-test.json --out=subnet.car
+    eudico genesis new --subnet-id=$SUBNETID --template=/etc/lotus/docker/genesis-test.json --out=/home/lotus_user/subnet.car
 else
-    eudico genesis new --subnet-id=$SUBNETID --template=/etc/lotus/docker/genesis.json --out=subnet.car
+    eudico genesis new --subnet-id=$SUBNETID --template=/etc/lotus/docker/genesis.json --out=/home/lotus_user/subnet.car
 fi
 
 echo "[*] Starting daemon"

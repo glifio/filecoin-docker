@@ -20,3 +20,13 @@ fi
 
 echo "[*] Starting daemon"
 eudico mir daemon --genesis=subnet.car --bootstrap=false
+
+eudico wait-api --timeout=300s
+sleep 5
+eudico wallet import --as-default --format=json-lotus  /etc/lotus/docker/wallet.key
+echo "[*] Initializing validator config and adding validator"
+eudico mir validator config init
+validator_addr=`eudico mir validator config validator-addr | grep -vE '(/ip6/)' | grep -E '/ip4/127.0.0.1/tcp/1347'`
+eudico mir validator config add-validator $validator_addr
+echo "[*] Starting validator"
+eudico mir validator run --nosync

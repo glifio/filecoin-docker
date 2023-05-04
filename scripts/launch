@@ -4,8 +4,7 @@
 
 
 function launch_root_validator {
-  /etc/lotus/docker/subnet-daemon /root &
-  /etc/lotus/docker/root-single-validator &
+  /etc/lotus/docker/subnet-daemon /root
 }
 
 # Start the daemon process

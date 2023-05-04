@@ -7,6 +7,10 @@ function launch_root_validator {
   /etc/lotus/docker/subnet-daemon /root
 }
 
+function launch_validator {
+  validate_env_hard $SUBNETID && /etc/lotus/docker/subnet-daemon $SUBNETID;
+}
+
 # Start the daemon process
 function launch_daemon {
   echo "Starting spacenet daemon...";
@@ -16,7 +20,9 @@ function launch_daemon {
 
 # Launch lotus in the selected mode
 function launch {
-  if [ "$INFRA_LOTUS_ROOT_VALIDATOR" = true ]; then
+  if [ "$INFRA_LOTUS_VALIDATOR" = true ]; then
+    launch_validator;
+  elif [ "$INFRA_LOTUS_ROOT_VALIDATOR" = true ]; then
     launch_root_validator;
   elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
     launch_daemon;

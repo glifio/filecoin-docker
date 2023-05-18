@@ -19,8 +19,9 @@ function launch_daemon {
 }
 
 function launch_gateway {
+  launch_daemon &;
+
   echo "Starting spacenet gateway...";
-  launch_daemon;
   eudico wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
 }
 

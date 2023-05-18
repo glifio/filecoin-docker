@@ -18,12 +18,20 @@ function launch_daemon {
   eudico mir daemon --bootstrap=true;
 }
 
+function launch_gateway {
+  echo "Starting spacenet gateway...";
+  launch_daemon;
+  eudico wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
+}
+
 # Launch lotus in the selected mode
 function launch {
   if [ "$INFRA_LOTUS_VALIDATOR" = true ]; then
     launch_validator;
   elif [ "$INFRA_LOTUS_ROOT_VALIDATOR" = true ]; then
     launch_root_validator;
+  elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
+    launch_gateway;
   elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
     launch_daemon;
   fi

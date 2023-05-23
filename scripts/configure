@@ -110,7 +110,7 @@ validate_env_soft INFRA_SHEDEXPORT && run_export;
 # Handle INFRA_SYNC variable
 function run_sync {
   echo "Starting sync wait...";
-  eudico sync wait --mir && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &
+  ( repeat eudico sync wait --mir && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &);
 }
 
 validate_env_soft INFRA_SYNC && run_sync;

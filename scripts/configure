@@ -4,18 +4,12 @@
 
 repeat() { while :; sleep 3; do $@ && return; done }
 
-# Exit if INFRA_LOTUS_HOME is not defined
-validate_env_hard INFRA_LOTUS_HOME;
-
 # Handle INFRA_CLEAR_RESTART variable
 function run_clear_restart {
   echo "I'll remove ALL LOTUS DATA from $LOTUS_DIR/";
   echo " -------> Removing ... <---------";
   repeat rm -rf "$LOTUS_DIR/*";
 }
-
-validate_env_soft INFRA_CLEAR_RESTART && run_clear_restart;
-
 
 # Handle INFRA_SECRETVOLUME variable
 function handle_persist_node_id {
@@ -36,8 +30,6 @@ function copy_secrets {
   cp $PRIVATE_KEY_SOURCE_PATH $PRIVATE_KEY_TARGET_PATH;
 }
 
-validate_env_soft INFRA_SECRETVOLUME && copy_secrets;
-
 # Set filesystem permissions on the copied secrets
 function set_secrets_permissions {
   # Set permissions in the keystore directory to 600
@@ -50,8 +42,6 @@ function set_secrets_permissions {
       chmod -f 600 "$TOKEN_TARGET_PATH"
   fi
 }
-
-set_secrets_permissions;
 
 # Copy config.toml if needed
 function copy_config {
@@ -71,8 +61,6 @@ function copy_config {
   cp $LOTUS_CONFIG_SOURCE_PATH $LOTUS_CONFIG_TARGET_PATH
 }
 
-copy_config;
-
 # Handle INFRA_IMPORT variable
 function run_import {
   echo "Starting import...";
@@ -82,56 +70,44 @@ function run_import {
   fi
 }
 
-validate_env_soft INFRA_IMPORT && run_import;
+function run_import_from_ipfs {
+  echo "Fetching IPFS CID...";
+  local CID=$(curl $SNAPSHOT_CID);
+  echo "Fetched. CID is $CID";
 
-if [[ -z "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" ]]
-then
-  echo "INFRA_IMPORT_SNAPSHOT_FROM_IPFS not defined."
-elif [ "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" = true ]; then
-  echo "Fetching IPFS CID..."
-  CID=$(curl $SNAPSHOT_CID)
-  echo "Fetched. CID is $CID"
-  SNAPSHOTURL="$IPFS_GW/$CID"
-  echo "Full URL to snapshot is $SNAPSHOTURL"
-  INFRA_IMPORT_SNAPSHOT=true
-elif [ "$IMPORT_SNAPSHOT_FROM_IPFS" = false ]; then
-  echo "IMPORT_SNAPSHOT_FROM_IPFS disabled."
-fi
+  local SNAPSHOTURL="$IPFS_GW/$CID";
+  echo "Full URL to snapshot is $SNAPSHOTURL";
 
-if [ -f "$INFRA_LOTUS_HOME/.lotus/import-complete" ]; then
-  echo "IMPORT was completed before."
-else
-if [ "$INFRA_IMPORT_SNAPSHOT" = true ] ; then
-    echo "Starting import wait"
-    if [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
-      lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
-      touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
-      else
-        rm -fr "$INFRA_LOTUS_HOME/.lotus/datastore/chain/*"
-        lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL
-        touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
-    fi
-elif [ "$INFRA_IMPORT_SNAPSHOT" = false ] ; then
-  echo "INFRA_IMPORT_SNAPSHOT disabled."
-fi
-fi
+  INFRA_IMPORT_SNAPSHOT=true;
+}
 
-if [[ -z "$INFRA_SHEDEXPORT" ]]
-then
-  echo "INFRA_SHEDEXPORT not defined."
-elif [ "$INFRA_SHEDEXPORT" = true ]; then
-  while true; do
-  echo "Exporting state"
-  /usr/local/bin/lotus-shed export --skip-old-msgs --recent-stateroots=900 $INFRA_SHEDEXPORTPATH
-  timeout $INFRA_SHEDEXPORTPERIOD /usr/local/bin/lotus daemon
-  done
-elif [ "$INFRA_SHEDEXPORT" = false ]; then
-  echo "INFRA_SHEDEXPORT disabled."
-fi
+function is_import_completed {
+  # If there's a file at IMPORT_COMPLETE_PATH, exit. 
+  if [ -f "$IMPORT_COMPLETE_PATH" ]; then
+    return 0;
+  fi
+
+  return 1;
+}
 
 function run_sync {
   echo "Starting sync wait...";
   ( repeat lotus sync wait --mir && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &);
 }
+
+# Exit if INFRA_LOTUS_HOME is not defined
+validate_env_hard INFRA_LOTUS_HOME;
+
+validate_env_soft INFRA_CLEAR_RESTART && run_clear_restart;
+
+validate_env_soft INFRA_SECRETVOLUME && copy_secrets;
+
+set_secrets_permissions;
+
+copy_config;
+
+validate_env_soft INFRA_IMPORT && run_import;
+
+validate_env_soft INFRA_IMPORT_SNAPSHOT_FROM_IPFS && run_import_from_ipfs;
 
 validate_env_soft INFRA_SYNC && run_sync;

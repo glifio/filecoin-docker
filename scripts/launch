@@ -2,28 +2,40 @@
 
 . /etc/lotus/docker/bash-config
 
-INFRA_VAR=$(env | grep INFRA_LOTUS_)
+# Start the daemon process
+function launch_daemon {
+  echo "Starting lotus daemon...";
 
-if [[ -z "$INFRA_VAR" ]] ; then
-  echo "INFRA_LOTUS_DAEMON or INFRA_LOTUS_LITE or INFRA_LOTUS_GATEWAY aren't defined. Please setting up ..."
-elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
-  echo "Starting lotus daemon with gateway"
-  # Start the daemon process with gateway
-  lotus daemon &
-  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s
-elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
-  echo "Starting daemon"
-  # Start the daemon process
-  lotus daemon
-elif [ "$INFRA_LOTUS_LITE" = true ]; then
-  if [[ -z "$FULLNODE_API_INFO" ]]; then
-    echo "FULLNODE_API_INFO isn't defined in lotus lite mode. Please setting up ..."
-  else
-  # Start lotus daemon in lite mode
-    echo "Starting lotus daemon in lite mode"
-    lotus daemon --lite
+  lotus daemon;
+}
+
+function launch_daemon_follower {
+  lotus daemon --follower;
+}
+
+function launch_gateway {
+  launch_daemon &
+
+  echo "Starting lotus gateway...";
+  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
+}
+
+function launch_follower {
+  launch_daemon_follower &
+  
+  echo "Starting lotus follower...";
+  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
+}
+
+# Launch lotus in the selected mode
+function launch {
+  if [ "$INFRA_LOTUS_FOLLOWER" = true ]; then
+    launch_follower;
+  elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
+    launch_gateway;
+  elif [ "$INFRA_LOTUS_DAEMON" = true ]; then
+    launch_daemon;
   fi
-elif [ "$INFRA_LOTUS_DAEMON" = false ]; then
-  echo "DAEMON disabled."
-fi
+}
 
+launch;

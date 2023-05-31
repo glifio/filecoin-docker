@@ -4,39 +4,85 @@
 
 repeat() { while :; sleep 3; do $@ && return; done }
 
-check_lotus_home_dir
-# Delete all data every pod restart
-if [[ -z "$INFRA_CLEAR_RESTART" ]]
-then
-  echo "INFRA_CLEAR_RESTART not defined"
-elif [ "$INFRA_CLEAR_RESTART" = true ]; then
-  echo "I'll remove ALL LOTUS DATA from $INFRA_LOTUS_HOME/.lotus/"
-  echo " -------> Removing ... <---------"
-  repeat rm -rf "$INFRA_LOTUS_HOME/.lotus/*"
-elif [ "$INFRA_CLEAR_RESTART" = false ]; then
-  echo "INFRA_CLEAR_RESTART disabled."
-fi
+# Exit if INFRA_LOTUS_HOME is not defined
+validate_env_hard INFRA_LOTUS_HOME;
 
-if [[ "$INFRA_SECRETVOLUME" = true  ]]; then
-  keys_management
-fi
+# Handle INFRA_CLEAR_RESTART variable
+function run_clear_restart {
+  echo "I'll remove ALL LOTUS DATA from $LOTUS_DIR/";
+  echo " -------> Removing ... <---------";
+  repeat rm -rf "$LOTUS_DIR/*";
+}
 
-prepare_config
-key_permissions
+validate_env_soft INFRA_CLEAR_RESTART && run_clear_restart;
 
-if [[ -z "$INFRA_IMPORT" ]]
-then
-  echo "INFRA_IMPORT not defined. "
-elif [ "$INFRA_IMPORT" = true ]; then
-  echo "Starting import wait"
-  CHAIN_CAR="/chain/chain.car"
-  if [ -f "$CHAIN_CAR" ] && [ ! -e "$INFRA_LOTUS_HOME/.lotus/datastore" ]; then
-    lotus daemon --halt-after-import --import-chain "$CHAIN_CAR"
-    touch "$INFRA_LOTUS_HOME/.lotus/import-complete"
+
+# Handle INFRA_SECRETVOLUME variable
+function handle_persist_node_id {
+  if [[ $INFRA_PERSISTNODEID = true ]]; then
+    cp $NODE_ID_SOURCE_PATH $NODE_ID_TARGET_PATH;
+    return 0;
   fi
-elif [ "$INFRA_IMPORT" = false ]; then
-  echo "INFRA_IMPORT disabled."
-fi
+
+  rm -f $NODE_ID_TARGET_PATH;
+}
+
+function copy_secrets {
+  handle_persist_node_id;
+  
+  mkdir -p $KEYSTORE_TARGET_DIR;
+  
+  cp $TOKEN_SOURCE_PATH $TOKEN_TARGET_PATH;
+  cp $PRIVATE_KEY_SOURCE_PATH $PRIVATE_KEY_TARGET_PATH;
+}
+
+validate_env_soft INFRA_SECRETVOLUME && copy_secrets;
+
+# Set filesystem permissions on the copied secrets
+function set_secrets_permissions {
+  # Set permissions in the keystore directory to 600
+  if [ -d "$KEYSTORE_TARGET_DIR" ]; then
+      find "$KEYSTORE_TARGET_DIR/" -type f -exec chmod 600 {} \;
+  fi
+
+  # Set permissions to the token file to 600
+  if [ -f "$TOKEN_TARGET_PATH" ]; then
+      chmod -f 600 "$TOKEN_TARGET_PATH"
+  fi
+}
+
+set_secrets_permissions;
+
+# Copy config.toml if needed
+function copy_config {
+  # If config.toml doesn't exist,
+  # print out error message and exit.
+  if [ ! -f "$LOTUS_CONFIG_SOURCE_PATH" ]; then
+    echo "$LOTUS_CONFIG_SOURCE_PATH not found";
+    return 0;
+  fi
+
+  # If the .lotus directory doesn't exist, create it.
+  if [ ! -d "$LOTUS_DIR" ]; then
+    mkdir "$LOTUS_DIR"
+  fi
+  
+  # Copy config.toml to the .lotus directory
+  cp $LOTUS_CONFIG_SOURCE_PATH $LOTUS_CONFIG_TARGET_PATH
+}
+
+copy_config;
+
+# Handle INFRA_IMPORT variable
+function run_import {
+  echo "Starting import...";
+  if [ -f "$SNAPSHOT_DEFAULT_PATH" ] && [ ! -e "$DATASTORE_TARGET_PATH" ]; then
+    lotus daemon --halt-after-import --import-chain "$SNAPSHOT_DEFAULT_PATH";
+    touch "$IMPORT_COMPLETE_PATH";
+  fi
+}
+
+validate_env_soft INFRA_IMPORT && run_import;
 
 if [[ -z "$INFRA_IMPORT_SNAPSHOT_FROM_IPFS" ]]
 then
@@ -83,12 +129,9 @@ elif [ "$INFRA_SHEDEXPORT" = false ]; then
   echo "INFRA_SHEDEXPORT disabled."
 fi
 
-if [[ -z "$INFRA_SYNC" ]]
-then
-  echo "INFRA_SYNC not defined."
-elif [ "$INFRA_SYNC" = true ]; then
-    echo "Starting sync wait"
-    ( repeat lotus sync wait && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &)
-elif [ "$INFRA_SYNC" = false ]; then
-  echo "SYNC disabled."
-fi
+function run_sync {
+  echo "Starting sync wait...";
+  ( repeat lotus sync wait --mir && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &);
+}
+
+validate_env_soft INFRA_SYNC && run_sync;

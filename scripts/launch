@@ -27,10 +27,18 @@ function launch_follower {
   lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
 }
 
+function launch_daemon_lite {
+  echo "Starting lotus daemon in lite mode...";
+
+  lotus daemon --lite;
+}
+
 # Launch lotus in the selected mode
 function launch {
   if [ "$INFRA_LOTUS_FOLLOWER" = true ]; then
     launch_follower;
+  elif [ "$INFRA_LOTUS_LITE" = true ]; then
+    validate_env_hard FULLNODE_API_INFO && launch_daemon_lite;
   elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
     launch_gateway;
   elif [ "$INFRA_LOTUS_DAEMON" = true ]; then

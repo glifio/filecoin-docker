@@ -4,7 +4,7 @@
 
 A Docker image for [Lotus](https://github.com/filecoin-project/lotus) Filecoin nodes.
 
-The have actual images in our [docker hub](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel CPU only, tags: v*. *. * is mainnet, *-nerpanet is nerpanet, *-calibnet is calibrationnet)
+The have actual images in our [docker hub](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (tags: v*. *. * is mainnet, *-calibnet is calibrationnet)
 
 ## Getting Started
 
@@ -35,15 +35,8 @@ In order to run this container you'll need docker installed.
     mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
     make run-calibnet
 ```
-### nerpanet from snapshot
-```shell
-## Build the Docker image for nerpanet
-    make -e NETWORK=nerpanet build
-## Create folder and run the Docker container with calibrationnet
-    mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
-    make run-nerpanet
-```
-or using our [images](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel cpu only)
+
+or using our [images](https://hub.docker.com/r/glif/lotus/tags?page=1&ordering=last_updated) (intel cpu only `linux/arm64/v8, linux/amd64`)
 
 mainnet from snapshot
 ```
@@ -53,7 +46,7 @@ docker run -d --name lotus \
 -e INFRA_LOTUS_DAEMON="true" \
 -e INFRA_LOTUS_HOME="/home/lotus_user" \
 -e INFRA_IMPORT_SNAPSHOT="true" \
--e SNAPSHOTURL="https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car" \
+-e SNAPSHOTURL="https://snapshots.mainnet.filops.net/minimal/latest.zst" \
 -e INFRA_SYNC="true" \
 --network host \
 -v $HOME/lotus:/home/lotus_user \
@@ -66,27 +59,14 @@ docker run -d --name lotus \
 -e INFRA_LOTUS_DAEMON="true" \
 -e INFRA_LOTUS_HOME="/home/lotus_user" \
 -e INFRA_IMPORT_SNAPSHOT="true" \
--e SNAPSHOTURL="https://dev.node.glif.io/calibrationapi/ipfs/8080/ipfs/$(curl -s https://gist.githubusercontent.com/openworklabbot/95da15b014ffc3b5a170485001f46abd/raw/snapshot.log)" \
+-e SNAPSHOTURL="https://snapshots.calibrationnet.filops.net/minimal/latest.zst" \
 -e INFRA_SYNC="true" \
 --network host \
 --restart always \
 --mount type=bind,source=$(SOURCE_DIR),target=/home/lotus_user \
 glif/lotus:v1.10.0-rc6-calibnet
 ```
-nerpanet from snapshot
-```
-mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
-docker run -d --name lotus \
--p 1234:1234 -p 1235:1235 \
--e INFRA_LOTUS_DAEMON="true" \
--e INFRA_LOTUS_HOME="/home/lotus_user" \
--e INFRA_IMPORT_SNAPSHOT="true" \
--e SNAPSHOTURL="https://dev.node.glif.io/nerpa00/ipfs/8080/ipfs/$(curl -s https://gist.githubusercontent.com/openworklabbot/d32543d42ed318f6dfde516c3d8668a0/raw/snapshot.log)" \
--e INFRA_SYNC="true" \
---network host \
--v $HOME/lotus:/home/lotus_user \
-glif/lotus:nerpa-v1.11.1-dev-nerpanet
-```
+
 or with [docker-compose](https://docs.docker.com/compose/install/)
 
 ### mainnet from snapshot
@@ -95,16 +75,6 @@ or with [docker-compose](https://docs.docker.com/compose/install/)
 mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
 ## Build and run docker container
 docker-compose up -d --build
-```
-
-### nerpanet from snapshot
-```shell
-## Create folder
-mkdir -p $HOME/lotus && sudo chown -R 2000:2000 $HOME/lotus
-## Update environment
-bash ./docker-compose-nerpanet-variable.sh
-## Build and run docker container
-docker-compose -f docker-compose-nerpanet.yaml up -d --build
 ```
 
 Verify that the container is running successfully with:
@@ -140,17 +110,19 @@ docker ps
 
 ## Dependencies
 
-- golang:1.16.5
+- golang:1.19.7
 - git
 - mesa-opencl-icd
 - ocl-icd-opencl-dev
 - gcc
 - bzr
 - jq
-- pkg-config 
-- clang  
-- libhwloc-dev 
-- ocl-icd-opencl-dev
+- pkg-config
+- curl
+- clang
+- build-essential
+- hwloc
+- libhwloc-dev
 
 ## Automatic build in docker hub
 
@@ -174,7 +146,7 @@ List of `tag` you may find on [lotus repository](https://github.com/filecoin-pro
 New version is available on [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)
 
 Docker image contains:
-- ubuntu:18.04
+- ubuntu:20.04
 - curl 
 - nano 
 - libhwloc-dev 

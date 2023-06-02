@@ -4,19 +4,14 @@ services:
     build:
       context: .
       args:
-        - BRANCH=master
-        - NETWORK=${NETWORK}
-    image: 'glif/lotus:master'
-    environment:
-     - INFRA_LOTUS_DAEMON=true
-     - INFRA_LOTUS_HOME=/home/lotus_user
-     - INFRA_IMPORT_SNAPSHOT=true
-     - INFRA_SYNC=true
-     - SNAPSHOTURL=${SNAPSHOTURL}
+        - BRANCH
+        - NETWORK
+    image: 'glif/lotus:latest'
+    env_file:
+      - .env
+    user: lotus_user
     volumes:
-      - type: bind
-        source: $HOME/lotus
-        target: /home/lotus_user
+      - $HOME/lotus:/home/lotus_user
     ports:
       - "1234:1234"
       - "1235:1235"

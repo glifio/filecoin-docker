@@ -4,8 +4,9 @@ FROM golang:1.19.7-buster AS lotus-build
 ARG REPOSITORY="filecoin-project/lotus"
 # Git branch of the lotus repository
 ARG BRANCH="master"
-# Filecoin network. Valid values: lotus, calibnet, hyperspace
+# Filecoin network. Valid values: lotus(mainnet), calibnet
 ARG NETWORK="lotus"
+
 
 # Install packages required by lotus
 RUN apt-get update && \
@@ -94,11 +95,20 @@ COPY scripts/bash-config \
     scripts/ensure \
     /etc/lotus/docker/
 
+# Create lotus group
+RUN addgroup --gid 2000 lotus
+
 # Create lotus user
-RUN adduser --uid 2000 --gecos "" --disabled-password --quiet lotus_user
+RUN adduser --gid 2000 --uid 2000 --gecos "" --disabled-password --quiet lotus_user
 
 # Add permissions for the lotus_user
-RUN chown lotus_user /home/lotus_user
+RUN chown -R 2000:2000 /home/lotus_user
+
+# # Add permissions for the group lotus
+# RUN chmod 664 /home/lotus_user
+#
+# # Add permissions for the group lotus
+# RUN chmod g+s /home/lotus_user
 
 USER lotus_user
 

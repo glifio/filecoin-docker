@@ -17,8 +17,6 @@ show_env
 echo "===> Configuring ..."
 /etc/lotus/docker/configure
 
-#echo "===> Running preflight checks ... "
-#/etc/lotus/docker/ensure
 
 echo "===> Launching ... "
 exec /etc/lotus/docker/launch

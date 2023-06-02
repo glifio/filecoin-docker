@@ -92,7 +92,7 @@ function is_import_completed {
 
 function run_sync {
   echo "Starting sync wait...";
-  ( repeat lotus sync wait --mir && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &);
+  ( repeat lotus sync wait && touch "$INFRA_LOTUS_HOME/.lotus/sync-complete" &);
 }
 
 # Exit if INFRA_LOTUS_HOME is not defined

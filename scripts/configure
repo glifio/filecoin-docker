@@ -75,7 +75,7 @@ function run_import_from_ipfs {
   local CID=$(curl $SNAPSHOT_CID);
   echo "Fetched. CID is $CID";
 
-  local SNAPSHOTURL="$IPFS_GW/$CID";
+  SNAPSHOTURL="$IPFS_GW/$CID";
   echo "Full URL to snapshot is $SNAPSHOTURL";
 
   INFRA_IMPORT_SNAPSHOT=true;

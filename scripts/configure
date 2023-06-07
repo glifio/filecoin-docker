@@ -81,6 +81,17 @@ function run_import_from_ipfs {
   INFRA_IMPORT_SNAPSHOT=true;
 }
 
+function run_import_snapshot {
+  echo "Starting import...";
+  if [ -e "$DATASTORE_TARGET_PATH" ]; then
+    echo "Removing all chain data...";
+    rm -rf "$DATASTORE_TARGET_PATH/chain/*";
+  fi
+
+  lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL;
+  touch "$IMPORT_COMPLETE_PATH";
+}
+
 function is_import_completed {
   # If there's a file at IMPORT_COMPLETE_PATH, exit. 
   if [ -f "$IMPORT_COMPLETE_PATH" ]; then
@@ -109,5 +120,7 @@ copy_config;
 validate_env_soft INFRA_IMPORT && run_import;
 
 validate_env_soft INFRA_IMPORT_SNAPSHOT_FROM_IPFS && run_import_from_ipfs;
+
+is_import_completed || (validate_env_soft INFRA_IMPORT_SNAPSHOT && run_import_snapshot);
 
 validate_env_soft INFRA_SYNC && run_sync;

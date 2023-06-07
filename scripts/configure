@@ -6,9 +6,9 @@ repeat() { while :; sleep 3; do $@ && return; done }
 
 # Handle INFRA_CLEAR_RESTART variable
 function run_clear_restart {
-  echo "I'll remove ALL LOTUS DATA from $LOTUS_DIR/";
+  echo "I'll remove ALL LOTUS DATA from $LOTUS_PATH/";
   echo " -------> Removing ... <---------";
-  repeat rm -rf "$LOTUS_DIR/*";
+  repeat rm -rf "$LOTUS_PATH/*";
 }
 
 # Handle INFRA_SECRETVOLUME variable
@@ -53,8 +53,8 @@ function copy_config {
   fi
 
   # If the .lotus directory doesn't exist, create it.
-  if [ ! -d "$LOTUS_DIR" ]; then
-    mkdir "$LOTUS_DIR"
+  if [ ! -d "$LOTUS_PATH" ]; then
+    mkdir "$LOTUS_PATH"
   fi
   
   # Copy config.toml to the .lotus directory

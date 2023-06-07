@@ -42,16 +42,16 @@ function validate_env_soft {
 }
 
 
-export LOTUS_DIR="$INFRA_LOTUS_HOME/.lotus";
+export LOTUS_PATH="$INFRA_LOTUS_HOME/.lotus";
 
 export LOTUS_CONFIG_SOURCE_PATH="$INFRA_LOTUS_HOME/config.toml";
-export LOTUS_CONFIG_TARGET_PATH="$LOTUS_DIR/config.toml";
+export LOTUS_CONFIG_TARGET_PATH="$LOTUS_PATH/config.toml";
 
 export KEYSTORE_SOURCE_DIR="/keystore";
-export KEYSTORE_TARGET_DIR="$LOTUS_DIR/keystore";
+export KEYSTORE_TARGET_DIR="$LOTUS_PATH/keystore";
 
 export TOKEN_SOURCE_PATH="$KEYSTORE_SOURCE_DIR/token";
-export TOKEN_TARGET_PATH="$LOTUS_DIR/token";
+export TOKEN_TARGET_PATH="$LOTUS_PATH/token";
 
 export PRIVATE_KEY_SOURCE_PATH="$KEYSTORE_SOURCE_DIR/privatekey";
 export PRIVATE_KEY_TARGET_PATH="$KEYSTORE_TARGET_DIR/MF2XI2BNNJ3XILLQOJUXMYLUMU";
@@ -61,7 +61,7 @@ export NODE_ID_TARGET_PATH="$KEYSTORE_TARGET_DIR/NRUWE4BSOAWWQ33TOQ";
 
 export SNAPSHOT_DEFAULT_PATH="/chain/chain.car";
 
-export DATASTORE_TARGET_PATH="$LOTUS_DIR/datastore";
+export DATASTORE_TARGET_PATH="$LOTUS_PATH/datastore";
 
-export IMPORT_COMPLETE_PATH="$LOTUS_DIR/import-complete";
-export SYNC_COMPLETE_PATH="$LOTUS_DIR/sync-complete";
+export IMPORT_COMPLETE_PATH="$LOTUS_PATH/import-complete";
+export SYNC_COMPLETE_PATH="$LOTUS_PATH/sync-complete";

@@ -12,6 +12,7 @@ By default `SNAPSHOTURL` environment variable uses a path for mainnet. It can be
 docker run -d --name=lotus -p 1234:1234 -p 1235:1235 -v $HOME/lotus:$HOME/lotus_user  --env-file .env -e INFRA_LOTUS_GATEWAY="true" -e INFRA_IMPORT_SNAPSHOT="true" -e INFRA_SYNC="true" -e INFRA_LOTUS_DAEMON="true"   glif/lotus:${IMAGE_TAG}
 ````
 ### Launch Lotus lite node
+Use case: You're blockchain developer and run your code against Lotus, this is your weapon of choice - way less resources and all write methods available.   
 By default `FULLNODE_API_INFO` environment variable `wss://wss.node.glif.io/apigw/lotus`. It can be changed in the [.env](.env) file, or add the flag `-e`.
 ````shell
 docker run -d --name=lotus -p 1234:1234 -p 1235:1235 -v $HOME/lotus:$HOME/lotus_user  --env-file .env  -e INFRA_LOTUS_LITE="true" glif/lotus:${IMAGE_TAG}
@@ -76,9 +77,9 @@ We provide three ways you can build your own images and run the container locall
 | Environment variables | What data does it accept?                                                                                                                                                                           | What is it for?                                                                                                                                                                                                                                                                                                                                                                             |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | INFRA_LOTUS_DAEMON    | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to start the lotus daemon only.                                                                                                                                                                                                                                                                                                                                              |
-| NFRA_LOTUS_GATEWAY    | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to start the lotus daemon with the lotus gateway on top.                                                                                                                                                                                                                                                                                                                     |
-| INFRA_CLEAR_RESTART   | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to remove the lotus folder. Useful when resetting the node.                                                                                                                                                                                                                                                                                                                  |
-| INFRA_IMPORT_SNAPSHOT | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to import the snapshot from the URL specified in the SNAPSHOTURL environment variable.                                                                                                                                                                                                                                                                                       |
+| INFRA_LOTUS_GATEWAY    | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to start the lotus daemon with the lotus gateway on top.                                                                                                                                                                                                                                                                                                                     |
+| INFRA_CLEAR_RESTART   | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to remove the lotus folder with  chainstore and statestore. Useful when resetting the node. ! CAUTION THIS VALUE WILL DROP ALL THE CHAIN STATE ON THE START, PLEASE PUT IT TO TRUE IF YOU UNDERSTAND CONSEQUENCES.                                                                                                                                                                                                                                                                                                                 |
+| INFRA_IMPORT_SNAPSHOT | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to import the snapshot from the URL specified in the SNAPSHOTURL environment variable. Set to FALSE to start fetching the blockchain state from the Genesis event(:warning: it will cost you several month).                                                                                                                                                                                                                                                                                   |
 | INFRA_LOTUS_HOME      | Path in the container’s filesystem. Default is: /home/lotus_user                                                                                                                                    | Defines where in the container’s filesystem the .lotus folder will be created.                                                                                                                                                                                                                                                                                                              |                                                                                                                    ||
 | INFRA_PERSISTNODEID   | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to copy the node ID from `/keystore/nodeid` to `$LOTUS_PATH/keystore/NRUWE4BSOAWWQ33TOQ`. This is needed for bootstrap node.                                                                                                                                                                                                                                                 |
 | INFRA_SECRETVOLUME    | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to copy the AUTH token from `/keystore/token` to `$LOTUS_PATH/token` and to copy the private_key from `/keystore/privatekey` to `$LOTUS_PATH/keystore/MF2XI2BNNJ3XILLQOJUXMYLUMU`. That implies that the Kubernetes secret has been mounted to `/keystore` as a directory. That allows using the same authentication token despite the node being reset over and over again. |
@@ -95,7 +96,7 @@ We provide three ways you can build your own images and run the container locall
 This section describes a few scenarios of how you can use the environment variables to achieve different results, e.g.\
 running the spot recent state node, running the on-demand state node, running the lotus lite node, running the node outside of Kubernetes, etc.
 
-#### Running the spot recent state node
+#### Running the spot (AWS temporary instance with discount return back anytime) recent state node
 
 
 When we use `INFRA_CLEAR_RESTART=true`, we expect that directory lotus is removed upon the start of the container. Then, if `INFRA_IMPORT_SNAPSHOT=true` and the `SNAPSHOTURL` is specified, the container will attempt to download and import the snapshot.
@@ -114,7 +115,7 @@ INFRA_SYNC=true
 SNAPSHOTURL=https://snapshots.mainnet.filops.net/minimal/latest.zst
 ````
 
-#### Running the on-demand state node
+#### Running the on-demand (AWS permanent instance) state node
 
 When we use `INFRA_CLEAR_RESTART=false`, we expect that directory lotus isn't removed upon the container start and data will continue to sync from the moment the sync was interrupted.
 
@@ -249,6 +250,7 @@ cp: cannot stat '/keystore/token': No such file or directory
   - [Using the Makefile](#using-the-makefile)
   - [Using docker-compose](#using-docker-compose)
 - [Troubleshooting](#troubleshooting)
+- [Contact Us](#Contact Us)
 
 
 ## Summary
@@ -288,6 +290,8 @@ If you want to understand better scripts structure and how it works, please foll
 - [Website](http://glif.io/)
 - [GitHub](https://github.com/glifio)
 - [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)
+- [Slack channel](#fil-glif-node-hosting)
+- [Discord](https://discord.gg/5qsJjsP3Re)
 
 ## License
 

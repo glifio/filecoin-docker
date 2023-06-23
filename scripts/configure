@@ -121,6 +121,6 @@ validate_env_soft INFRA_IMPORT && run_import;
 
 validate_env_soft INFRA_IMPORT_SNAPSHOT_FROM_IPFS && run_import_from_ipfs;
 
-is_import_completed || (validate_env_soft INFRA_IMPORT_SNAPSHOT && run_import_snapshot);
+is_import_completed && echo "Import has already been completed" || (validate_env_soft INFRA_IMPORT_SNAPSHOT && run_import_snapshot || echo "Not running the import");
 
-validate_env_soft INFRA_SYNC && run_sync;
+validate_env_soft INFRA_SYNC && run_sync || echo "Not running the lotus sync wait command...";

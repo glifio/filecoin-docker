@@ -290,7 +290,7 @@ If you want to understand better scripts structure and how it works, please foll
 - [Website](http://glif.io/)
 - [GitHub](https://github.com/glifio)
 - [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)
-- [Slack channel](https://join.slack.com/share/enQtNTQ3NDI4MjE0NjczOC0wMTM2ODNiOWIzMDNiM2VjZjYzZWFmZWM3NGI5ZWY1YzI1YmNmNDUxMWRhNmEyNTBkOTQzMjlmOTg3ZDZhMGU0)
+- [Slack channel](https://filecoinproject.slack.com/archives/C023K7D9GAX)
 - [Discord](https://discord.gg/5qsJjsP3Re)
 
 ## License

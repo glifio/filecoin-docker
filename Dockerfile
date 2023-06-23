@@ -92,7 +92,6 @@ COPY scripts/bash-config \
     scripts/configure \
     scripts/run \
     scripts/launch \
-    scripts/ensure \
     /etc/lotus/docker/
 
 # Create lotus group

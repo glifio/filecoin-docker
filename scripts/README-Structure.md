@@ -1,7 +1,16 @@
 ## Structure
 This section describes the scripts and how they work in more detail.
 
-![structure](./structure-1.drawio.png)
+````mermaid
+flowchart LR
+
+A[Dockerfile] -->|ENTRYPOINT /scripts/run| B{./run}
+B -->|run bash-config| C[./bash-config - Export ENV vars]
+B -->|run configure| D[./configure - Set configuration functions]
+B -->|run launch| E[./launch -  starts the required processes]
+
+````
+
 
 Here's a quick guide. The main parts of the repository are:
 * [Our infrastructure scripts:](./scripts)

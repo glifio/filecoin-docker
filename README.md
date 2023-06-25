@@ -2,8 +2,9 @@
 
 
 ````mermaid
-graph TD
-  A("<img src='scripts/png/protofire.png' width='150' height='169'/>")
+flowchart LR
+   A("<img src=''; width='150' height='169' />")-.->B("<img src='scripts/png/protofire.png' width='150' height='169'/>");
+   B-.-A;
 ````
 
 

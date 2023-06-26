@@ -23,7 +23,7 @@
 	<br />
 </p>
 
-Glif Docker images are managed by Protofire.
+Glif Docker images are managed by <a href="https://protofire.io">Protofire</a>.
 
 ## TL;DR
 

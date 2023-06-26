@@ -1,7 +1,7 @@
 
 
 <p align="center">
-<a href="https://www.glif.io/"> <img width="150" height="169" src="scripts/png/favicon-32x32.png"></a>
+<a href="https://www.glif.io/"> <img width="150" height="169" src="scripts/png/glif_logo.png"></a>
 </p>
 
 <div style="text-align: left"> Glif Docker images are managed by <p align="center">

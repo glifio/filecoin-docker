@@ -1,30 +1,19 @@
 
 
+<p align="center">
+<a href="https://www.glif.io/"> <img width="150" height="169" src="scripts/png/favicon-32x32.png"></a>
+</p>
 
-````mermaid
-flowchart LR
-   A("<img src=''; width='150' height='169' />")-.->B("<img src='scripts/png/protofire.png' width='150' height='169'/>");
-   B-.-A;
-````
+<div style="text-align: left"> Glif Docker images are managed by <p align="center">
+<a href="https://protofire.io/"> <img width="159" height="50" src="scripts/png/protofire.png"></a> </p> </div>
 
-
-
-
-[//]: # (<p align="center">)
-
-[//]: # (  <img width="150" height="169" src="scripts/png/favicon-16x16.png">  <img width="150" height="169" src="scripts/png/protofire.png">)
-
-[//]: # (</p>)
-
-[//]: # (<h1 align="center">)
-
-[//]: # (Glif Docker images are managed by Protofire.io)
-
-[//]: # (</h1>)
 
 [![Slack_channel](https://img.shields.io/badge/Contact_Us-AA_AA?style=plastic&logo=slack&logoColor=%20hsla&label=SLACK%20CHANNEL&labelColor=hex&color=e8e413)](https://filecoinproject.slack.com/archives/C023K7D9GAX)
+
 [![Docker Hub](https://img.shields.io/badge/Images_-AA?style=plastic&logo=docker&label=DOCKER%20HUB&labelColor=hex&color=118df2)](https://hub.docker.com/r/glif/lotus/tags)
-[![License Apache 2.0](https://img.shields.io/badge/Apache_2.0-AA?style=plastic&logo=apache&label=LICENSE&labelColor=hex&color=11d4f2)](https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE)
+
+
+[![License Apache 2.0](https://img.shields.io/badge/Apache_2.0-AA?style=plastic&logo=apache&label=LICENSE&labelColor=hex&color=11d4f2)](https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE) 
 [![Discord](https://img.shields.io/badge/Join_Us-AA?style=plastic&logo=discord&label=DISCORD&labelColor=hex&color=5e17eb)](https://discord.gg/5qsJjsP3Re)
 
 
@@ -313,9 +302,3 @@ Here's a quick guide. The main parts of the repository are:
 * [Docker-compose](./docker-compose.yaml) - contains a set of parameters for building the Lotus image and running the Lotus container in a docker-compose fashion.
 
 If you want to understand better scripts structure and how it works, please follow the link [Structure](scripts/README-Structure.md)
-
-## Contact Us
-
-- [Website](http://glif.io/)
-- [GitHub](https://github.com/glifio)
-- [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)

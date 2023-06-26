@@ -1,4 +1,30 @@
 
+<p align="center">
+  <a href="https://api.node.glif.io/" title="Glif Node Hosting">
+    <img src="scripts/png/glif-protofire-logo.png" alt="Glif-Protofire-logo" width="244" />
+  </a>
+</p>
+
+<h1 align="center">filecoin-docker</h1>
+
+<p align="center">
+	<a href="https://filecoinproject.slack.com/archives/C023K7D9GAX">
+		<img src="https://img.shields.io/badge/Contact_Us-AA_AA?style=for-the-badge&logo=slack&logoColor=white" />
+	</a>
+	<a href="https://hub.docker.com/r/glif/lotus/tags">
+		<img src="https://img.shields.io/badge/Docker_hub-IMAGES_AA?style=for-the-badge&logo=docker&logoColor=white&color=118df2" />
+	</a>
+	<a href="https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE">
+		<img src="https://img.shields.io/badge/Apache_2.0-_AA?style=for-the-badge&logo=apache&logoColor=white&color=11c5f2" />
+	</a>
+	<a href="https://discord.gg/5qsJjsP3Re">
+		<img src="https://img.shields.io/badge/Join_Us-_AA?style=for-the-badge&logo=discord&logoColor=white&color=af10f3" />
+	</a>
+	<br />
+</p>
+
+Glif Docker images are managed by <a href="https://protofire.io">Protofire</a>.
+
 ## TL;DR
 
 ### Launch Lotus
@@ -77,7 +103,7 @@ We provide three ways you can build your own images and run the container locall
 | Environment variables | What data does it accept?                                                                                                                                                                           | What is it for?                                                                                                                                                                                                                                                                                                                                                                             |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | INFRA_LOTUS_DAEMON    | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to start the lotus daemon only.                                                                                                                                                                                                                                                                                                                                              |
-| INFRA_LOTUS_GATEWAY    | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to start the lotus daemon with the lotus gateway on top.                                                                                                                                                                                                                                                                                                                     |
+| INFRA_LOTUS_GATEWAY   | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to start the lotus daemon with the lotus gateway on top.                                                                                                                                                                                                                                                                                                                     |
 | INFRA_CLEAR_RESTART   | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to remove the lotus folder with  chainstore and statestore. Useful when resetting the node. ! CAUTION THIS VALUE WILL DROP ALL THE CHAIN STATE ON THE START, PLEASE PUT IT TO TRUE IF YOU UNDERSTAND CONSEQUENCES.                                                                                                                                                                                                                                                                                                                 |
 | INFRA_IMPORT_SNAPSHOT | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to import the snapshot from the URL specified in the SNAPSHOTURL environment variable. Set to FALSE to start fetching the blockchain state from the Genesis event(:warning: it will cost you several month).                                                                                                                                                                                                                                                                                   |
 | INFRA_LOTUS_HOME      | Path in the container’s filesystem. Default is: /home/lotus_user                                                                                                                                    | Defines where in the container’s filesystem the .lotus folder will be created.                                                                                                                                                                                                                                                                                                              |                                                                                                                    ||
@@ -285,14 +311,3 @@ Here's a quick guide. The main parts of the repository are:
 
 If you want to understand better scripts structure and how it works, please follow the link [Structure](scripts/README-Structure.md)
 
-## Contact Us
-
-- [Website](http://glif.io/)
-- [GitHub](https://github.com/glifio)
-- [Docker Hub](https://hub.docker.com/r/glif/lotus/tags)
-- [Slack channel](https://filecoinproject.slack.com/archives/C023K7D9GAX)
-- [Discord](https://discord.gg/5qsJjsP3Re)
-
-## License
-
-This project is licensed under the [Apache 2.0](https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE) license.

@@ -1,7 +1,7 @@
 
 
 <div style="text-align: center">
-<a href="https://api.node.glif.io/"> <img width="300" src="scripts/png/glif-protofire-logo.png"></a>
+<a href="https://api.node.glif.io/"> <img width="300" src="scripts/png/glif-protofire-logo.png"></a><p align="center">
 </div>
 <h1 align="center">Filecoin-docker</h1>
 

@@ -1,25 +1,20 @@
 
-
 <p align="center">
-<a href="https://api.node.glif.io/"> <img width="300" src="scripts/png/glif-protofire-logo.png"></a>
+  <a href="https://api.node.glif.io/" title="Filecoin-docker">
+    <img src="scripts/png/glif-protofire-logo.png" alt="Glif-Protofire-logo" width="244" />
+  </a>
 </p>
-<h1 align="center">Filecoin-docker</h1>
 
-[//]: # (<div style="text-align: left"> Glif Docker images are managed by  <a href="https://protofire.io/"> <img width="120" height="30" src="scripts/png/protofire.png"></a> <p align="center">)
-
-[//]: # ( </div>)
-
+<h1 align="center">filecoin-docker</h1>
 
 [![Slack_channel](https://img.shields.io/badge/Contact_Us-AA_AA?style=plastic&logo=slack&logoColor=%20hsla&label=SLACK%20CHANNEL&labelColor=hex&color=e8e413)](https://filecoinproject.slack.com/archives/C023K7D9GAX)
-
 [![Docker Hub](https://img.shields.io/badge/Images_-AA?style=plastic&logo=docker&label=DOCKER%20HUB&labelColor=hex&color=118df2)](https://hub.docker.com/r/glif/lotus/tags)
-
-
-[![License Apache 2.0](https://img.shields.io/badge/Apache_2.0-AA?style=plastic&logo=apache&label=LICENSE&labelColor=hex&color=11d4f2)](https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE) 
+[![License Apache 2.0](https://img.shields.io/badge/Apache_2.0-AA?style=plastic&logo=apache&label=LICENSE&labelColor=hex&color=11d4f2)](https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE)
 [![Discord](https://img.shields.io/badge/Join_Us-AA?style=plastic&logo=discord&label=DISCORD&labelColor=hex&color=5e17eb)](https://discord.gg/5qsJjsP3Re)
 
-# About
-Glif Docker images are managed by
+Glif Docker images are managed by Protofire.
+
+
 
 ## TL;DR
 

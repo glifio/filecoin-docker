@@ -9,16 +9,16 @@
 
 <p align="center">
 	<a href="https://filecoinproject.slack.com/archives/C023K7D9GAX">
-		<img src="https://img.shields.io/badge/Contact_Us-AA_AA?style=plastic&logo=slack&logoColor=%20hsla&label=SLACK%20CHANNEL&labelColor=hex&color=e8e413" />
+		<img src="https://img.shields.io/badge/Contact_Us-AA_AA?style=for-the-badge&logo=slack&logoColor=white" />
 	</a>
 	<a href="https://hub.docker.com/r/glif/lotus/tags">
-		<img src="https://img.shields.io/badge/Images_-AA?style=plastic&logo=docker&label=DOCKER%20HUB&labelColor=hex&color=118df2" />
+		<img src="https://img.shields.io/badge/Docker_hub-IMAGES_AA?style=for-the-badge&logo=docker&logoColor=white&color=118df2" />
 	</a>
 	<a href="https://github.com/openworklabs/filecoin-docker/blob/master/LICENSE">
-		<img src="https://img.shields.io/badge/Apache_2.0-AA?style=plastic&logo=apache&label=LICENSE&labelColor=hex&color=11d4f2" />
+		<img src="https://img.shields.io/badge/Apache_2.0-_AA?style=for-the-badge&logo=apache&logoColor=white&color=11c5f2" />
 	</a>
 	<a href="https://discord.gg/5qsJjsP3Re">
-		<img src="https://img.shields.io/badge/Join_Us-AA?style=plastic&logo=discord&label=DISCORD&labelColor=hex&color=5e17eb" />
+		<img src="https://img.shields.io/badge/Join_Us-_AA?style=for-the-badge&logo=discord&logoColor=white&color=af10f3" />
 	</a>
 	<br />
 </p>

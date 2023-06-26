@@ -1,8 +1,8 @@
 
 
-<div style="text-align: center">
-<a href="https://api.node.glif.io/"> <img width="300" src="scripts/png/glif-protofire-logo.png"></a><p align="center">
-</div>
+<p align="center">
+<a href="https://api.node.glif.io/"> <img width="300" src="scripts/png/glif-protofire-logo.png"></a>
+</p>
 <h1 align="center">Filecoin-docker</h1>
 
 [//]: # (<div style="text-align: left"> Glif Docker images are managed by  <a href="https://protofire.io/"> <img width="120" height="30" src="scripts/png/protofire.png"></a> <p align="center">)

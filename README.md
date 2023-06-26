@@ -4,7 +4,7 @@
 <a href="https://www.glif.io/"> <img width="150" height="169" src="scripts/png/glif_logo.png"></a>
 </p>
 
-<div style="text-align: left"> Glif Docker images are managed by  <a href="https://protofire.io/"> <img width="130" height="30" src="scripts/png/protofire.png"></a> <p align="center">
+<div style="text-align: left"> Glif Docker images are managed by  <a href="https://protofire.io/"> <img width="120" height="30" src="scripts/png/protofire.png"></a> <p align="center">
  </div>
 
 

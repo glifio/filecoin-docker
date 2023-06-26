@@ -4,8 +4,8 @@
 <a href="https://www.glif.io/"> <img width="150" height="169" src="scripts/png/glif_logo.png"></a>
 </p>
 
-<div style="text-align: left"> Glif Docker images are managed by <p align="center">
-<a href="https://protofire.io/"> <img width="159" height="50" src="scripts/png/protofire.png"></a> </p> </div>
+<div style="text-align: left"> Glif Docker images are managed by  <a href="https://protofire.io/"> <img width="159" height="50" src="scripts/png/protofire.png"></a> <p align="center">
+ </div>
 
 
 [![Slack_channel](https://img.shields.io/badge/Contact_Us-AA_AA?style=plastic&logo=slack&logoColor=%20hsla&label=SLACK%20CHANNEL&labelColor=hex&color=e8e413)](https://filecoinproject.slack.com/archives/C023K7D9GAX)

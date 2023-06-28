@@ -276,7 +276,6 @@ cp: cannot stat '/keystore/token': No such file or directory
   - [Using the Makefile](#using-the-makefile)
   - [Using docker-compose](#using-docker-compose)
 - [Troubleshooting](#troubleshooting)
-- [Contact Us](#Contact Us)
 
 
 ## Summary

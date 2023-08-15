@@ -115,7 +115,7 @@ validate_env_soft INFRA_SECRETVOLUME && copy_secrets;
 
 set_secrets_permissions;
 
-copy_config;
+validate_env_soft INFRA_COPY_CONFIG && copy_config;
 
 validate_env_soft INFRA_IMPORT && run_import;
 

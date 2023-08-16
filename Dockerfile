@@ -45,7 +45,7 @@ FROM ubuntu:20.04 AS lotus-base
 
 # Copy software dependencies
 COPY --from=lotus-build \
-    /usr/lib/*/libhwloc.so.5 \
+    /usr/lib/*/libhwloc.so.15 \
     /usr/lib/*/libnuma.so.1 \
     /usr/lib/*/libltdl.so.7 \
     /lib/

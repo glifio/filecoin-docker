@@ -38,7 +38,7 @@ function launch {
   if [ "$INFRA_LOTUS_FOLLOWER" = true ]; then
     launch_follower;
   elif [ "$INFRA_LOTUS_LITE" = true ]; then
-    validate_env_hard FULLNODE_API_INFO && launch_daemon_lite;
+    validate_env_hard FULLNODE_API_INFO && launch_daemon_lite || echo "FULLNODE_API_INFO is invalid";
   elif [ "$INFRA_LOTUS_GATEWAY" = true ]; then
     launch_gateway;
   elif [ "$INFRA_LOTUS_DAEMON" = true ]; then

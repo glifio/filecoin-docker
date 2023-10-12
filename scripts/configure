@@ -81,6 +81,26 @@ function run_import_from_ipfs {
   INFRA_IMPORT_SNAPSHOT=true;
 }
 
+function import_snapshots_one {
+  echo "Importing single snapshot: $1...";
+  lotus daemon --halt-after-import --import-snapshot $1;
+}
+
+function import_snapshots_all {
+  echo "Multiple snapshots import is in effect...";
+
+  SNAPSHOTS=$(find $INFRA_SNAPSHOTS_DIR -maxdepth 1 -type f \( -name '*.zst' -o -name '*.car' \))
+  SNAPSHOTS_COUNT=$(echo "$SNAPSHOTS" | wc -w)
+  
+  CURRENT_SNAPSHOT_INDEX=1
+  for SNAPSHOT in $SNAPSHOTS; do
+    echo "Importing snapshot[$CURRENT_SNAPSHOT_INDEX/$SNAPSHOTS_COUNT]: $SNAPSHOT";
+
+    lotus daemon --halt-after-import --import-snapshot "$SNAPSHOT";
+    CURRENT_SNAPSHOT_INDEX=$(( CURRENT_SNAPSHOT_INDEX+1 ))
+  done
+}
+
 function run_import_snapshot {
   echo "Starting import...";
   if [ -e "$DATASTORE_TARGET_PATH" ]; then
@@ -88,7 +108,12 @@ function run_import_snapshot {
     rm -rf "$DATASTORE_TARGET_PATH/chain/*";
   fi
 
-  lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL;
+  if [[ -z "INFRA_SNAPSHOTS_DIR" ]]; then
+    import_snapshots_one $SNAPSHOTURL;
+  else
+    import_snapshots_all;
+  fi 
+  
   touch "$IMPORT_COMPLETE_PATH";
 }
 

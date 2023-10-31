@@ -3,7 +3,7 @@ FROM golang:1.19.7-buster AS lotus-build
 # Lotus repository
 ARG REPOSITORY="consensus-shipyard/ipc"
 # Git branch of the lotus repository
-ARG BRANCH="v0.2.0"
+ARG BRANCH="main"
 # Filecoin network. Valid values: lotus, calibnet, hyperspace
 ARG NETWORK="spacenet"
 

@@ -17,7 +17,7 @@ function launch_gateway {
   launch_daemon &
 
   echo "Starting lotus gateway...";
-  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
+  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 90000 --api-max-lookback 720h0m0s;
 }
 
 function launch_follower {

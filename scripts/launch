@@ -17,14 +17,14 @@ function launch_gateway {
   launch_daemon &
 
   echo "Starting lotus gateway...";
-  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
+  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit $INFRA_LOTUS_GW_LOOKBACK_LIMIT --api-max-lookback $INFRA_LOTUS_GW_MAX_LOOKBACK;
 }
 
 function launch_follower {
   launch_daemon_follower &
   
   echo "Starting lotus follower...";
-  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit 2000 --api-max-lookback 16h40m0s;
+  lotus wait-api --timeout 30m && lotus-gateway run --api-wait-lookback-limit $INFRA_LOTUS_GW_LOOKBACK_LIMIT --api-max-lookback $INFRA_LOTUS_GW_MAX_LOOKBACK;
 }
 
 function launch_daemon_lite {

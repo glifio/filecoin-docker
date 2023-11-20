@@ -67,9 +67,9 @@ export IMPORT_COMPLETE_PATH="$LOTUS_PATH/import-complete";
 export SYNC_COMPLETE_PATH="$LOTUS_PATH/sync-complete";
 
 if [[ -z "$INFRA_LOTUS_GW_LOOKBACK_LIMIT" ]]; then
-  export $INFRA_LOTUS_GW_LOOKBACK_LIMIT="2000";
+  export INFRA_LOTUS_GW_LOOKBACK_LIMIT="2000";
 fi
 
 if [[ -z "$INFRA_LOTUS_GW_MAX_LOOKBACK" ]]; then
-  export $INFRA_LOTUS_GW_MAX_LOOKBACK="16h40m0s";
+  export INFRA_LOTUS_GW_MAX_LOOKBACK="16h40m0s";
 fi

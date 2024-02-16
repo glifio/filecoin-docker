@@ -22,9 +22,9 @@ function handle_persist_node_id {
 }
 
 function copy_secrets {
-  handle_persist_node_id;
-  
   mkdir -p $KEYSTORE_TARGET_DIR;
+
+  handle_persist_node_id;
   
   cp $TOKEN_SOURCE_PATH $TOKEN_TARGET_PATH;
   cp $PRIVATE_KEY_SOURCE_PATH $PRIVATE_KEY_TARGET_PATH;

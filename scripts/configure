@@ -88,7 +88,7 @@ function run_import_snapshot {
     rm -rf "$DATASTORE_TARGET_PATH/chain/*";
   fi
 
-  lotus daemon --halt-after-import --import-snapshot $SNAPSHOTURL;
+  lotus daemon --halt-after-import --remove-existing-chain --import-snapshot $SNAPSHOTURL;
   touch "$IMPORT_COMPLETE_PATH";
 }
 

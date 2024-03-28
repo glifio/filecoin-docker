@@ -1,4 +1,4 @@
-FROM golang:1.20.7-bullseye AS lotus-build
+FROM golang:1.21.7-bullseye AS lotus-build
 
 # Lotus repository
 ARG REPOSITORY="filecoin-project/lotus"

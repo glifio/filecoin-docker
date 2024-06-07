@@ -19,14 +19,9 @@ if [ ! -z $(echo $OUR_BLOCK | grep "e+") ]
 fi
 
 # If local block is lower than minimum allowed block or we can't get block data - the health is bad
-if [[ "$OUR_BLOCK" -ge "$MIN_ALLOWED_BLOCK" && ! -z "$OUR_BLOCK" && ! -z "$MIN_ALLOWED_BLOCK" ]]; then
-  exit 0
-else
-  exit 1
-fi
-
+if [[ "$OUR_BLOCK" -ge "$MIN_ALLOWED_BLOCK" && ! -z "$OUR_BLOCK" && ! -z "$MIN_ALLOWED_BLOCK" ]] && \
 # Fail readiness probe if Filecoin.EthGetLogs method request takes longer than 10 seconds
-if timeout 10 curl -s -X POST -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","method":"Filecoin.EthGetLogs","params":[{}],"id":1}' http://127.0.0.1:1234/rpc/v1; then
+    timeout 10 curl -s -X POST -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","method":"Filecoin.EthGetLogs","params":[{}],"id":1}' http://127.0.0.1:1234/rpc/v1; then
   exit 0
 else
   exit 1

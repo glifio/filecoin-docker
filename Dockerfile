@@ -6,6 +6,8 @@ ARG REPOSITORY="filecoin-project/lotus"
 ARG BRANCH="master"
 # Filecoin network. Valid values: lotus(mainnet), calibnet
 ARG NETWORK="lotus"
+# Repo folder name
+ARG FOLDER_NAME="lotus"
 
 
 # Install packages required by lotus
@@ -32,8 +34,8 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Install lotus
-RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH && \
-    cd lotus && \
+RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH $FOLDER_NAME && \
+    cd $FOLDER_NAME && \
     make clean && \
     make deps && \
     make $NETWORK lotus-shed lotus-gateway && \

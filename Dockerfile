@@ -36,10 +36,10 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # Install lotus
 RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH $FOLDER_NAME && \
     cd $FOLDER_NAME && \
-    go get github.com/kilic/bls12-381@v0.1.0 && \
-    go mod tidy && \
     make clean && \
     make deps && \
+    go get github.com/kilic/bls12-381@v0.1.0 && \
+    go mod tidy && \
     make $NETWORK lotus-shed lotus-gateway && \
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-gateway /usr/local/bin/lotus-gateway && \

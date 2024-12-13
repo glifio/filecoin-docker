@@ -37,7 +37,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH $FOLDER_NAME && \
     cd $FOLDER_NAME && \
     git submodule update --init --recursive && \
-    git submodule update --recursive \
+    git submodule update --recursive && \
     make clean deps && \
     make $NETWORK lotus-shed lotus-gateway && \
     install -C ./lotus /usr/local/bin/lotus && \

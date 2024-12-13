@@ -36,12 +36,16 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # Install lotus
 RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH $FOLDER_NAME && \
     cd $FOLDER_NAME && \
-    make clean && \
-    make deps && \
+    make clean deps && \
     make $NETWORK lotus-shed lotus-gateway && \
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-gateway /usr/local/bin/lotus-gateway && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
+
+# Print information on filecoin-ffi
+RUN cd $FOLDER_NAME/extern/filecoin-ffi && \
+    git status
+
 
 FROM ubuntu:20.04 AS lotus-base
 

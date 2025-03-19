@@ -36,11 +36,15 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # Install lotus
 RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH $FOLDER_NAME && \
     cd $FOLDER_NAME && \
-    make clean && \
-    make deps && \
-    make $NETWORK lotus-shed lotus-gateway && \
+    make clean deps && \
+    if [ "$NETWORK" = "calibnet" ]; then \
+    make lotus-gateway-calibnet; \
+    else \
+    make lotus-gateway; \
+    fi && \
+    make ${NETWORK} lotus-shed && \
+    install -C ./lotus-gateway /usr/local/bin/lotus-gateway; \
     install -C ./lotus /usr/local/bin/lotus && \
-    install -C ./lotus-gateway /usr/local/bin/lotus-gateway && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 
 FROM ubuntu:20.04 AS lotus-base

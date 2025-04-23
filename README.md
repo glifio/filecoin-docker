@@ -28,7 +28,7 @@ Glif Docker images are managed by <a href="https://protofire.io">Protofire</a>.
 ## TL;DR
 
 ### Launch Lotus
-By default `SNAPSHOTURL` environment variable uses a path for mainnet `https://snapshots.mainnet.filops.net/minimal/latest.zst`. It can be changed in the [.env](.env) file, or add the flag `-e`.
+By default `SNAPSHOTURL` environment variable uses a path for mainnet `https://forest-archive.chainsafe.dev/latest/mainnet`. It can be changed in the [.env](.env) file, or add the flag `-e`.
 ````shell
 docker run -d --name=lotus -p 1234:1234 -p 1235:1235 -v $HOME/lotus:$HOME/lotus_user  --env-file .env -e INFRA_LOTUS_DAEMON="true" -e INFRA_SYNC="true" -e INFRA_IMPORT_SNAPSHOT="true" glif/lotus:${IMAGE_TAG}
 ````
@@ -110,7 +110,7 @@ We provide three ways you can build your own images and run the container locall
 | INFRA_PERSISTNODEID   | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to copy the node ID from `/keystore/nodeid` to `$LOTUS_PATH/keystore/NRUWE4BSOAWWQ33TOQ`. This is needed for bootstrap node.                                                                                                                                                                                                                                                 |
 | INFRA_SECRETVOLUME    | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to copy the AUTH token from `/keystore/token` to `$LOTUS_PATH/token` and to copy the private_key from `/keystore/privatekey` to `$LOTUS_PATH/keystore/MF2XI2BNNJ3XILLQOJUXMYLUMU`. That implies that the Kubernetes secret has been mounted to `/keystore` as a directory. That allows using the same authentication token despite the node being reset over and over again. |
 | INFRA_SYNC            | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE for the Lotus blockchain sync before the actual Lotus Daemon starts. Example of usage - Liveness probe in the k8s - you are waiting for the file `$INFRA_LOTUS_HOME/.lotus/sync-complete` and only after the file creation you add Lotus pod to the k8s service.                                                                                                             |
-| SNAPSHOTURL           | URL to the snapshot. The current recent state snapshots are available here: https://snapshots.mainnet.filops.net/minimal/latest.zst, https://snapshots.calibrationnet.filops.net/minimal/latest.zst | Set it to TRUE snapshot URL to make lotus download and import it. Can also be a path in the container’s filesystem.                                                                                                                                                                                                                                                                         |
+| SNAPSHOTURL           | URL to the snapshot. The current recent state snapshots are available here: https://forest-archive.chainsafe.dev/latest/mainnet, https://forest-archive.chainsafe.dev/latest/calibnet               | Set it to TRUE snapshot URL to make lotus download and import it. Can also be a path in the container’s filesystem.                                                                                                                                                                                                                                                                         |
 | INFRA_LOTUS_LITE      | TRUE or FALSE                                                                                                                                                                                       | Set it to TRUE to run the lotus daemon in the lite node mode.                                                                                                                                                                                                                                                                                                                               |
 | FULLNODE_API_INFO     | URL of the full node: `wss://wss.node.glif.io/apigw/lotus`                                                                                                                                          | You have to specify this variable if `INFRA_LOTUS_LITE` is set to true.                                                                                                                                                                                                                                                                                                                     |
 
@@ -138,7 +138,7 @@ INFRA_LOTUS_GATEWAY=true
 INFRA_PERSISTNODEID=false
 INFRA_SECRETVOLUME=false
 INFRA_SYNC=true
-SNAPSHOTURL=https://snapshots.mainnet.filops.net/minimal/latest.zst
+SNAPSHOTURL=https://forest-archive.chainsafe.dev/latest/mainnet
 ````
 
 #### Running the on-demand (AWS permanent instance) state node
@@ -156,7 +156,7 @@ INFRA_LOTUS_GATEWAY=true
 INFRA_PERSISTNODEID=false
 INFRA_SECRETVOLUME=false
 INFRA_SYNC=true
-SNAPSHOTURL=https://snapshots.mainnet.filops.net/minimal/latest.zst
+SNAPSHOTURL=https://forest-archive.chainsafe.dev/latest/mainnet
 ````
 
 

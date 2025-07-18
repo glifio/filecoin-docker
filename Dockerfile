@@ -38,7 +38,7 @@ RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH $F
     cd $FOLDER_NAME && \
     make clean deps && \
     if [ "$NETWORK" = "calibnet" ]; then \
-    make lotus-gateway-calibnet; \
+    make calibnet-lotus-gateway; \
     else \
     make lotus-gateway; \
     fi && \

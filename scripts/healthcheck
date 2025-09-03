@@ -12,12 +12,15 @@ GENESIS_TIMESTAMP=$(timeout -k3 3 curl -s http://127.0.0.1:1234/rpc/v0 -X POST -
 CURRENT_TIMESTAMP=$(date +"%s")
 DIFFERENCE_IN_TIME=$(( $CURRENT_TIMESTAMP - $GENESIS_TIMESTAMP ))
 MIN_ALLOWED_BLOCK=$(( $DIFFERENCE_IN_TIME / $BLOCK_TIME - $ALLOWED_DELAY ))
-OUR_BLOCK=$(curl -s --max-time 3 localhost:1234/debug/metrics | grep ^lotus_chain_node_worker_height | awk '{print $2}')
+OUR_BLOCK=$(
+  curl -s --max-time 3 localhost:1234/debug/metrics |
+  awk '/^lotus_chain_node_worker_height/ {
+         v=$NF+0;                   # numeric value (handles 5.28e+06)
+         if (v>m) m=v               # keep the max if multiple lines
+       }
+       END { if (m!="") printf "%.0f\n", m }'
+)
 THE_BLOCK=$(curl -s -X POST -H "Content-type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}' localhost:1234/rpc/v1 | awk -F '"' '{print $8}')
-
-if [ ! -z $(echo $OUR_BLOCK | grep "e+") ]
-    then OUR_BLOCK=$(printf "%0.f" $OUR_BLOCK)
-fi
 
 # If local block is lower than minimum allowed block or we can't get block data - the health is bad
 if [[ "$OUR_BLOCK" -ge "$MIN_ALLOWED_BLOCK" && ! -z "$OUR_BLOCK" && ! -z "$MIN_ALLOWED_BLOCK" && ! -z "$THE_BLOCK" ]] && \

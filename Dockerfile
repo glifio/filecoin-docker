@@ -1,4 +1,4 @@
-FROM golang:1.24.7-trixie AS lotus-build
+FROM golang:1.24.7-bookworm AS lotus-build
 
 # Lotus repository
 ARG REPOSITORY="filecoin-project/lotus"
@@ -47,7 +47,7 @@ RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH $F
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 
-FROM ubuntu:20.04 AS lotus-base
+FROM debian:bookworm-slim AS lotus-base
 
 # Copy software dependencies
 COPY --from=lotus-build \

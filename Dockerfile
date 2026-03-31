@@ -1,4 +1,4 @@
-FROM golang:1.24.7-bookworm AS lotus-build
+FROM golang:1.25-bookworm AS lotus-build
 
 # Lotus repository
 ARG REPOSITORY="filecoin-project/lotus"
@@ -47,41 +47,26 @@ RUN git clone https://github.com/${REPOSITORY}.git --depth 1 --branch $BRANCH $F
     install -C ./lotus /usr/local/bin/lotus && \
     install -C ./lotus-shed /usr/local/bin/lotus-shed
 
-FROM debian:bookworm-slim AS lotus-base
 
-# Copy software dependencies
-COPY --from=lotus-build \
-    /usr/lib/*/libhwloc.so.15 \
-    /usr/lib/*/libnuma.so.1 \
-    /usr/lib/*/libltdl.so.7 \
-    /lib/
+FROM debian:bookworm-slim AS lotus-runtime
 
-# Copy OpenCL
-COPY --from=lotus-build \
-    /usr/lib/*/libOpenCL.so.1.0.0 \
-    /lib/libOpenCL.so.1
-
-# Copy SSL certificates
-COPY --from=lotus-build \
-    /etc/ssl/certs \
-    /etc/ssl/certs
-
-# Copy lotus binaries
 COPY --from=lotus-build \
     /usr/local/bin/lotus \
     /usr/local/bin/lotus-gateway \
     /usr/local/bin/lotus-shed \
     /usr/local/bin/
 
-FROM lotus-base AS lotus-runtime
-
-# Install JQ
+# Install runtime apt dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        jq  \
-        curl \
-        nano && \
-    apt-get clean && \
+        libhwloc15 \
+        ocl-icd-libopencl1 \
+        libudev1 \
+        libcap2 \
+        libgcc-s1 \
+        ca-certificates \
+        jq \
+        curl && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy lotus version

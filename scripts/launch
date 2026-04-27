@@ -6,7 +6,7 @@
 function launch_daemon {
   echo "Starting lotus daemon...";
 
-  lotus daemon;
+  lotus daemon ${LOTUS_DAEMON_FLAGS:-};
 }
 
 function launch_daemon_follower {
